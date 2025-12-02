@@ -6,7 +6,12 @@ import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
 import { Users } from './collections/Users'
+import { Books } from './collections/Books'
+import { Authors } from './collections/Authors'
+import { Genres } from './collections/Genres'
+import { Orders } from './collections/Orders'
 import { Media } from './collections/Media'
+import { SiteSettings } from './globals/SiteSettings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -18,7 +23,8 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media],
+  collections: [Users, Books, Authors, Genres, Orders, Media],
+  globals: [SiteSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -26,9 +32,8 @@ export default buildConfig({
   },
   db: sqliteAdapter({
     client: {
-      url: process.env.DATABASE_URI || '',
+      url: process.env.DATABASE_URI || 'file:./eksamen-webteknologi.db',
     },
   }),
   sharp,
-  plugins: [],
 })
