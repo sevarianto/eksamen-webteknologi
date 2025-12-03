@@ -68,6 +68,10 @@ export interface Config {
   blocks: {};
   collections: {
     users: User;
+    books: Book;
+    authors: Author;
+    genres: Genre;
+    orders: Order;
     media: Media;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -77,6 +81,10 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
+    books: BooksSelect<false> | BooksSelect<true>;
+    authors: AuthorsSelect<false> | AuthorsSelect<true>;
+    genres: GenresSelect<false> | GenresSelect<true>;
+    orders: OrdersSelect<false> | OrdersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -84,10 +92,15 @@ export interface Config {
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: string;
+    defaultIDType: number;
   };
-  globals: {};
-  globalsSelect: {};
+  fallbackLocale: null;
+  globals: {
+    'site-settings': SiteSetting;
+  };
+  globalsSelect: {
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+  };
   locale: null;
   user: User & {
     collection: 'users';
@@ -120,7 +133,7 @@ export interface UserAuthOperations {
  * via the `definition` "users".
  */
 export interface User {
-  id: string;
+  id: number;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -141,10 +154,52 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "books".
+ */
+export interface Book {
+  id: number;
+  title: string;
+  titleStyle?: {
+    fontSize?: ('small' | 'normal' | 'large' | 'xlarge' | 'xxlarge') | null;
+    fontWeight?: ('normal' | 'semibold' | 'bold') | null;
+    textColor?: string | null;
+    textAlign?: ('left' | 'center' | 'right') | null;
+  };
+  /**
+   * URL-vennlig versjon av tittelen (eks: harry-potter-de-vises-stein)
+   */
+  slug: string;
+  description: string;
+  descriptionStyle?: {
+    fontSize?: ('small' | 'normal' | 'large') | null;
+    fontWeight?: ('normal' | 'semibold' | 'bold') | null;
+    textColor?: string | null;
+    textAlign?: ('left' | 'center' | 'right' | 'justify') | null;
+    lineHeight?: ('tight' | 'normal' | 'loose') | null;
+  };
+  price: number;
+  isbn: string;
+  publishedYear?: number | null;
+  coverImage?: (number | null) | Media;
+  coverImageStyle?: {
+    borderRadius?: ('none' | 'small' | 'medium' | 'large' | 'full') | null;
+    opacity?: number | null;
+    objectFit?: ('cover' | 'contain' | 'fill') | null;
+  };
+  author: number | Author;
+  genres?: (number | Genre)[] | null;
+  ageRating: 'barn' | 'ungdom' | 'voksen';
+  stock: number;
+  featured?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
 export interface Media {
-  id: string;
+  id: number;
   alt: string;
   updatedAt: string;
   createdAt: string;
@@ -160,10 +215,92 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "authors".
+ */
+export interface Author {
+  id: number;
+  name: string;
+  nameStyle?: {
+    fontSize?: ('small' | 'normal' | 'large' | 'xlarge') | null;
+    fontWeight?: ('normal' | 'semibold' | 'bold') | null;
+    textColor?: string | null;
+    textAlign?: ('left' | 'center' | 'right') | null;
+  };
+  /**
+   * URL-vennlig versjon (eks: jo-nesbo)
+   */
+  slug: string;
+  bio?: string | null;
+  bioStyle?: {
+    fontSize?: ('small' | 'normal' | 'large') | null;
+    fontWeight?: ('normal' | 'semibold' | 'bold') | null;
+    textColor?: string | null;
+    textAlign?: ('left' | 'center' | 'right' | 'justify') | null;
+    lineHeight?: ('tight' | 'normal' | 'loose') | null;
+  };
+  photo?: (number | null) | Media;
+  photoStyle?: {
+    borderRadius?: ('none' | 'small' | 'medium' | 'large' | 'full') | null;
+    opacity?: number | null;
+    objectFit?: ('cover' | 'contain' | 'fill') | null;
+  };
+  birthYear?: number | null;
+  nationality?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "genres".
+ */
+export interface Genre {
+  id: number;
+  name: string;
+  nameStyle?: {
+    fontSize?: ('small' | 'normal' | 'large' | 'xlarge') | null;
+    fontWeight?: ('normal' | 'semibold' | 'bold') | null;
+    textColor?: string | null;
+    textAlign?: ('left' | 'center' | 'right') | null;
+  };
+  slug: string;
+  description?: string | null;
+  descriptionStyle?: {
+    fontSize?: ('small' | 'normal' | 'large') | null;
+    fontWeight?: ('normal' | 'semibold' | 'bold') | null;
+    textColor?: string | null;
+    textAlign?: ('left' | 'center' | 'right' | 'justify') | null;
+    lineHeight?: ('tight' | 'normal' | 'loose') | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders".
+ */
+export interface Order {
+  id: number;
+  orderNumber: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone?: string | null;
+  items: {
+    book: number | Book;
+    quantity: number;
+    price: number;
+    id?: string | null;
+  }[];
+  totalAmount: number;
+  status?: ('pending' | 'confirmed' | 'shipped' | 'delivered') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: string;
+  id: number;
   key: string;
   data:
     | {
@@ -180,20 +317,36 @@ export interface PayloadKv {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: string;
+  id: number;
   document?:
     | ({
         relationTo: 'users';
-        value: string | User;
+        value: number | User;
+      } | null)
+    | ({
+        relationTo: 'books';
+        value: number | Book;
+      } | null)
+    | ({
+        relationTo: 'authors';
+        value: number | Author;
+      } | null)
+    | ({
+        relationTo: 'genres';
+        value: number | Genre;
+      } | null)
+    | ({
+        relationTo: 'orders';
+        value: number | Order;
       } | null)
     | ({
         relationTo: 'media';
-        value: string | Media;
+        value: number | Media;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -203,10 +356,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: string;
+  id: number;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   key?: string | null;
   value?:
@@ -226,7 +379,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: string;
+  id: number;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -253,6 +406,138 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "books_select".
+ */
+export interface BooksSelect<T extends boolean = true> {
+  title?: T;
+  titleStyle?:
+    | T
+    | {
+        fontSize?: T;
+        fontWeight?: T;
+        textColor?: T;
+        textAlign?: T;
+      };
+  slug?: T;
+  description?: T;
+  descriptionStyle?:
+    | T
+    | {
+        fontSize?: T;
+        fontWeight?: T;
+        textColor?: T;
+        textAlign?: T;
+        lineHeight?: T;
+      };
+  price?: T;
+  isbn?: T;
+  publishedYear?: T;
+  coverImage?: T;
+  coverImageStyle?:
+    | T
+    | {
+        borderRadius?: T;
+        opacity?: T;
+        objectFit?: T;
+      };
+  author?: T;
+  genres?: T;
+  ageRating?: T;
+  stock?: T;
+  featured?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "authors_select".
+ */
+export interface AuthorsSelect<T extends boolean = true> {
+  name?: T;
+  nameStyle?:
+    | T
+    | {
+        fontSize?: T;
+        fontWeight?: T;
+        textColor?: T;
+        textAlign?: T;
+      };
+  slug?: T;
+  bio?: T;
+  bioStyle?:
+    | T
+    | {
+        fontSize?: T;
+        fontWeight?: T;
+        textColor?: T;
+        textAlign?: T;
+        lineHeight?: T;
+      };
+  photo?: T;
+  photoStyle?:
+    | T
+    | {
+        borderRadius?: T;
+        opacity?: T;
+        objectFit?: T;
+      };
+  birthYear?: T;
+  nationality?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "genres_select".
+ */
+export interface GenresSelect<T extends boolean = true> {
+  name?: T;
+  nameStyle?:
+    | T
+    | {
+        fontSize?: T;
+        fontWeight?: T;
+        textColor?: T;
+        textAlign?: T;
+      };
+  slug?: T;
+  description?: T;
+  descriptionStyle?:
+    | T
+    | {
+        fontSize?: T;
+        fontWeight?: T;
+        textColor?: T;
+        textAlign?: T;
+        lineHeight?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders_select".
+ */
+export interface OrdersSelect<T extends boolean = true> {
+  orderNumber?: T;
+  customerName?: T;
+  customerEmail?: T;
+  customerPhone?: T;
+  items?:
+    | T
+    | {
+        book?: T;
+        quantity?: T;
+        price?: T;
+        id?: T;
+      };
+  totalAmount?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -311,6 +596,306 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  general: {
+    siteName: string;
+    logo?: (number | null) | Media;
+    favicon?: (number | null) | Media;
+  };
+  header: {
+    backgroundColor: 'emerald' | 'blue' | 'purple' | 'dark' | 'white';
+    textColor: 'white' | 'black' | 'gray';
+    sticky?: boolean | null;
+    showCartIcon?: boolean | null;
+  };
+  /**
+   * Legg til seksjoner som vises på hjemmesiden i rekkefølge
+   */
+  homeSections?:
+    | {
+        sectionType: 'hero' | 'featured' | 'categories' | 'text' | 'banner';
+        visible?: boolean | null;
+        hero?: {
+          title: string;
+          titleStyle?: {
+            fontSize?: ('small' | 'normal' | 'large' | 'xlarge' | 'xxlarge') | null;
+            fontWeight?: ('normal' | 'semibold' | 'bold') | null;
+            textColor?: string | null;
+            textAlign?: ('left' | 'center' | 'right') | null;
+          };
+          subtitle?: string | null;
+          subtitleStyle?: {
+            fontSize?: ('small' | 'normal' | 'large' | 'xlarge') | null;
+            fontWeight?: ('normal' | 'semibold' | 'bold') | null;
+            textColor?: string | null;
+            textAlign?: ('left' | 'center' | 'right') | null;
+          };
+          buttonText?: string | null;
+          buttonStyle?: {
+            backgroundColor?: string | null;
+            textColor?: string | null;
+            fontSize?: ('small' | 'normal' | 'large') | null;
+            padding?: ('small' | 'medium' | 'large') | null;
+            borderRadius?: ('none' | 'small' | 'medium' | 'large' | 'full') | null;
+          };
+          buttonLink?: string | null;
+          backgroundType: 'gradient' | 'image' | 'video';
+          backgroundImage?: (number | null) | Media;
+          /**
+           * Last opp video (MP4 anbefales)
+           */
+          backgroundVideo?: (number | null) | Media;
+          gradientStart?: ('emerald' | 'blue' | 'purple' | 'rose' | 'amber') | null;
+          gradientEnd?: ('emerald' | 'blue' | 'purple' | 'teal') | null;
+          height: 'short' | 'normal' | 'tall' | 'full';
+          textAlign?: ('left' | 'center' | 'right') | null;
+          padding?: ('none' | 'small' | 'medium' | 'large') | null;
+        };
+        featured?: {
+          title?: string | null;
+          titleStyle?: {
+            fontSize?: ('small' | 'normal' | 'large' | 'xlarge') | null;
+            fontWeight?: ('normal' | 'semibold' | 'bold') | null;
+            textColor?: string | null;
+            textAlign?: ('left' | 'center' | 'right') | null;
+          };
+          limit?: number | null;
+          backgroundColor?: ('white' | 'gray' | 'emerald') | null;
+          sectionPadding?: ('none' | 'small' | 'medium' | 'large') | null;
+        };
+        categories?: {
+          title?: string | null;
+          titleStyle?: {
+            fontSize?: ('small' | 'normal' | 'large' | 'xlarge') | null;
+            fontWeight?: ('normal' | 'semibold' | 'bold') | null;
+            textColor?: string | null;
+            textAlign?: ('left' | 'center' | 'right') | null;
+          };
+          backgroundColor?: ('white' | 'gray' | 'emerald') | null;
+          sectionPadding?: ('none' | 'small' | 'medium' | 'large') | null;
+        };
+        textSection?: {
+          title?: string | null;
+          titleStyle?: {
+            fontSize?: ('small' | 'normal' | 'large' | 'xlarge') | null;
+            fontWeight?: ('normal' | 'semibold' | 'bold') | null;
+            textColor?: string | null;
+            textAlign?: ('left' | 'center' | 'right') | null;
+          };
+          content: string;
+          contentStyle?: {
+            fontSize?: ('small' | 'normal' | 'large') | null;
+            fontWeight?: ('normal' | 'semibold' | 'bold') | null;
+            textColor?: string | null;
+            textAlign?: ('left' | 'center' | 'right' | 'justify') | null;
+            lineHeight?: ('tight' | 'normal' | 'loose') | null;
+          };
+          backgroundColor?: ('white' | 'gray' | 'emerald') | null;
+          sectionPadding?: ('none' | 'small' | 'medium' | 'large') | null;
+        };
+        banner?: {
+          image: number | Media;
+          imageStyle?: {
+            borderRadius?: ('none' | 'small' | 'medium' | 'large' | 'full') | null;
+            opacity?: number | null;
+            objectFit?: ('cover' | 'contain' | 'fill') | null;
+          };
+          height?: ('short' | 'medium' | 'tall') | null;
+          link?: string | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  footer: {
+    companyName: string;
+    companyNameStyle?: {
+      fontSize?: ('small' | 'normal' | 'large' | 'xlarge') | null;
+      fontWeight?: ('normal' | 'semibold' | 'bold') | null;
+      textColor?: string | null;
+    };
+    description?: string | null;
+    descriptionStyle?: {
+      fontSize?: ('small' | 'normal' | 'large') | null;
+      textColor?: string | null;
+    };
+    email: string;
+    phone?: string | null;
+    openingHours?: string | null;
+    backgroundColor?: ('dark' | 'gray' | 'emerald') | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  general?:
+    | T
+    | {
+        siteName?: T;
+        logo?: T;
+        favicon?: T;
+      };
+  header?:
+    | T
+    | {
+        backgroundColor?: T;
+        textColor?: T;
+        sticky?: T;
+        showCartIcon?: T;
+      };
+  homeSections?:
+    | T
+    | {
+        sectionType?: T;
+        visible?: T;
+        hero?:
+          | T
+          | {
+              title?: T;
+              titleStyle?:
+                | T
+                | {
+                    fontSize?: T;
+                    fontWeight?: T;
+                    textColor?: T;
+                    textAlign?: T;
+                  };
+              subtitle?: T;
+              subtitleStyle?:
+                | T
+                | {
+                    fontSize?: T;
+                    fontWeight?: T;
+                    textColor?: T;
+                    textAlign?: T;
+                  };
+              buttonText?: T;
+              buttonStyle?:
+                | T
+                | {
+                    backgroundColor?: T;
+                    textColor?: T;
+                    fontSize?: T;
+                    padding?: T;
+                    borderRadius?: T;
+                  };
+              buttonLink?: T;
+              backgroundType?: T;
+              backgroundImage?: T;
+              backgroundVideo?: T;
+              gradientStart?: T;
+              gradientEnd?: T;
+              height?: T;
+              textAlign?: T;
+              padding?: T;
+            };
+        featured?:
+          | T
+          | {
+              title?: T;
+              titleStyle?:
+                | T
+                | {
+                    fontSize?: T;
+                    fontWeight?: T;
+                    textColor?: T;
+                    textAlign?: T;
+                  };
+              limit?: T;
+              backgroundColor?: T;
+              sectionPadding?: T;
+            };
+        categories?:
+          | T
+          | {
+              title?: T;
+              titleStyle?:
+                | T
+                | {
+                    fontSize?: T;
+                    fontWeight?: T;
+                    textColor?: T;
+                    textAlign?: T;
+                  };
+              backgroundColor?: T;
+              sectionPadding?: T;
+            };
+        textSection?:
+          | T
+          | {
+              title?: T;
+              titleStyle?:
+                | T
+                | {
+                    fontSize?: T;
+                    fontWeight?: T;
+                    textColor?: T;
+                    textAlign?: T;
+                  };
+              content?: T;
+              contentStyle?:
+                | T
+                | {
+                    fontSize?: T;
+                    fontWeight?: T;
+                    textColor?: T;
+                    textAlign?: T;
+                    lineHeight?: T;
+                  };
+              backgroundColor?: T;
+              sectionPadding?: T;
+            };
+        banner?:
+          | T
+          | {
+              image?: T;
+              imageStyle?:
+                | T
+                | {
+                    borderRadius?: T;
+                    opacity?: T;
+                    objectFit?: T;
+                  };
+              height?: T;
+              link?: T;
+            };
+        id?: T;
+      };
+  footer?:
+    | T
+    | {
+        companyName?: T;
+        companyNameStyle?:
+          | T
+          | {
+              fontSize?: T;
+              fontWeight?: T;
+              textColor?: T;
+            };
+        description?: T;
+        descriptionStyle?:
+          | T
+          | {
+              fontSize?: T;
+              textColor?: T;
+            };
+        email?: T;
+        phone?: T;
+        openingHours?: T;
+        backgroundColor?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
