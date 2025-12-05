@@ -2,10 +2,21 @@ import type { GlobalConfig } from 'payload'
 
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
+  label: 'Site Settings',
   access: {
     read: () => true,
+    update: () => true,
   },
   fields: [
+    {
+      name: 'previewButton',
+      type: 'ui',
+      admin: {
+        components: {
+          Field: '../components/admin/PreviewButton#default',
+        },
+      },
+    },
     // GENERAL
     {
       name: 'general',
@@ -41,29 +52,31 @@ export const SiteSettings: GlobalConfig = {
       fields: [
         {
           name: 'backgroundColor',
-          type: 'select',
+          type: 'text',
           dbName: 'bg_col',
           required: true,
-          defaultValue: 'emerald',
-          options: [
-            { label: 'Emerald (Grønn)', value: 'emerald' },
-            { label: 'Blue (Blå)', value: 'blue' },
-            { label: 'Purple (Lilla)', value: 'purple' },
-            { label: 'Dark (Mørk)', value: 'dark' },
-            { label: 'White (Hvit)', value: 'white' },
-          ],
+          defaultValue: '#10b981',
+          label: 'Bakgrunnsfarge',
+          admin: {
+            description: 'Klikk på fargeboksen for å åpne fargehjul',
+            components: {
+              Field: '../components/admin/ColorPickerField#default',
+            },
+          },
         },
         {
           name: 'textColor',
-          type: 'select',
+          type: 'text',
           dbName: 'txt_col',
           required: true,
-          defaultValue: 'white',
-          options: [
-            { label: 'Hvit', value: 'white' },
-            { label: 'Svart', value: 'black' },
-            { label: 'Grå', value: 'gray' },
-          ],
+          defaultValue: '#ffffff',
+          label: 'Tekstfarge',
+          admin: {
+            description: 'Klikk på fargeboksen for å åpne fargehjul',
+            components: {
+              Field: '../components/admin/ColorPickerField#default',
+            },
+          },
         },
         {
           name: 'sticky',
@@ -159,7 +172,13 @@ export const SiteSettings: GlobalConfig = {
               type: 'text',
               dbName: 'tc',
               defaultValue: '#ffffff',
-              label: 'Tekstfarge (hex, f.eks. #ffffff)',
+              label: 'Tekstfarge',
+              admin: {
+                description: 'Klikk på fargeboksen for å åpne fargehjul',
+                components: {
+                  Field: '../components/admin/ColorPickerField#default',
+                },
+              },
             },
             {
               name: 'textAlign',
@@ -213,7 +232,13 @@ export const SiteSettings: GlobalConfig = {
               type: 'text',
               dbName: 'tc',
               defaultValue: '#ffffff',
-              label: 'Tekstfarge (hex)',
+              label: 'Tekstfarge',
+              admin: {
+                description: 'Klikk på fargeboksen for å åpne fargehjul',
+                components: {
+                  Field: '../components/admin/ColorPickerField#default',
+                },
+              },
             },
             {
               name: 'textAlign',
@@ -243,13 +268,25 @@ export const SiteSettings: GlobalConfig = {
               name: 'backgroundColor',
               type: 'text',
               defaultValue: '#10b981',
-              label: 'Bakgrunnsfarge (hex)',
+              label: 'Bakgrunnsfarge',
+              admin: {
+                description: 'Klikk på fargeboksen for å åpne fargehjul',
+                components: {
+                  Field: '../components/admin/ColorPickerField#default',
+                },
+              },
             },
             {
               name: 'textColor',
               type: 'text',
               defaultValue: '#ffffff',
-              label: 'Tekstfarge (hex)',
+              label: 'Tekstfarge',
+              admin: {
+                description: 'Klikk på fargeboksen for å åpne fargehjul',
+                components: {
+                  Field: '../components/admin/ColorPickerField#default',
+                },
+              },
             },
             {
               name: 'fontSize',
@@ -323,34 +360,17 @@ export const SiteSettings: GlobalConfig = {
               },
             },
             {
-              name: 'gradientStart',
-              type: 'select',
-              dbName: 'grad_start',
-              defaultValue: 'emerald',
-              options: [
-                { label: 'Emerald', value: 'emerald' },
-                { label: 'Blue', value: 'blue' },
-                { label: 'Purple', value: 'purple' },
-                { label: 'Rose', value: 'rose' },
-                { label: 'Amber', value: 'amber' },
-              ],
+              name: 'gradientColors',
+              type: 'text',
+              dbName: 'grad_colors',
+              defaultValue: JSON.stringify({ color1: '#10b981', color2: '#059669', angle: 135 }),
+              label: 'Gradient Farger',
               admin: {
+                description: 'Velg gradient-farger med fargehjul. Klikk på fargeboksene for å åpne fargehjul.',
                 condition: (data, siblingData) => siblingData?.backgroundType === 'gradient',
-              },
-            },
-            {
-              name: 'gradientEnd',
-              type: 'select',
-              dbName: 'grad_end',
-              defaultValue: 'teal',
-              options: [
-                { label: 'Emerald', value: 'emerald' },
-                { label: 'Blue', value: 'blue' },
-                { label: 'Purple', value: 'purple' },
-                { label: 'Teal', value: 'teal' },
-              ],
-              admin: {
-                condition: (data, siblingData) => siblingData?.backgroundType === 'gradient',
+                components: {
+                  Field: '../components/admin/GradientColorPickerField#default',
+                },
               },
             },
             {
@@ -441,7 +461,13 @@ export const SiteSettings: GlobalConfig = {
                   type: 'text',
                   dbName: 'tc',
                   defaultValue: '#000000',
-                  label: 'Tekstfarge (hex)',
+                  label: 'Tekstfarge',
+              admin: {
+                description: 'Klikk på fargeboksen for å åpne fargehjul',
+                components: {
+                  Field: '../components/admin/ColorPickerField#default',
+                },
+              },
                 },
                 {
                   name: 'textAlign',
@@ -465,13 +491,15 @@ export const SiteSettings: GlobalConfig = {
             },
             {
               name: 'backgroundColor',
-              type: 'select',
-              defaultValue: 'white',
-              options: [
-                { label: 'Hvit', value: 'white' },
-                { label: 'Grå', value: 'gray' },
-                { label: 'Emerald', value: 'emerald' },
-              ],
+              type: 'text',
+              defaultValue: '#ffffff',
+              label: 'Bakgrunnsfarge',
+              admin: {
+                description: 'Velg bakgrunnsfarge (hex, f.eks. #ffffff)',
+                htmlAttributes: {
+                  type: 'color',
+                },
+              },
             },
             {
               name: 'sectionPadding',
@@ -537,7 +565,13 @@ export const SiteSettings: GlobalConfig = {
                   type: 'text',
                   dbName: 'tc',
                   defaultValue: '#000000',
-                  label: 'Tekstfarge (hex)',
+                  label: 'Tekstfarge',
+              admin: {
+                description: 'Klikk på fargeboksen for å åpne fargehjul',
+                components: {
+                  Field: '../components/admin/ColorPickerField#default',
+                },
+              },
                 },
                 {
                   name: 'textAlign',
@@ -554,14 +588,16 @@ export const SiteSettings: GlobalConfig = {
             },
             {
               name: 'backgroundColor',
-              type: 'select',
+              type: 'text',
               dbName: 'bg_col',
-              defaultValue: 'gray',
-              options: [
-                { label: 'Hvit', value: 'white' },
-                { label: 'Grå', value: 'gray' },
-                { label: 'Emerald', value: 'emerald' },
-              ],
+              defaultValue: '#f3f4f6',
+              label: 'Bakgrunnsfarge',
+              admin: {
+                description: 'Velg bakgrunnsfarge (hex, f.eks. #f3f4f6)',
+                htmlAttributes: {
+                  type: 'color',
+                },
+              },
             },
             {
               name: 'sectionPadding',
@@ -626,7 +662,13 @@ export const SiteSettings: GlobalConfig = {
                   type: 'text',
                   dbName: 'tc',
                   defaultValue: '#000000',
-                  label: 'Tekstfarge (hex)',
+                  label: 'Tekstfarge',
+              admin: {
+                description: 'Klikk på fargeboksen for å åpne fargehjul',
+                components: {
+                  Field: '../components/admin/ColorPickerField#default',
+                },
+              },
                 },
                 {
                   name: 'textAlign',
@@ -679,7 +721,13 @@ export const SiteSettings: GlobalConfig = {
                   type: 'text',
                   dbName: 'tc',
                   defaultValue: '#000000',
-                  label: 'Tekstfarge (hex)',
+                  label: 'Tekstfarge',
+              admin: {
+                description: 'Klikk på fargeboksen for å åpne fargehjul',
+                components: {
+                  Field: '../components/admin/ColorPickerField#default',
+                },
+              },
                 },
                 {
                   name: 'textAlign',
@@ -708,14 +756,16 @@ export const SiteSettings: GlobalConfig = {
             },
             {
               name: 'backgroundColor',
-              type: 'select',
+              type: 'text',
               dbName: 'bg_col',
-              defaultValue: 'white',
-              options: [
-                { label: 'Hvit', value: 'white' },
-                { label: 'Grå', value: 'gray' },
-                { label: 'Emerald', value: 'emerald' },
-              ],
+              defaultValue: '#ffffff',
+              label: 'Bakgrunnsfarge',
+              admin: {
+                description: 'Velg bakgrunnsfarge (hex, f.eks. #ffffff)',
+                htmlAttributes: {
+                  type: 'color',
+                },
+              },
             },
             {
               name: 'sectionPadding',
@@ -857,7 +907,13 @@ export const SiteSettings: GlobalConfig = {
               type: 'text',
               dbName: 'tc',
               defaultValue: '#ffffff',
-              label: 'Tekstfarge (hex)',
+              label: 'Tekstfarge',
+              admin: {
+                description: 'Klikk på fargeboksen for å åpne fargehjul',
+                components: {
+                  Field: '../components/admin/ColorPickerField#default',
+                },
+              },
             },
           ],
         },
@@ -888,7 +944,13 @@ export const SiteSettings: GlobalConfig = {
               type: 'text',
               dbName: 'tc',
               defaultValue: '#ffffff',
-              label: 'Tekstfarge (hex)',
+              label: 'Tekstfarge',
+              admin: {
+                description: 'Klikk på fargeboksen for å åpne fargehjul',
+                components: {
+                  Field: '../components/admin/ColorPickerField#default',
+                },
+              },
             },
           ],
         },
@@ -910,14 +972,31 @@ export const SiteSettings: GlobalConfig = {
         },
         {
           name: 'backgroundColor',
-          type: 'select',
+          type: 'text',
           dbName: 'bg_col',
-          defaultValue: 'dark',
-          options: [
-            { label: 'Mørk', value: 'dark' },
-            { label: 'Grå', value: 'gray' },
-            { label: 'Emerald', value: 'emerald' },
-          ],
+          required: true,
+          defaultValue: '#111827',
+          label: 'Bakgrunnsfarge',
+          admin: {
+            description: 'Klikk på fargeboksen for å åpne fargehjul',
+            components: {
+              Field: '../components/admin/ColorPickerField#default',
+            },
+          },
+        },
+        {
+          name: 'textColor',
+          type: 'text',
+          dbName: 'txt_col',
+          required: true,
+          defaultValue: '#ffffff',
+          label: 'Tekstfarge',
+          admin: {
+            description: 'Klikk på fargeboksen for å åpne fargehjul',
+            components: {
+              Field: '../components/admin/ColorPickerField#default',
+            },
+          },
         },
       ],
     },
