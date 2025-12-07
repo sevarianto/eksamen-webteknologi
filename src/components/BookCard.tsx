@@ -43,16 +43,34 @@ export default function BookCard({ book }: BookCardProps) {
         )}
 
         {/* Age Rating Badge */}
-        <div className="mb-3">
-          <span className={`text-xs px-2 py-1 rounded ${
-            book.ageRating === 'barn' ? 'bg-blue-100 text-blue-800' :
-            book.ageRating === 'ungdom' ? 'bg-purple-100 text-purple-800' :
-            'bg-gray-100 text-gray-800'
-          }`}>
-            {book.ageRating === 'barn' ? 'Barn' :
-             book.ageRating === 'ungdom' ? 'Ungdom' : 'Voksen'}
-          </span>
-        </div>
+        {book.ageRating && book.ageRating.length > 0 && (
+          <div className="mb-3 flex flex-wrap gap-1">
+            {Array.isArray(book.ageRating) ? (
+              book.ageRating.map((rating) => (
+                <span
+                  key={rating}
+                  className={`text-xs px-2 py-1 rounded ${
+                    rating === 'barn' ? 'bg-blue-100 text-blue-800' :
+                    rating === 'ungdom' ? 'bg-purple-100 text-purple-800' :
+                    'bg-gray-100 text-gray-800'
+                  }`}
+                >
+                  {rating === 'barn' ? 'Barn' :
+                   rating === 'ungdom' ? 'Ungdom' : 'Voksen'}
+                </span>
+              ))
+            ) : (
+              <span className={`text-xs px-2 py-1 rounded ${
+                book.ageRating === 'barn' ? 'bg-blue-100 text-blue-800' :
+                book.ageRating === 'ungdom' ? 'bg-purple-100 text-purple-800' :
+                'bg-gray-100 text-gray-800'
+              }`}>
+                {book.ageRating === 'barn' ? 'Barn' :
+                 book.ageRating === 'ungdom' ? 'Ungdom' : 'Voksen'}
+              </span>
+            )}
+          </div>
+        )}
 
         {/* Price and Stock */}
         <div className="flex justify-between items-center pt-3 border-t">

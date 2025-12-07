@@ -93,7 +93,29 @@ export default async function Home() {
                   <div className="absolute inset-0 bg-black bg-opacity-40"></div>
                 </>
               ) : (
-                <div className={`absolute inset-0 bg-gradient-to-br ${gradients[hero.gradientStart as keyof typeof gradients] || gradients.emerald}`}></div>
+                (() => {
+                  // Try to parse custom gradient colors
+                  let gradientStyle: React.CSSProperties = {}
+                  try {
+                    if (hero.gradientColors && typeof hero.gradientColors === 'string') {
+                      const gradient = JSON.parse(hero.gradientColors)
+                      if (gradient.color1 && gradient.color2) {
+                        gradientStyle = {
+                          background: `linear-gradient(${gradient.angle || 135}deg, ${gradient.color1}, ${gradient.color2})`,
+                        }
+                      }
+                    }
+                  } catch {
+                    // Fallback to default gradient
+                  }
+                  
+                  if (Object.keys(gradientStyle).length > 0) {
+                    return <div className="absolute inset-0" style={gradientStyle}></div>
+                  }
+                  
+                  // Fallback to predefined gradients
+                  return <div className={`absolute inset-0 bg-gradient-to-br ${gradients[hero.gradientStart as keyof typeof gradients] || gradients.emerald}`}></div>
+                })()
               )}
 
               {/* Content */}
@@ -121,31 +143,46 @@ export default async function Home() {
 
         // FEATURED BOOKS SECTION
         if (section.sectionType === 'featured' && section.featured) {
-          const bgClasses = {
-            white: 'bg-white',
-            gray: 'bg-gray-100',
-            emerald: 'bg-emerald-50',
+          const getBgStyle = () => {
+            if (section.featured.backgroundColor && section.featured.backgroundColor.startsWith('#')) {
+              return { style: { backgroundColor: section.featured.backgroundColor }, className: '' }
+            }
+            const bgClasses: Record<string, string> = {
+              white: 'bg-white',
+              gray: 'bg-gray-100',
+              emerald: 'bg-emerald-50',
+            }
+            return { style: {}, className: bgClasses[section.featured.backgroundColor as string] || bgClasses.white }
           }
+          const bgStyle = getBgStyle()
 
           return (
             <FeaturedBooksSection 
               key={index} 
               settings={section.featured}
-              bgClass={bgClasses[section.featured.backgroundColor as keyof typeof bgClasses] || bgClasses.white}
+              bgClass={bgStyle.className}
+              bgStyle={bgStyle.style}
             />
           )
         }
 
         // CATEGORIES SECTION
         if (section.sectionType === 'categories' && section.categories) {
-          const bgClasses = {
-            white: 'bg-white',
-            gray: 'bg-gray-100',
-            emerald: 'bg-emerald-50',
+          const getBgStyle = () => {
+            if (section.categories.backgroundColor && section.categories.backgroundColor.startsWith('#')) {
+              return { style: { backgroundColor: section.categories.backgroundColor }, className: '' }
+            }
+            const bgClasses: Record<string, string> = {
+              white: 'bg-white',
+              gray: 'bg-gray-100',
+              emerald: 'bg-emerald-50',
+            }
+            return { style: {}, className: bgClasses[section.categories.backgroundColor as string] || bgClasses.gray }
           }
+          const bgStyle = getBgStyle()
 
           return (
-            <section key={index} className={`${bgClasses[section.categories.backgroundColor as keyof typeof bgClasses] || bgClasses.gray} py-16`}>
+            <section key={index} className={`${bgStyle.className} py-16`} style={bgStyle.style}>
               <div className="container mx-auto px-4">
                 <h2 className="text-4xl font-bold mb-10 text-center">
                   {section.categories.title}
@@ -174,14 +211,21 @@ export default async function Home() {
 
         // TEXT SECTION
         if (section.sectionType === 'text' && section.textSection) {
-          const bgClasses = {
-            white: 'bg-white',
-            gray: 'bg-gray-100',
-            emerald: 'bg-emerald-50',
+          const getBgStyle = () => {
+            if (section.textSection.backgroundColor && section.textSection.backgroundColor.startsWith('#')) {
+              return { style: { backgroundColor: section.textSection.backgroundColor }, className: '' }
+            }
+            const bgClasses: Record<string, string> = {
+              white: 'bg-white',
+              gray: 'bg-gray-100',
+              emerald: 'bg-emerald-50',
+            }
+            return { style: {}, className: bgClasses[section.textSection.backgroundColor as string] || bgClasses.white }
           }
+          const bgStyle = getBgStyle()
 
           return (
-            <section key={index} className={`${bgClasses[section.textSection.backgroundColor as keyof typeof bgClasses] || bgClasses.white} py-16`}>
+            <section key={index} className={`${bgStyle.className} py-16`} style={bgStyle.style}>
               <div className="container mx-auto px-4 max-w-4xl">
                 {section.textSection.title && (
                   <h2 className="text-4xl font-bold mb-6 text-center">{section.textSection.title}</h2>

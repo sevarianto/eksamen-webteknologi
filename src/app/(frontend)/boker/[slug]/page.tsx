@@ -80,14 +80,30 @@ export default async function BookDetailPage(props: { params: Promise<{ slug: st
 
           {/* Metadata */}
           <div className="flex flex-wrap gap-3 mb-6">
-            <span className={`px-3 py-1 rounded text-sm font-medium ${
-              book.ageRating === 'barn' ? 'bg-blue-100 text-blue-800' :
-              book.ageRating === 'ungdom' ? 'bg-purple-100 text-purple-800' :
-              'bg-gray-100 text-gray-800'
-            }`}>
-              {book.ageRating === 'barn' ? 'Barn (5-13 år)' :
-               book.ageRating === 'ungdom' ? 'Ungdom (13-17 år)' : 'Voksen (17+ år)'}
-            </span>
+            {Array.isArray(book.ageRating) && book.ageRating.length > 0 ? (
+              book.ageRating.map((rating) => (
+                <span
+                  key={rating}
+                  className={`px-3 py-1 rounded text-sm font-medium ${
+                    rating === 'barn' ? 'bg-blue-100 text-blue-800' :
+                    rating === 'ungdom' ? 'bg-purple-100 text-purple-800' :
+                    'bg-gray-100 text-gray-800'
+                  }`}
+                >
+                  {rating === 'barn' ? 'Barn (5-13 år)' :
+                   rating === 'ungdom' ? 'Ungdom (13-17 år)' : 'Voksen (17+ år)'}
+                </span>
+              ))
+            ) : book.ageRating ? (
+              <span className={`px-3 py-1 rounded text-sm font-medium ${
+                book.ageRating === 'barn' ? 'bg-blue-100 text-blue-800' :
+                book.ageRating === 'ungdom' ? 'bg-purple-100 text-purple-800' :
+                'bg-gray-100 text-gray-800'
+              }`}>
+                {book.ageRating === 'barn' ? 'Barn (5-13 år)' :
+                 book.ageRating === 'ungdom' ? 'Ungdom (13-17 år)' : 'Voksen (17+ år)'}
+              </span>
+            ) : null}
             
             {genres.map((genre) => (
               <Link
