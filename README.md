@@ -1,67 +1,226 @@
-# Payload Blank Template
+# BookDragons - Nettbutikk for bøker
 
-This template comes configured with the bare minimum to get started on anything you need.
+En moderne nettbutikk for bøker bygget med Next.js, Payload CMS og SQLite. BookDragons lar kunder utforske bøker, filtrere etter sjanger, legge varer i handlekurv og sende inn bestillinger. Ansatte kan administrere innholdet gjennom Payload CMS admin-panel.
 
-## Quick start
+## Teknologistack
 
-This template can be deployed directly from our Cloud hosting and it will setup MongoDB and cloud S3 object storage for media.
+### Frontend
+- **Next.js 15.4.8** - React-rammeverk med App Router
+- **React 19.2.1** - UI-bibliotek
+- **TypeScript 5.7.3** - Type-sikkerhet
+- **Tailwind CSS 3.4.18** - Styling
 
-## Quick Start - local setup
+### Backend
+- **Payload CMS 3.67.0** - Headless CMS
+- **SQLite** - Database (via @payloadcms/db-sqlite)
+- **Sharp 0.34.2** - Bildebehandling
 
-To spin up this template locally, follow these steps:
+### Utvikling
+- **Vitest** - Enhetstester
+- **Playwright** - E2E-tester
+- **ESLint** - Linting
 
-### Clone
+## Prosjektstruktur
 
-After you click the `Deploy` button above, you'll want to have standalone copy of this repo on your machine. If you've already cloned this repo, skip to [Development](#development).
+```
+eksamen-webteknologi/
+├── src/
+│   ├── app/                    # Next.js App Router
+│   │   ├── (frontend)/         # Frontend-ruter
+│   │   │   ├── boker/          # Bokliste og detaljsider
+│   │   │   ├── forfattere/     # Forfatterliste og detaljsider
+│   │   │   ├── sjangere/       # Sjangerliste og filtrering
+│   │   │   ├── handlekurv/     # Handlekurv-side
+│   │   │   ├── bestilling/     # Bestillingsskjema
+│   │   │   └── page.tsx       # Forside
+│   │   └── (payload)/          # Payload CMS admin
+│   │       └── admin/          # Admin-panel
+│   ├── collections/            # Payload collections
+│   │   ├── Books.ts            # Bøker
+│   │   ├── Authors.ts         # Forfattere
+│   │   ├── Genres.ts          # Sjangere
+│   │   ├── Orders.ts          # Bestillinger
+│   │   ├── Users.ts            # Brukere
+│   │   └── Media.ts            # Media-opplastinger
+│   ├── components/             # Gjenbrukbare React-komponenter
+│   │   ├── BookCard.tsx        # Bokkort-komponent
+│   │   ├── AuthorCard.tsx      # Forfatterkort-komponent
+│   │   ├── AddToCartButton.tsx # Handlekurv-knapp
+│   │   ├── Header.tsx          # Header-komponent
+│   │   └── Footer.tsx          # Footer-komponent
+│   ├── lib/                    # Hjelpefunksjoner
+│   │   └── cart.ts             # Handlekurv-logikk
+│   ├── globals/                # Payload globals
+│   │   └── SiteSettings.ts     # Nettsted-innstillinger
+│   ├── payload.config.ts       # Payload-konfigurasjon
+│   └── payload-types.ts        # Genererte TypeScript-typer
+├── tests/                      # Tester
+│   ├── e2e/                    # E2E-tester
+│   └── int/                    # Integrasjonstester
+└── package.json
+```
 
-### Development
+## Installasjon
 
-1. First [clone the repo](#clone) if you have not done so already
-2. `cd my-project && cp .env.example .env` to copy the example environment variables. You'll need to add the `MONGODB_URI` from your Cloud project to your `.env` if you want to use S3 storage and the MongoDB database that was created for you.
+### Forutsetninger
+- Node.js 18.20.2 eller høyere (eller >=20.9.0)
+- pnpm 9 eller høyere
 
-3. `pnpm install && pnpm dev` to install dependencies and start the dev server
-4. open `http://localhost:3000` to open the app in your browser
+### Steg-for-steg
 
-That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
+1. **Klon repositoriet**
+   ```bash
+   git clone <repository-url>
+   cd eksamen-webteknologi
+   ```
 
-#### Docker (Optional)
+2. **Installer avhengigheter**
+   ```bash
+   pnpm install
+   ```
 
-If you prefer to use Docker for local development instead of a local MongoDB instance, the provided docker-compose.yml file can be used.
+3. **Opprett miljøvariabler**
+   
+   Opprett en `.env`-fil i rotmappen:
+   ```env
+   # Payload
+   PAYLOAD_SECRET=din-hemmelige-nøkkel-her
+   
+   # Database (SQLite)
+   DATABASE_URI=file:./eksamen-webteknologi.db
+   
+   # Next.js
+   NEXT_PUBLIC_SERVER_URL=http://localhost:3000
+   ```
 
-To do so, follow these steps:
+   **Viktig:** Bytt ut `PAYLOAD_SECRET` med en tilfeldig streng. Du kan generere en med:
+   ```bash
+   openssl rand -base64 32
+   ```
 
-- Modify the `MONGODB_URI` in your `.env` file to `mongodb://127.0.0.1/<dbname>`
-- Modify the `docker-compose.yml` file's `MONGODB_URI` to match the above `<dbname>`
-- Run `docker-compose up` to start the database, optionally pass `-d` to run in the background.
+4. **Start utviklingsserveren**
+   ```bash
+   pnpm dev
+   ```
 
-## How it works
+5. **Åpne nettleseren**
+   - Frontend: http://localhost:3000
+   - Admin-panel: http://localhost:3000/admin
 
-The Payload config is tailored specifically to the needs of most websites. It is pre-configured in the following ways:
+6. **Opprett første admin-bruker**
+   - Gå til http://localhost:3000/admin
+   - Følg instruksjonene for å opprette din første admin-bruker
 
-### Collections
+## Bygging for produksjon
 
-See the [Collections](https://payloadcms.com/docs/configuration/collections) docs for details on how to extend this functionality.
+1. **Bygg prosjektet**
+   ```bash
+   pnpm build
+   ```
 
-- #### Users (Authentication)
+2. **Start produksjonsserveren**
+   ```bash
+   pnpm start
+   ```
 
-  Users are auth-enabled collections that have access to the admin panel.
+## Database
 
-  For additional help, see the official [Auth Example](https://github.com/payloadcms/payload/tree/main/examples/auth) or the [Authentication](https://payloadcms.com/docs/authentication/overview#authentication-overview) docs.
+Prosjektet bruker SQLite som database. Database-filen (`eksamen-webteknologi.db`) lagres lokalt i prosjektmappen og er ekskludert fra git via `.gitignore`.
 
-- #### Media
+### Database-oppsett
+- Database-filen opprettes automatisk ved første kjøring
+- Ingen ekstra konfigurasjon nødvendig
+- For produksjon, vurder å bruke PostgreSQL eller MongoDB
 
-  This is the uploads enabled collection. It features pre-configured sizes, focal point and manual resizing to help you manage your pictures.
+## Funksjonalitet
 
-### Docker
+### For kunder
+- ✅ Se alle bøker
+- ✅ Se bokdetaljer (tittel, forfatter, beskrivelse, pris, lagerstatus)
+- ✅ Filtrere bøker etter sjanger
+- ✅ Se lagerstatus for hver bok
+- ✅ Legge bøker i handlekurv
+- ✅ Se handlekurv med antall og totalpris
+- ✅ Sende inn bestilling med kontaktinformasjon
+- ✅ Se bestillingsbekreftelse
 
-Alternatively, you can use [Docker](https://www.docker.com) to spin up this template locally. To do so, follow these steps:
+### For ansatte (Admin-panel)
+- ✅ Legge inn bøker med alle detaljer
+- ✅ Administrere forfattere med biografi og foto
+- ✅ Administrere sjangere med beskrivelser
+- ✅ Sette lagerstatus (antall på lager)
+- ✅ Legge til aldersmerking (barn, ungdom, voksen)
+- ✅ Last opp bilder (forsidebilder, forfatterfoto)
+- ✅ Se oversikt over alle bestillinger
+- ✅ Konfigurere nettsted-innstillinger (header, footer, hjemmeside-seksjoner)
 
-1. Follow [steps 1 and 2 from above](#development), the docker-compose file will automatically use the `.env` file in your project root
-1. Next run `docker-compose up`
-1. Follow [steps 4 and 5 from above](#development) to login and create your first admin user
+## Testing
 
-That's it! The Docker instance will help you get up and running quickly while also standardizing the development environment across your teams.
+### Kjøre tester
+```bash
+# Alle tester
+pnpm test
 
-## Questions
+# Kun integrasjonstester
+pnpm test:int
 
-If you have any issues or questions, reach out to us on [Discord](https://discord.com/invite/payload) or start a [GitHub discussion](https://github.com/payloadcms/payload/discussions).
+# Kun E2E-tester
+pnpm test:e2e
+```
+
+### E2E-tester
+E2E-tester krever at utviklingsserveren kjører:
+```bash
+# Terminal 1: Start server
+pnpm dev
+
+# Terminal 2: Kjør tester
+pnpm test:e2e
+```
+
+## Utvikling
+
+### Generere TypeScript-typer
+Når du endrer Payload collections, generer nye typer:
+```bash
+pnpm generate:types
+```
+
+### Linting
+```bash
+pnpm lint
+```
+
+## Miljøvariabler
+
+| Variabel | Beskrivelse | Påkrevd |
+|----------|-------------|---------|
+| `PAYLOAD_SECRET` | Hemmelig nøkkel for Payload | Ja |
+| `DATABASE_URI` | SQLite database path | Nei (standard: `file:./eksamen-webteknologi.db`) |
+| `NEXT_PUBLIC_SERVER_URL` | Base URL for API-kall | Nei (standard: `http://localhost:3000`) |
+
+## Feilsøking
+
+### Database-filer
+Hvis du får problemer med database, kan du slette database-filen og la den opprettes på nytt:
+```bash
+rm eksamen-webteknologi.db
+pnpm dev
+```
+
+### Port allerede i bruk
+Hvis port 3000 allerede er i bruk, endre porten i `package.json` eller miljøvariabler.
+
+### TypeScript-feil
+Hvis du får TypeScript-feil etter å ha endret collections:
+```bash
+pnpm generate:types
+```
+
+## Lisens
+
+MIT
+
+## Kontakt
+
+For spørsmål eller problemer, opprett en issue i repositoriet.
