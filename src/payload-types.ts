@@ -249,6 +249,7 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+  sizes?: {};
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -555,6 +556,7 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+  sizes?: T | {};
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -609,13 +611,23 @@ export interface SiteSetting {
   };
   header: {
     /**
-     * Klikk på fargeboksen for å åpne fargehjul
+     * Velg bakgrunnsfarge (hex, f.eks. #10b981)
      */
     backgroundColor: string;
     /**
-     * Klikk på fargeboksen for å åpne fargehjul
+     * Velg tekstfarge fra listen
      */
-    textColor: string;
+    textColor:
+      | '#ffffff'
+      | '#000000'
+      | '#f3f4f6'
+      | '#6b7280'
+      | '#374151'
+      | '#ef4444'
+      | '#3b82f6'
+      | '#10b981'
+      | '#f59e0b'
+      | '#8b5cf6';
     sticky?: boolean | null;
     showCartIcon?: boolean | null;
   };
@@ -632,9 +644,22 @@ export interface SiteSetting {
             fontSize?: ('small' | 'normal' | 'large' | 'xlarge' | 'xxlarge') | null;
             fontWeight?: ('normal' | 'semibold' | 'bold') | null;
             /**
-             * Klikk på fargeboksen for å åpne fargehjul
+             * Velg tekstfarge fra listen
              */
-            textColor?: string | null;
+            textColor?:
+              | (
+                  | '#ffffff'
+                  | '#000000'
+                  | '#f3f4f6'
+                  | '#6b7280'
+                  | '#374151'
+                  | '#ef4444'
+                  | '#3b82f6'
+                  | '#10b981'
+                  | '#f59e0b'
+                  | '#8b5cf6'
+                )
+              | null;
             textAlign?: ('left' | 'center' | 'right') | null;
           };
           subtitle?: string | null;
@@ -642,21 +667,47 @@ export interface SiteSetting {
             fontSize?: ('small' | 'normal' | 'large' | 'xlarge') | null;
             fontWeight?: ('normal' | 'semibold' | 'bold') | null;
             /**
-             * Klikk på fargeboksen for å åpne fargehjul
+             * Velg tekstfarge fra listen
              */
-            textColor?: string | null;
+            textColor?:
+              | (
+                  | '#ffffff'
+                  | '#000000'
+                  | '#f3f4f6'
+                  | '#6b7280'
+                  | '#374151'
+                  | '#ef4444'
+                  | '#3b82f6'
+                  | '#10b981'
+                  | '#f59e0b'
+                  | '#8b5cf6'
+                )
+              | null;
             textAlign?: ('left' | 'center' | 'right') | null;
           };
           buttonText?: string | null;
           buttonStyle?: {
             /**
-             * Klikk på fargeboksen for å åpne fargehjul
+             * Velg bakgrunnsfarge (hex, f.eks. #10b981)
              */
             backgroundColor?: string | null;
             /**
-             * Klikk på fargeboksen for å åpne fargehjul
+             * Velg tekstfarge fra listen
              */
-            textColor?: string | null;
+            textColor?:
+              | (
+                  | '#ffffff'
+                  | '#000000'
+                  | '#f3f4f6'
+                  | '#6b7280'
+                  | '#374151'
+                  | '#ef4444'
+                  | '#3b82f6'
+                  | '#10b981'
+                  | '#f59e0b'
+                  | '#8b5cf6'
+                )
+              | null;
             fontSize?: ('small' | 'normal' | 'large') | null;
             padding?: ('small' | 'medium' | 'large') | null;
             borderRadius?: ('none' | 'small' | 'medium' | 'large' | 'full') | null;
@@ -669,9 +720,17 @@ export interface SiteSetting {
            */
           backgroundVideo?: (number | null) | Media;
           /**
-           * Velg gradient-farger med fargehjul. Klikk på fargeboksene for å åpne fargehjul.
+           * Velg første gradient-farge (hex, f.eks. #10b981)
            */
-          gradientColors?: string | null;
+          gradientColor1?: string | null;
+          /**
+           * Velg andre gradient-farge (hex, f.eks. #059669)
+           */
+          gradientColor2?: string | null;
+          /**
+           * Vinkel for gradient (0-360 grader)
+           */
+          gradientAngle?: number | null;
           height: 'short' | 'normal' | 'tall' | 'full';
           textAlign?: ('left' | 'center' | 'right') | null;
           padding?: ('none' | 'small' | 'medium' | 'large') | null;
@@ -682,9 +741,22 @@ export interface SiteSetting {
             fontSize?: ('small' | 'normal' | 'large' | 'xlarge') | null;
             fontWeight?: ('normal' | 'semibold' | 'bold') | null;
             /**
-             * Klikk på fargeboksen for å åpne fargehjul
+             * Velg tekstfarge fra listen
              */
-            textColor?: string | null;
+            textColor?:
+              | (
+                  | '#ffffff'
+                  | '#000000'
+                  | '#f3f4f6'
+                  | '#6b7280'
+                  | '#374151'
+                  | '#ef4444'
+                  | '#3b82f6'
+                  | '#10b981'
+                  | '#f59e0b'
+                  | '#8b5cf6'
+                )
+              | null;
             textAlign?: ('left' | 'center' | 'right') | null;
           };
           limit?: number | null;
@@ -700,9 +772,22 @@ export interface SiteSetting {
             fontSize?: ('small' | 'normal' | 'large' | 'xlarge') | null;
             fontWeight?: ('normal' | 'semibold' | 'bold') | null;
             /**
-             * Klikk på fargeboksen for å åpne fargehjul
+             * Velg tekstfarge fra listen
              */
-            textColor?: string | null;
+            textColor?:
+              | (
+                  | '#ffffff'
+                  | '#000000'
+                  | '#f3f4f6'
+                  | '#6b7280'
+                  | '#374151'
+                  | '#ef4444'
+                  | '#3b82f6'
+                  | '#10b981'
+                  | '#f59e0b'
+                  | '#8b5cf6'
+                )
+              | null;
             textAlign?: ('left' | 'center' | 'right') | null;
           };
           /**
@@ -717,9 +802,22 @@ export interface SiteSetting {
             fontSize?: ('small' | 'normal' | 'large' | 'xlarge') | null;
             fontWeight?: ('normal' | 'semibold' | 'bold') | null;
             /**
-             * Klikk på fargeboksen for å åpne fargehjul
+             * Velg tekstfarge fra listen
              */
-            textColor?: string | null;
+            textColor?:
+              | (
+                  | '#ffffff'
+                  | '#000000'
+                  | '#f3f4f6'
+                  | '#6b7280'
+                  | '#374151'
+                  | '#ef4444'
+                  | '#3b82f6'
+                  | '#10b981'
+                  | '#f59e0b'
+                  | '#8b5cf6'
+                )
+              | null;
             textAlign?: ('left' | 'center' | 'right') | null;
           };
           content: string;
@@ -727,9 +825,22 @@ export interface SiteSetting {
             fontSize?: ('small' | 'normal' | 'large') | null;
             fontWeight?: ('normal' | 'semibold' | 'bold') | null;
             /**
-             * Klikk på fargeboksen for å åpne fargehjul
+             * Velg tekstfarge fra listen
              */
-            textColor?: string | null;
+            textColor?:
+              | (
+                  | '#ffffff'
+                  | '#000000'
+                  | '#f3f4f6'
+                  | '#6b7280'
+                  | '#374151'
+                  | '#ef4444'
+                  | '#3b82f6'
+                  | '#10b981'
+                  | '#f59e0b'
+                  | '#8b5cf6'
+                )
+              | null;
             textAlign?: ('left' | 'center' | 'right' | 'justify') | null;
             lineHeight?: ('tight' | 'normal' | 'loose') | null;
           };
@@ -758,29 +869,65 @@ export interface SiteSetting {
       fontSize?: ('small' | 'normal' | 'large' | 'xlarge') | null;
       fontWeight?: ('normal' | 'semibold' | 'bold') | null;
       /**
-       * Klikk på fargeboksen for å åpne fargehjul
+       * Velg tekstfarge fra listen
        */
-      textColor?: string | null;
+      textColor?:
+        | (
+            | '#ffffff'
+            | '#000000'
+            | '#f3f4f6'
+            | '#6b7280'
+            | '#374151'
+            | '#ef4444'
+            | '#3b82f6'
+            | '#10b981'
+            | '#f59e0b'
+            | '#8b5cf6'
+          )
+        | null;
     };
     description?: string | null;
     descriptionStyle?: {
       fontSize?: ('small' | 'normal' | 'large') | null;
       /**
-       * Klikk på fargeboksen for å åpne fargehjul
+       * Velg tekstfarge fra listen
        */
-      textColor?: string | null;
+      textColor?:
+        | (
+            | '#ffffff'
+            | '#000000'
+            | '#f3f4f6'
+            | '#6b7280'
+            | '#374151'
+            | '#ef4444'
+            | '#3b82f6'
+            | '#10b981'
+            | '#f59e0b'
+            | '#8b5cf6'
+          )
+        | null;
     };
     email: string;
     phone?: string | null;
     openingHours?: string | null;
     /**
-     * Klikk på fargeboksen for å åpne fargehjul
+     * Velg bakgrunnsfarge (hex, f.eks. #111827)
      */
     backgroundColor: string;
     /**
-     * Klikk på fargeboksen for å åpne fargehjul
+     * Velg tekstfarge fra listen
      */
-    textColor: string;
+    textColor:
+      | '#ffffff'
+      | '#000000'
+      | '#f3f4f6'
+      | '#6b7280'
+      | '#374151'
+      | '#ef4444'
+      | '#3b82f6'
+      | '#10b981'
+      | '#f59e0b'
+      | '#8b5cf6';
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -845,7 +992,9 @@ export interface SiteSettingsSelect<T extends boolean = true> {
               backgroundType?: T;
               backgroundImage?: T;
               backgroundVideo?: T;
-              gradientColors?: T;
+              gradientColor1?: T;
+              gradientColor2?: T;
+              gradientAngle?: T;
               height?: T;
               textAlign?: T;
               padding?: T;
