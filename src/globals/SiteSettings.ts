@@ -53,29 +53,34 @@ export const SiteSettings: GlobalConfig = {
         {
           name: 'backgroundColor',
           type: 'text',
-          dbName: 'bg_col',
           required: true,
           defaultValue: '#10b981',
           label: 'Bakgrunnsfarge',
           admin: {
-            description: 'Klikk på fargeboksen for å åpne fargehjul',
-            components: {
-              Field: '../components/admin/ColorPickerField#default',
-            },
+            description: 'Velg bakgrunnsfarge (hex, f.eks. #10b981)',
           },
         },
         {
           name: 'textColor',
-          type: 'text',
+          type: 'select',
           dbName: 'txt_col',
           required: true,
           defaultValue: '#ffffff',
           label: 'Tekstfarge',
+          options: [
+            { label: 'Hvit', value: '#ffffff' },
+            { label: 'Svart', value: '#000000' },
+            { label: 'Grå (lys)', value: '#f3f4f6' },
+            { label: 'Grå (mørk)', value: '#6b7280' },
+            { label: 'Grå (veldig mørk)', value: '#374151' },
+            { label: 'Rød', value: '#ef4444' },
+            { label: 'Blå', value: '#3b82f6' },
+            { label: 'Grønn', value: '#10b981' },
+            { label: 'Gul', value: '#f59e0b' },
+            { label: 'Lilla', value: '#8b5cf6' },
+          ],
           admin: {
-            description: 'Klikk på fargeboksen for å åpne fargehjul',
-            components: {
-              Field: '../components/admin/ColorPickerField#default',
-            },
+            description: 'Velg tekstfarge fra listen',
           },
         },
         {
@@ -121,7 +126,7 @@ export const SiteSettings: GlobalConfig = {
           defaultValue: true,
           label: 'Vis denne seksjonen',
         },
-        
+
         // HERO SETTINGS
         {
           name: 'hero',
@@ -131,200 +136,222 @@ export const SiteSettings: GlobalConfig = {
             condition: (data, siblingData) => siblingData?.sectionType === 'hero',
           },
           fields: [
-        {
-          name: 'title',
-          type: 'text',
-          required: true,
-          defaultValue: 'Velkommen til BookDragons',
-        },
-        {
-          name: 'titleStyle',
-          type: 'group',
-          label: 'Tittel Styling',
-          dbName: 'title_sty',
-          fields: [
             {
-              name: 'fontSize',
-              type: 'select',
-              dbName: 'fs',
-              defaultValue: 'xlarge',
-              options: [
-                { label: 'Liten', value: 'small' },
-                { label: 'Normal', value: 'normal' },
-                { label: 'Stor', value: 'large' },
-                { label: 'Ekstra Stor', value: 'xlarge' },
-                { label: 'XXL', value: 'xxlarge' },
-              ],
-            },
-            {
-              name: 'fontWeight',
-              type: 'select',
-              dbName: 'fw',
-              defaultValue: 'bold',
-              options: [
-                { label: 'Normal', value: 'normal' },
-                { label: 'Halvfet', value: 'semibold' },
-                { label: 'Fet', value: 'bold' },
-              ],
-            },
-            {
-              name: 'textColor',
+              name: 'title',
               type: 'text',
-              dbName: 'tc',
-              defaultValue: '#ffffff',
-              label: 'Tekstfarge',
-              admin: {
-                description: 'Klikk på fargeboksen for å åpne fargehjul',
-                components: {
-                  Field: '../components/admin/ColorPickerField#default',
+              required: true,
+              defaultValue: 'Velkommen til BookDragons',
+            },
+            {
+              name: 'titleStyle',
+              type: 'group',
+              label: 'Tittel Styling',
+              fields: [
+                {
+                  name: 'fontSize',
+                  type: 'select',
+                  dbName: 'fs',
+                  defaultValue: 'xlarge',
+                  options: [
+                    { label: 'Liten', value: 'small' },
+                    { label: 'Normal', value: 'normal' },
+                    { label: 'Stor', value: 'large' },
+                    { label: 'Ekstra Stor', value: 'xlarge' },
+                    { label: 'XXL', value: 'xxlarge' },
+                  ],
                 },
-              },
-            },
-            {
-              name: 'textAlign',
-              type: 'select',
-              dbName: 'ta',
-              defaultValue: 'center',
-              options: [
-                { label: 'Venstre', value: 'left' },
-                { label: 'Senter', value: 'center' },
-                { label: 'Høyre', value: 'right' },
-              ],
-            },
-          ],
-        },
-        {
-          name: 'subtitle',
-          type: 'textarea',
-          defaultValue: 'Din bokhandel på Østlandet med stort utvalg av bøker',
-        },
-        {
-          name: 'subtitleStyle',
-          type: 'group',
-          label: 'Undertittel Styling',
-          dbName: 'sub_sty',
-          fields: [
-            {
-              name: 'fontSize',
-              type: 'select',
-              dbName: 'fs',
-              defaultValue: 'normal',
-              options: [
-                { label: 'Liten', value: 'small' },
-                { label: 'Normal', value: 'normal' },
-                { label: 'Stor', value: 'large' },
-                { label: 'Ekstra Stor', value: 'xlarge' },
-              ],
-            },
-            {
-              name: 'fontWeight',
-              type: 'select',
-              dbName: 'fw',
-              defaultValue: 'normal',
-              options: [
-                { label: 'Normal', value: 'normal' },
-                { label: 'Halvfet', value: 'semibold' },
-                { label: 'Fet', value: 'bold' },
+                {
+                  name: 'fontWeight',
+                  type: 'select',
+                  dbName: 'fw',
+                  defaultValue: 'bold',
+                  options: [
+                    { label: 'Normal', value: 'normal' },
+                    { label: 'Halvfet', value: 'semibold' },
+                    { label: 'Fet', value: 'bold' },
+                  ],
+                },
+                {
+                  name: 'textColor',
+                  type: 'select',
+                  dbName: 'tc',
+                  defaultValue: '#ffffff',
+                  label: 'Tekstfarge',
+                  options: [
+                    { label: 'Hvit', value: '#ffffff' },
+                    { label: 'Svart', value: '#000000' },
+                    { label: 'Grå (lys)', value: '#f3f4f6' },
+                    { label: 'Grå (mørk)', value: '#6b7280' },
+                    { label: 'Grå (veldig mørk)', value: '#374151' },
+                    { label: 'Rød', value: '#ef4444' },
+                    { label: 'Blå', value: '#3b82f6' },
+                    { label: 'Grønn', value: '#10b981' },
+                    { label: 'Gul', value: '#f59e0b' },
+                    { label: 'Lilla', value: '#8b5cf6' },
+                  ],
+                  admin: {
+                    description: 'Velg tekstfarge fra listen',
+                  },
+                },
+                {
+                  name: 'textAlign',
+                  type: 'select',
+                  dbName: 'ta',
+                  defaultValue: 'center',
+                  options: [
+                    { label: 'Venstre', value: 'left' },
+                    { label: 'Senter', value: 'center' },
+                    { label: 'Høyre', value: 'right' },
+                  ],
+                },
               ],
             },
             {
-              name: 'textColor',
+              name: 'subtitle',
+              type: 'textarea',
+              defaultValue: 'Din bokhandel på Østlandet med stort utvalg av bøker',
+            },
+            {
+              name: 'subtitleStyle',
+              type: 'group',
+              label: 'Undertittel Styling',
+              fields: [
+                {
+                  name: 'fontSize',
+                  type: 'select',
+                  dbName: 'fs',
+                  defaultValue: 'normal',
+                  options: [
+                    { label: 'Liten', value: 'small' },
+                    { label: 'Normal', value: 'normal' },
+                    { label: 'Stor', value: 'large' },
+                    { label: 'Ekstra Stor', value: 'xlarge' },
+                  ],
+                },
+                {
+                  name: 'fontWeight',
+                  type: 'select',
+                  dbName: 'fw',
+                  defaultValue: 'normal',
+                  options: [
+                    { label: 'Normal', value: 'normal' },
+                    { label: 'Halvfet', value: 'semibold' },
+                    { label: 'Fet', value: 'bold' },
+                  ],
+                },
+                {
+                  name: 'textColor',
+                  type: 'select',
+                  dbName: 'tc',
+                  defaultValue: '#ffffff',
+                  label: 'Tekstfarge',
+                  options: [
+                    { label: 'Hvit', value: '#ffffff' },
+                    { label: 'Svart', value: '#000000' },
+                    { label: 'Grå (lys)', value: '#f3f4f6' },
+                    { label: 'Grå (mørk)', value: '#6b7280' },
+                    { label: 'Grå (veldig mørk)', value: '#374151' },
+                    { label: 'Rød', value: '#ef4444' },
+                    { label: 'Blå', value: '#3b82f6' },
+                    { label: 'Grønn', value: '#10b981' },
+                    { label: 'Gul', value: '#f59e0b' },
+                    { label: 'Lilla', value: '#8b5cf6' },
+                  ],
+                  admin: {
+                    description: 'Velg tekstfarge fra listen',
+                  },
+                },
+                {
+                  name: 'textAlign',
+                  type: 'select',
+                  dbName: 'ta',
+                  defaultValue: 'center',
+                  options: [
+                    { label: 'Venstre', value: 'left' },
+                    { label: 'Senter', value: 'center' },
+                    { label: 'Høyre', value: 'right' },
+                  ],
+                },
+              ],
+            },
+            {
+              name: 'buttonText',
               type: 'text',
-              dbName: 'tc',
-              defaultValue: '#ffffff',
-              label: 'Tekstfarge',
-              admin: {
-                description: 'Klikk på fargeboksen for å åpne fargehjul',
-                components: {
-                  Field: '../components/admin/ColorPickerField#default',
+              defaultValue: 'Se alle bøker',
+            },
+            {
+              name: 'buttonStyle',
+              type: 'group',
+              label: 'Knapp Styling',
+              fields: [
+                {
+                  name: 'backgroundColor',
+                  type: 'text',
+                  defaultValue: '#10b981',
+                  label: 'Bakgrunnsfarge',
+                  admin: {
+                    description: 'Velg bakgrunnsfarge (hex, f.eks. #10b981)',
+                  },
                 },
-              },
-            },
-            {
-              name: 'textAlign',
-              type: 'select',
-              dbName: 'ta',
-              defaultValue: 'center',
-              options: [
-                { label: 'Venstre', value: 'left' },
-                { label: 'Senter', value: 'center' },
-                { label: 'Høyre', value: 'right' },
-              ],
-            },
-          ],
-        },
-        {
-          name: 'buttonText',
-          type: 'text',
-          defaultValue: 'Se alle bøker',
-        },
-        {
-          name: 'buttonStyle',
-          type: 'group',
-          label: 'Knapp Styling',
-          dbName: 'btn_sty',
-          fields: [
-            {
-              name: 'backgroundColor',
-              type: 'text',
-              defaultValue: '#10b981',
-              label: 'Bakgrunnsfarge',
-              admin: {
-                description: 'Klikk på fargeboksen for å åpne fargehjul',
-                components: {
-                  Field: '../components/admin/ColorPickerField#default',
+                {
+                  name: 'textColor',
+                  type: 'select',
+                  dbName: 'tc',
+                  defaultValue: '#ffffff',
+                  label: 'Tekstfarge',
+                  options: [
+                    { label: 'Hvit', value: '#ffffff' },
+                    { label: 'Svart', value: '#000000' },
+                    { label: 'Grå (lys)', value: '#f3f4f6' },
+                    { label: 'Grå (mørk)', value: '#6b7280' },
+                    { label: 'Grå (veldig mørk)', value: '#374151' },
+                    { label: 'Rød', value: '#ef4444' },
+                    { label: 'Blå', value: '#3b82f6' },
+                    { label: 'Grønn', value: '#10b981' },
+                    { label: 'Gul', value: '#f59e0b' },
+                    { label: 'Lilla', value: '#8b5cf6' },
+                  ],
+                  admin: {
+                    description: 'Velg tekstfarge fra listen',
+                  },
                 },
-              },
-            },
-            {
-              name: 'textColor',
-              type: 'text',
-              defaultValue: '#ffffff',
-              label: 'Tekstfarge',
-              admin: {
-                description: 'Klikk på fargeboksen for å åpne fargehjul',
-                components: {
-                  Field: '../components/admin/ColorPickerField#default',
+                {
+                  name: 'fontSize',
+                  type: 'select',
+                  dbName: 'fs',
+                  defaultValue: 'normal',
+                  options: [
+                    { label: 'Liten', value: 'small' },
+                    { label: 'Normal', value: 'normal' },
+                    { label: 'Stor', value: 'large' },
+                  ],
                 },
-              },
-            },
-            {
-              name: 'fontSize',
-              type: 'select',
-              dbName: 'fs',
-              defaultValue: 'normal',
-              options: [
-                { label: 'Liten', value: 'small' },
-                { label: 'Normal', value: 'normal' },
-                { label: 'Stor', value: 'large' },
+                {
+                  name: 'padding',
+                  type: 'select',
+                  dbName: 'pad',
+                  defaultValue: 'medium',
+                  options: [
+                    { label: 'Liten', value: 'small' },
+                    { label: 'Medium', value: 'medium' },
+                    { label: 'Stor', value: 'large' },
+                  ],
+                },
+                {
+                  name: 'borderRadius',
+                  type: 'select',
+                  dbName: 'br',
+                  defaultValue: 'medium',
+                  options: [
+                    { label: 'Ingen', value: 'none' },
+                    { label: 'Liten', value: 'small' },
+                    { label: 'Medium', value: 'medium' },
+                    { label: 'Stor', value: 'large' },
+                    { label: 'Full', value: 'full' },
+                  ],
+                },
               ],
             },
-            {
-              name: 'padding',
-              type: 'select',
-              dbName: 'pad',
-              defaultValue: 'medium',
-              options: [
-                { label: 'Liten', value: 'small' },
-                { label: 'Medium', value: 'medium' },
-                { label: 'Stor', value: 'large' },
-              ],
-            },
-            {
-              name: 'borderRadius',
-              type: 'select',
-              dbName: 'br',
-              defaultValue: 'medium',
-              options: [
-                { label: 'Ingen', value: 'none' },
-                { label: 'Liten', value: 'small' },
-                { label: 'Medium', value: 'medium' },
-                { label: 'Stor', value: 'large' },
-                { label: 'Full', value: 'full' },
-              ],
-            },
-          ],
-        },
             {
               name: 'buttonLink',
               type: 'text',
@@ -360,18 +387,36 @@ export const SiteSettings: GlobalConfig = {
               },
             },
             {
-              name: 'gradientColors',
+              name: 'gradientColor1',
               type: 'text',
-              dbName: 'grad_colors',
-              defaultValue: JSON.stringify({ color1: '#10b981', color2: '#059669', angle: 135 }),
-              label: 'Gradient Farger',
+              defaultValue: '#10b981',
+              label: 'Gradient Farge 1',
               admin: {
-                description: 'Velg gradient-farger med fargehjul. Klikk på fargeboksene for å åpne fargehjul.',
+                description: 'Velg første gradient-farge (hex, f.eks. #10b981)',
                 condition: (data, siblingData) => siblingData?.backgroundType === 'gradient',
-                components: {
-                  Field: '../components/admin/GradientColorPickerField#default',
-                },
               },
+            },
+            {
+              name: 'gradientColor2',
+              type: 'text',
+              defaultValue: '#059669',
+              label: 'Gradient Farge 2',
+              admin: {
+                description: 'Velg andre gradient-farge (hex, f.eks. #059669)',
+                condition: (data, siblingData) => siblingData?.backgroundType === 'gradient',
+              },
+            },
+            {
+              name: 'gradientAngle',
+              type: 'number',
+              defaultValue: 135,
+              label: 'Gradient Vinkel',
+              admin: {
+                description: 'Vinkel for gradient (0-360 grader)',
+                condition: (data, siblingData) => siblingData?.backgroundType === 'gradient',
+              },
+              min: 0,
+              max: 360,
             },
             {
               name: 'height',
@@ -431,7 +476,6 @@ export const SiteSettings: GlobalConfig = {
               name: 'titleStyle',
               type: 'group',
               label: 'Tittel Styling',
-              dbName: 'feat_title_sty',
               fields: [
                 {
                   name: 'fontSize',
@@ -458,16 +502,25 @@ export const SiteSettings: GlobalConfig = {
                 },
                 {
                   name: 'textColor',
-                  type: 'text',
+                  type: 'select',
                   dbName: 'tc',
                   defaultValue: '#000000',
                   label: 'Tekstfarge',
-              admin: {
-                description: 'Klikk på fargeboksen for å åpne fargehjul',
-                components: {
-                  Field: '../components/admin/ColorPickerField#default',
-                },
-              },
+                  options: [
+                    { label: 'Hvit', value: '#ffffff' },
+                    { label: 'Svart', value: '#000000' },
+                    { label: 'Grå (lys)', value: '#f3f4f6' },
+                    { label: 'Grå (mørk)', value: '#6b7280' },
+                    { label: 'Grå (veldig mørk)', value: '#374151' },
+                    { label: 'Rød', value: '#ef4444' },
+                    { label: 'Blå', value: '#3b82f6' },
+                    { label: 'Grønn', value: '#10b981' },
+                    { label: 'Gul', value: '#f59e0b' },
+                    { label: 'Lilla', value: '#8b5cf6' },
+                  ],
+                  admin: {
+                    description: 'Velg tekstfarge fra listen',
+                  },
                 },
                 {
                   name: 'textAlign',
@@ -496,9 +549,6 @@ export const SiteSettings: GlobalConfig = {
               label: 'Bakgrunnsfarge',
               admin: {
                 description: 'Velg bakgrunnsfarge (hex, f.eks. #ffffff)',
-                htmlAttributes: {
-                  type: 'color',
-                },
               },
             },
             {
@@ -535,7 +585,6 @@ export const SiteSettings: GlobalConfig = {
               name: 'titleStyle',
               type: 'group',
               label: 'Tittel Styling',
-              dbName: 'cat_title_sty',
               fields: [
                 {
                   name: 'fontSize',
@@ -562,16 +611,25 @@ export const SiteSettings: GlobalConfig = {
                 },
                 {
                   name: 'textColor',
-                  type: 'text',
+                  type: 'select',
                   dbName: 'tc',
                   defaultValue: '#000000',
                   label: 'Tekstfarge',
-              admin: {
-                description: 'Klikk på fargeboksen for å åpne fargehjul',
-                components: {
-                  Field: '../components/admin/ColorPickerField#default',
-                },
-              },
+                  options: [
+                    { label: 'Hvit', value: '#ffffff' },
+                    { label: 'Svart', value: '#000000' },
+                    { label: 'Grå (lys)', value: '#f3f4f6' },
+                    { label: 'Grå (mørk)', value: '#6b7280' },
+                    { label: 'Grå (veldig mørk)', value: '#374151' },
+                    { label: 'Rød', value: '#ef4444' },
+                    { label: 'Blå', value: '#3b82f6' },
+                    { label: 'Grønn', value: '#10b981' },
+                    { label: 'Gul', value: '#f59e0b' },
+                    { label: 'Lilla', value: '#8b5cf6' },
+                  ],
+                  admin: {
+                    description: 'Velg tekstfarge fra listen',
+                  },
                 },
                 {
                   name: 'textAlign',
@@ -589,14 +647,10 @@ export const SiteSettings: GlobalConfig = {
             {
               name: 'backgroundColor',
               type: 'text',
-              dbName: 'bg_col',
               defaultValue: '#f3f4f6',
               label: 'Bakgrunnsfarge',
               admin: {
                 description: 'Velg bakgrunnsfarge (hex, f.eks. #f3f4f6)',
-                htmlAttributes: {
-                  type: 'color',
-                },
               },
             },
             {
@@ -632,7 +686,6 @@ export const SiteSettings: GlobalConfig = {
               name: 'titleStyle',
               type: 'group',
               label: 'Tittel Styling',
-              dbName: 'txt_title_sty',
               fields: [
                 {
                   name: 'fontSize',
@@ -659,16 +712,25 @@ export const SiteSettings: GlobalConfig = {
                 },
                 {
                   name: 'textColor',
-                  type: 'text',
+                  type: 'select',
                   dbName: 'tc',
                   defaultValue: '#000000',
                   label: 'Tekstfarge',
-              admin: {
-                description: 'Klikk på fargeboksen for å åpne fargehjul',
-                components: {
-                  Field: '../components/admin/ColorPickerField#default',
-                },
-              },
+                  options: [
+                    { label: 'Hvit', value: '#ffffff' },
+                    { label: 'Svart', value: '#000000' },
+                    { label: 'Grå (lys)', value: '#f3f4f6' },
+                    { label: 'Grå (mørk)', value: '#6b7280' },
+                    { label: 'Grå (veldig mørk)', value: '#374151' },
+                    { label: 'Rød', value: '#ef4444' },
+                    { label: 'Blå', value: '#3b82f6' },
+                    { label: 'Grønn', value: '#10b981' },
+                    { label: 'Gul', value: '#f59e0b' },
+                    { label: 'Lilla', value: '#8b5cf6' },
+                  ],
+                  admin: {
+                    description: 'Velg tekstfarge fra listen',
+                  },
                 },
                 {
                   name: 'textAlign',
@@ -692,7 +754,6 @@ export const SiteSettings: GlobalConfig = {
               name: 'contentStyle',
               type: 'group',
               label: 'Innhold Styling',
-              dbName: 'txt_content_sty',
               fields: [
                 {
                   name: 'fontSize',
@@ -718,16 +779,25 @@ export const SiteSettings: GlobalConfig = {
                 },
                 {
                   name: 'textColor',
-                  type: 'text',
+                  type: 'select',
                   dbName: 'tc',
                   defaultValue: '#000000',
                   label: 'Tekstfarge',
-              admin: {
-                description: 'Klikk på fargeboksen for å åpne fargehjul',
-                components: {
-                  Field: '../components/admin/ColorPickerField#default',
-                },
-              },
+                  options: [
+                    { label: 'Hvit', value: '#ffffff' },
+                    { label: 'Svart', value: '#000000' },
+                    { label: 'Grå (lys)', value: '#f3f4f6' },
+                    { label: 'Grå (mørk)', value: '#6b7280' },
+                    { label: 'Grå (veldig mørk)', value: '#374151' },
+                    { label: 'Rød', value: '#ef4444' },
+                    { label: 'Blå', value: '#3b82f6' },
+                    { label: 'Grønn', value: '#10b981' },
+                    { label: 'Gul', value: '#f59e0b' },
+                    { label: 'Lilla', value: '#8b5cf6' },
+                  ],
+                  admin: {
+                    description: 'Velg tekstfarge fra listen',
+                  },
                 },
                 {
                   name: 'textAlign',
@@ -757,14 +827,10 @@ export const SiteSettings: GlobalConfig = {
             {
               name: 'backgroundColor',
               type: 'text',
-              dbName: 'bg_col',
               defaultValue: '#ffffff',
               label: 'Bakgrunnsfarge',
               admin: {
                 description: 'Velg bakgrunnsfarge (hex, f.eks. #ffffff)',
-                htmlAttributes: {
-                  type: 'color',
-                },
               },
             },
             {
@@ -802,7 +868,6 @@ export const SiteSettings: GlobalConfig = {
               name: 'imageStyle',
               type: 'group',
               label: 'Bilde Styling',
-              dbName: 'banner_img_sty',
               fields: [
                 {
                   name: 'borderRadius',
@@ -820,7 +885,6 @@ export const SiteSettings: GlobalConfig = {
                 {
                   name: 'opacity',
                   type: 'number',
-                  dbName: 'op',
                   defaultValue: 100,
                   min: 0,
                   max: 100,
@@ -877,7 +941,6 @@ export const SiteSettings: GlobalConfig = {
           name: 'companyNameStyle',
           type: 'group',
           label: 'Firmanavn Styling',
-          dbName: 'footer_comp_sty',
           fields: [
             {
               name: 'fontSize',
@@ -904,15 +967,24 @@ export const SiteSettings: GlobalConfig = {
             },
             {
               name: 'textColor',
-              type: 'text',
+              type: 'select',
               dbName: 'tc',
               defaultValue: '#ffffff',
               label: 'Tekstfarge',
+              options: [
+                { label: 'Hvit', value: '#ffffff' },
+                { label: 'Svart', value: '#000000' },
+                { label: 'Grå (lys)', value: '#f3f4f6' },
+                { label: 'Grå (mørk)', value: '#6b7280' },
+                { label: 'Grå (veldig mørk)', value: '#374151' },
+                { label: 'Rød', value: '#ef4444' },
+                { label: 'Blå', value: '#3b82f6' },
+                { label: 'Grønn', value: '#10b981' },
+                { label: 'Gul', value: '#f59e0b' },
+                { label: 'Lilla', value: '#8b5cf6' },
+              ],
               admin: {
-                description: 'Klikk på fargeboksen for å åpne fargehjul',
-                components: {
-                  Field: '../components/admin/ColorPickerField#default',
-                },
+                description: 'Velg tekstfarge fra listen',
               },
             },
           ],
@@ -926,7 +998,6 @@ export const SiteSettings: GlobalConfig = {
           name: 'descriptionStyle',
           type: 'group',
           label: 'Beskrivelse Styling',
-          dbName: 'footer_desc_sty',
           fields: [
             {
               name: 'fontSize',
@@ -941,15 +1012,24 @@ export const SiteSettings: GlobalConfig = {
             },
             {
               name: 'textColor',
-              type: 'text',
+              type: 'select',
               dbName: 'tc',
               defaultValue: '#ffffff',
               label: 'Tekstfarge',
+              options: [
+                { label: 'Hvit', value: '#ffffff' },
+                { label: 'Svart', value: '#000000' },
+                { label: 'Grå (lys)', value: '#f3f4f6' },
+                { label: 'Grå (mørk)', value: '#6b7280' },
+                { label: 'Grå (veldig mørk)', value: '#374151' },
+                { label: 'Rød', value: '#ef4444' },
+                { label: 'Blå', value: '#3b82f6' },
+                { label: 'Grønn', value: '#10b981' },
+                { label: 'Gul', value: '#f59e0b' },
+                { label: 'Lilla', value: '#8b5cf6' },
+              ],
               admin: {
-                description: 'Klikk på fargeboksen for å åpne fargehjul',
-                components: {
-                  Field: '../components/admin/ColorPickerField#default',
-                },
+                description: 'Velg tekstfarge fra listen',
               },
             },
           ],
@@ -973,29 +1053,34 @@ export const SiteSettings: GlobalConfig = {
         {
           name: 'backgroundColor',
           type: 'text',
-          dbName: 'bg_col',
           required: true,
           defaultValue: '#111827',
           label: 'Bakgrunnsfarge',
           admin: {
-            description: 'Klikk på fargeboksen for å åpne fargehjul',
-            components: {
-              Field: '../components/admin/ColorPickerField#default',
-            },
+            description: 'Velg bakgrunnsfarge (hex, f.eks. #111827)',
           },
         },
         {
           name: 'textColor',
-          type: 'text',
+          type: 'select',
           dbName: 'txt_col',
           required: true,
           defaultValue: '#ffffff',
           label: 'Tekstfarge',
+          options: [
+            { label: 'Hvit', value: '#ffffff' },
+            { label: 'Svart', value: '#000000' },
+            { label: 'Grå (lys)', value: '#f3f4f6' },
+            { label: 'Grå (mørk)', value: '#6b7280' },
+            { label: 'Grå (veldig mørk)', value: '#374151' },
+            { label: 'Rød', value: '#ef4444' },
+            { label: 'Blå', value: '#3b82f6' },
+            { label: 'Grønn', value: '#10b981' },
+            { label: 'Gul', value: '#f59e0b' },
+            { label: 'Lilla', value: '#8b5cf6' },
+          ],
           admin: {
-            description: 'Klikk på fargeboksen for å åpne fargehjul',
-            components: {
-              Field: '../components/admin/ColorPickerField#default',
-            },
+            description: 'Velg tekstfarge fra listen',
           },
         },
       ],
