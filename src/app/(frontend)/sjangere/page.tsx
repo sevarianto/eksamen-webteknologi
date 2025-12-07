@@ -1,16 +1,25 @@
 import Link from 'next/link'
+import type { Genre } from '@/payload-types'
 
-async function getGenres() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}/api/genres?limit=50`, {
-    cache: 'no-store',
-  })
-  
-  if (!res.ok) {
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
+async function getGenres(): Promise<Genre[]> {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}/api/genres?limit=50`, {
+      cache: 'no-store',
+    })
+    
+    if (!res.ok) {
+      return []
+    }
+    
+    const data = await res.json()
+    return data.docs || []
+  } catch (error) {
+    console.error('Error fetching genres:', error)
     return []
   }
-  
-  const data = await res.json()
-  return data.docs || []
 }
 
 export default async function GenresPage() {
@@ -24,7 +33,7 @@ export default async function GenresPage() {
         <p className="text-gray-600">Ingen sjangere tilgjengelig.</p>
       ) : (
         <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {genres.map((genre: any) => (
+          {genres.map((genre) => (
             <Link 
               key={genre.id} 
               href={`/sjangere/${genre.slug}`}

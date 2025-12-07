@@ -1,7 +1,10 @@
 import Link from 'next/link'
+import type { SiteSetting, Book } from '@/payload-types'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
+
+type HomeSection = NonNullable<SiteSetting['homeSections']>[number]
 
 async function getFeaturedBooks(limit = 3) {
   const res = await fetch(
@@ -39,11 +42,11 @@ export default async function Home() {
     )
   }
 
-  const visibleSections = settings.homeSections.filter((s: any) => s.visible !== false)
+  const visibleSections = (settings.homeSections || []).filter((s: HomeSection) => s.visible !== false)
 
   return (
     <div className="min-h-screen">
-      {visibleSections.map((section: any, index: number) => {
+      {visibleSections.map((section: HomeSection, index: number) => {
         // HERO SECTION
         if (section.sectionType === 'hero' && section.hero) {
           const hero = section.hero
@@ -275,7 +278,13 @@ export default async function Home() {
 }
 
 // FEATURED BOOKS COMPONENT
-async function FeaturedBooksSection({ settings, bgClass }: any) {
+async function FeaturedBooksSection({ 
+  settings, 
+  bgClass 
+}: { 
+  settings: { title?: string | null; limit?: number | null } 
+  bgClass?: string 
+}) {
   const books = await getFeaturedBooks(settings.limit || 3)
 
   if (books.length === 0) return null
@@ -288,7 +297,7 @@ async function FeaturedBooksSection({ settings, bgClass }: any) {
         </h2>
         
         <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
-          {books.map((book: any) => (
+          {books.map((book: Book) => (
             <Link 
               key={book.id} 
               href={`/boker/${book.slug}`}

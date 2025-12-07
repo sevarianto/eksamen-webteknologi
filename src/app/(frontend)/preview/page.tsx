@@ -1,9 +1,12 @@
 import Link from 'next/link'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import type { SiteSetting, Book } from '@/payload-types'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
+
+type HomeSection = NonNullable<SiteSetting['homeSections']>[number]
 
 async function getFeaturedBooks(limit = 3) {
   const res = await fetch(
@@ -55,7 +58,7 @@ export default async function PreviewPage() {
       <Header />
 
       <main>
-        {allSections.map((section: any, index: number) => {
+        {allSections.map((section: HomeSection, index: number) => {
           // HERO SECTION
           if (section.sectionType === 'hero' && section.hero) {
             const hero = section.hero
@@ -80,7 +83,7 @@ export default async function PreviewPage() {
             }
 
             // Apply custom styling from hero.titleStyle
-            const titleStyle: any = {}
+            const titleStyle: React.CSSProperties = {}
             if (hero.titleStyle) {
               if (hero.titleStyle.fontSize) {
                 const fontSizeMap: Record<string, string> = {
@@ -106,7 +109,7 @@ export default async function PreviewPage() {
             }
 
             // Apply custom styling from hero.subtitleStyle
-            const subtitleStyle: any = {}
+            const subtitleStyle: React.CSSProperties = {}
             if (hero.subtitleStyle) {
               if (hero.subtitleStyle.fontSize) {
                 const fontSizeMap: Record<string, string> = {
@@ -132,7 +135,7 @@ export default async function PreviewPage() {
             }
 
             // Apply button styling
-            const buttonStyle: any = {}
+            const buttonStyle: React.CSSProperties = {}
             if (hero.buttonStyle) {
               if (hero.buttonStyle.backgroundColor) {
                 buttonStyle.backgroundColor = hero.buttonStyle.backgroundColor
@@ -362,7 +365,7 @@ export default async function PreviewPage() {
             const bgStyle = getBgStyle()
 
             // Apply custom styling
-            const titleStyle: any = {}
+            const titleStyle: React.CSSProperties = {}
             if (section.textSection.titleStyle) {
               if (section.textSection.titleStyle.fontSize) {
                 const fontSizeMap: Record<string, string> = {
@@ -388,7 +391,7 @@ export default async function PreviewPage() {
               }
             }
 
-            const contentStyle: any = {}
+            const contentStyle: React.CSSProperties = {}
             if (section.textSection.contentStyle) {
               if (section.textSection.contentStyle.fontSize) {
                 const fontSizeMap: Record<string, string> = {
@@ -477,7 +480,15 @@ export default async function PreviewPage() {
 }
 
 // FEATURED BOOKS COMPONENT
-async function FeaturedBooksSection({ settings, bgClass, bgStyle }: any) {
+async function FeaturedBooksSection({ 
+  settings, 
+  bgClass, 
+  bgStyle 
+}: { 
+  settings: { title?: string | null; limit?: number | null } 
+  bgClass?: string 
+  bgStyle?: React.CSSProperties 
+}) {
   const books = await getFeaturedBooks(settings.limit || 3)
 
   if (books.length === 0) return null
@@ -488,7 +499,7 @@ async function FeaturedBooksSection({ settings, bgClass, bgStyle }: any) {
         <h2 className="text-4xl font-bold mb-10 text-center">{settings.title}</h2>
 
         <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
-          {books.map((book: any) => (
+          {books.map((book: Book) => (
             <Link
               key={book.id}
               href={`/boker/${book.slug}`}
