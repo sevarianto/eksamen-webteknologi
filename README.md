@@ -111,6 +111,20 @@ eksamen-webteknologi/
    - Gå til http://localhost:3000/admin
    - Følg instruksjonene for å opprette din første admin-bruker
 
+7. **Legg inn eksempeldata (valgfritt)**
+   - Kjør seed-scriptet for å legge inn eksempeldata (bøker, forfattere, sjangere):
+   ```bash
+   npm run seed
+   ```
+   - Alle data kan redigeres og slettes i admin-panelet etterpå
+
+7. **Legg inn eksempeldata (valgfritt)**
+   - Kjør seed-scriptet for å legge inn eksempeldata (bøker, forfattere, sjangere):
+   ```bash
+   npm run seed
+   ```
+   - Alle data kan redigeres og slettes i admin-panelet etterpå
+
 ## Bygging for produksjon
 
 1. **Bygg prosjektet**
@@ -135,24 +149,24 @@ Prosjektet bruker SQLite som database. Database-filen (`eksamen-webteknologi.db`
 ## Funksjonalitet
 
 ### For kunder
-- ✅ Se alle bøker
-- ✅ Se bokdetaljer (tittel, forfatter, beskrivelse, pris, lagerstatus)
-- ✅ Filtrere bøker etter sjanger
-- ✅ Se lagerstatus for hver bok
-- ✅ Legge bøker i handlekurv
-- ✅ Se handlekurv med antall og totalpris
-- ✅ Sende inn bestilling med kontaktinformasjon
-- ✅ Se bestillingsbekreftelse
+- Se alle bøker
+- Se bokdetaljer (tittel, forfatter, beskrivelse, pris, lagerstatus)
+- Filtrere bøker etter sjanger
+- Se lagerstatus for hver bok
+- Legge bøker i handlekurv
+- Se handlekurv med antall og totalpris
+- Sende inn bestilling med kontaktinformasjon
+- Se bestillingsbekreftelse
 
 ### For ansatte (Admin-panel)
-- ✅ Legge inn bøker med alle detaljer
-- ✅ Administrere forfattere med biografi og foto
-- ✅ Administrere sjangere med beskrivelser
-- ✅ Sette lagerstatus (antall på lager)
-- ✅ Legge til aldersmerking (barn, ungdom, voksen)
-- ✅ Last opp bilder (forsidebilder, forfatterfoto)
-- ✅ Se oversikt over alle bestillinger
-- ✅ Konfigurere nettsted-innstillinger (header, footer, hjemmeside-seksjoner)
+- Legge inn bøker med alle detaljer
+- Administrere forfattere med biografi og foto
+- Administrere sjangere med beskrivelser
+- Sette lagerstatus (antall på lager)
+- Legge til aldersmerking (barn, ungdom, voksen)
+- Last opp bilder (forsidebilder, forfatterfoto)
+- Se oversikt over alle bestillinger
+- Konfigurere nettsted-innstillinger (header, footer, hjemmeside-seksjoner)
 
 ## Testing
 
