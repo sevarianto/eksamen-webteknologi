@@ -159,17 +159,29 @@ export interface User {
 export interface Book {
   id: number;
   title: string;
+  /**
+   * URL-vennlig versjon av tittelen (eks: harry-potter-de-vises-stein)
+   */
+  slug: string;
+  description: string;
+  author: number | Author;
+  genres?: (number | Genre)[] | null;
+  /**
+   * Velg én eller flere aldersgrupper som passer for boken
+   */
+  ageRating: ('barn' | 'ungdom' | 'voksen')[];
+  price: number;
+  isbn: string;
+  publishedYear?: number | null;
+  stock: number;
+  coverImage?: (number | null) | Media;
+  featured?: boolean | null;
   titleStyle?: {
     fontSize?: ('small' | 'normal' | 'large' | 'xlarge' | 'xxlarge') | null;
     fontWeight?: ('normal' | 'semibold' | 'bold') | null;
     textColor?: string | null;
     textAlign?: ('left' | 'center' | 'right') | null;
   };
-  /**
-   * URL-vennlig versjon av tittelen (eks: harry-potter-de-vises-stein)
-   */
-  slug: string;
-  description: string;
   descriptionStyle?: {
     fontSize?: ('small' | 'normal' | 'large') | null;
     fontWeight?: ('normal' | 'semibold' | 'bold') | null;
@@ -177,20 +189,45 @@ export interface Book {
     textAlign?: ('left' | 'center' | 'right' | 'justify') | null;
     lineHeight?: ('tight' | 'normal' | 'loose') | null;
   };
-  price: number;
-  isbn: string;
-  publishedYear?: number | null;
-  coverImage?: (number | null) | Media;
   coverImageStyle?: {
     borderRadius?: ('none' | 'small' | 'medium' | 'large' | 'full') | null;
-    opacity?: number | null;
     objectFit?: ('cover' | 'contain' | 'fill') | null;
   };
-  author: number | Author;
-  genres?: (number | Genre)[] | null;
-  ageRating: 'barn' | 'ungdom' | 'voksen';
-  stock: number;
-  featured?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "authors".
+ */
+export interface Author {
+  id: number;
+  name: string;
+  /**
+   * URL-vennlig versjon (eks: jo-nesbo)
+   */
+  slug: string;
+  bio?: string | null;
+  birthYear?: number | null;
+  nationality?: string | null;
+  photo?: (number | null) | Media;
+  nameStyle?: {
+    fontSize?: ('small' | 'normal' | 'large' | 'xlarge') | null;
+    fontWeight?: ('normal' | 'semibold' | 'bold') | null;
+    textColor?: string | null;
+    textAlign?: ('left' | 'center' | 'right') | null;
+  };
+  bioStyle?: {
+    fontSize?: ('small' | 'normal' | 'large') | null;
+    fontWeight?: ('normal' | 'semibold' | 'bold') | null;
+    textColor?: string | null;
+    textAlign?: ('left' | 'center' | 'right' | 'justify') | null;
+    lineHeight?: ('tight' | 'normal' | 'loose') | null;
+  };
+  photoStyle?: {
+    borderRadius?: ('none' | 'small' | 'medium' | 'large' | 'full') | null;
+    objectFit?: ('cover' | 'contain' | 'fill') | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -212,42 +249,6 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "authors".
- */
-export interface Author {
-  id: number;
-  name: string;
-  nameStyle?: {
-    fontSize?: ('small' | 'normal' | 'large' | 'xlarge') | null;
-    fontWeight?: ('normal' | 'semibold' | 'bold') | null;
-    textColor?: string | null;
-    textAlign?: ('left' | 'center' | 'right') | null;
-  };
-  /**
-   * URL-vennlig versjon (eks: jo-nesbo)
-   */
-  slug: string;
-  bio?: string | null;
-  bioStyle?: {
-    fontSize?: ('small' | 'normal' | 'large') | null;
-    fontWeight?: ('normal' | 'semibold' | 'bold') | null;
-    textColor?: string | null;
-    textAlign?: ('left' | 'center' | 'right' | 'justify') | null;
-    lineHeight?: ('tight' | 'normal' | 'loose') | null;
-  };
-  photo?: (number | null) | Media;
-  photoStyle?: {
-    borderRadius?: ('none' | 'small' | 'medium' | 'large' | 'full') | null;
-    opacity?: number | null;
-    objectFit?: ('cover' | 'contain' | 'fill') | null;
-  };
-  birthYear?: number | null;
-  nationality?: string | null;
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -413,6 +414,17 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface BooksSelect<T extends boolean = true> {
   title?: T;
+  slug?: T;
+  description?: T;
+  author?: T;
+  genres?: T;
+  ageRating?: T;
+  price?: T;
+  isbn?: T;
+  publishedYear?: T;
+  stock?: T;
+  coverImage?: T;
+  featured?: T;
   titleStyle?:
     | T
     | {
@@ -421,8 +433,6 @@ export interface BooksSelect<T extends boolean = true> {
         textColor?: T;
         textAlign?: T;
       };
-  slug?: T;
-  description?: T;
   descriptionStyle?:
     | T
     | {
@@ -432,22 +442,12 @@ export interface BooksSelect<T extends boolean = true> {
         textAlign?: T;
         lineHeight?: T;
       };
-  price?: T;
-  isbn?: T;
-  publishedYear?: T;
-  coverImage?: T;
   coverImageStyle?:
     | T
     | {
         borderRadius?: T;
-        opacity?: T;
         objectFit?: T;
       };
-  author?: T;
-  genres?: T;
-  ageRating?: T;
-  stock?: T;
-  featured?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -457,6 +457,11 @@ export interface BooksSelect<T extends boolean = true> {
  */
 export interface AuthorsSelect<T extends boolean = true> {
   name?: T;
+  slug?: T;
+  bio?: T;
+  birthYear?: T;
+  nationality?: T;
+  photo?: T;
   nameStyle?:
     | T
     | {
@@ -465,8 +470,6 @@ export interface AuthorsSelect<T extends boolean = true> {
         textColor?: T;
         textAlign?: T;
       };
-  slug?: T;
-  bio?: T;
   bioStyle?:
     | T
     | {
@@ -476,16 +479,12 @@ export interface AuthorsSelect<T extends boolean = true> {
         textAlign?: T;
         lineHeight?: T;
       };
-  photo?: T;
   photoStyle?:
     | T
     | {
         borderRadius?: T;
-        opacity?: T;
         objectFit?: T;
       };
-  birthYear?: T;
-  nationality?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -609,8 +608,14 @@ export interface SiteSetting {
     favicon?: (number | null) | Media;
   };
   header: {
-    backgroundColor: 'emerald' | 'blue' | 'purple' | 'dark' | 'white';
-    textColor: 'white' | 'black' | 'gray';
+    /**
+     * Klikk på fargeboksen for å åpne fargehjul
+     */
+    backgroundColor: string;
+    /**
+     * Klikk på fargeboksen for å åpne fargehjul
+     */
+    textColor: string;
     sticky?: boolean | null;
     showCartIcon?: boolean | null;
   };
@@ -626,6 +631,9 @@ export interface SiteSetting {
           titleStyle?: {
             fontSize?: ('small' | 'normal' | 'large' | 'xlarge' | 'xxlarge') | null;
             fontWeight?: ('normal' | 'semibold' | 'bold') | null;
+            /**
+             * Klikk på fargeboksen for å åpne fargehjul
+             */
             textColor?: string | null;
             textAlign?: ('left' | 'center' | 'right') | null;
           };
@@ -633,12 +641,21 @@ export interface SiteSetting {
           subtitleStyle?: {
             fontSize?: ('small' | 'normal' | 'large' | 'xlarge') | null;
             fontWeight?: ('normal' | 'semibold' | 'bold') | null;
+            /**
+             * Klikk på fargeboksen for å åpne fargehjul
+             */
             textColor?: string | null;
             textAlign?: ('left' | 'center' | 'right') | null;
           };
           buttonText?: string | null;
           buttonStyle?: {
+            /**
+             * Klikk på fargeboksen for å åpne fargehjul
+             */
             backgroundColor?: string | null;
+            /**
+             * Klikk på fargeboksen for å åpne fargehjul
+             */
             textColor?: string | null;
             fontSize?: ('small' | 'normal' | 'large') | null;
             padding?: ('small' | 'medium' | 'large') | null;
@@ -651,8 +668,10 @@ export interface SiteSetting {
            * Last opp video (MP4 anbefales)
            */
           backgroundVideo?: (number | null) | Media;
-          gradientStart?: ('emerald' | 'blue' | 'purple' | 'rose' | 'amber') | null;
-          gradientEnd?: ('emerald' | 'blue' | 'purple' | 'teal') | null;
+          /**
+           * Velg gradient-farger med fargehjul. Klikk på fargeboksene for å åpne fargehjul.
+           */
+          gradientColors?: string | null;
           height: 'short' | 'normal' | 'tall' | 'full';
           textAlign?: ('left' | 'center' | 'right') | null;
           padding?: ('none' | 'small' | 'medium' | 'large') | null;
@@ -662,11 +681,17 @@ export interface SiteSetting {
           titleStyle?: {
             fontSize?: ('small' | 'normal' | 'large' | 'xlarge') | null;
             fontWeight?: ('normal' | 'semibold' | 'bold') | null;
+            /**
+             * Klikk på fargeboksen for å åpne fargehjul
+             */
             textColor?: string | null;
             textAlign?: ('left' | 'center' | 'right') | null;
           };
           limit?: number | null;
-          backgroundColor?: ('white' | 'gray' | 'emerald') | null;
+          /**
+           * Velg bakgrunnsfarge (hex, f.eks. #ffffff)
+           */
+          backgroundColor?: string | null;
           sectionPadding?: ('none' | 'small' | 'medium' | 'large') | null;
         };
         categories?: {
@@ -674,10 +699,16 @@ export interface SiteSetting {
           titleStyle?: {
             fontSize?: ('small' | 'normal' | 'large' | 'xlarge') | null;
             fontWeight?: ('normal' | 'semibold' | 'bold') | null;
+            /**
+             * Klikk på fargeboksen for å åpne fargehjul
+             */
             textColor?: string | null;
             textAlign?: ('left' | 'center' | 'right') | null;
           };
-          backgroundColor?: ('white' | 'gray' | 'emerald') | null;
+          /**
+           * Velg bakgrunnsfarge (hex, f.eks. #f3f4f6)
+           */
+          backgroundColor?: string | null;
           sectionPadding?: ('none' | 'small' | 'medium' | 'large') | null;
         };
         textSection?: {
@@ -685,6 +716,9 @@ export interface SiteSetting {
           titleStyle?: {
             fontSize?: ('small' | 'normal' | 'large' | 'xlarge') | null;
             fontWeight?: ('normal' | 'semibold' | 'bold') | null;
+            /**
+             * Klikk på fargeboksen for å åpne fargehjul
+             */
             textColor?: string | null;
             textAlign?: ('left' | 'center' | 'right') | null;
           };
@@ -692,11 +726,17 @@ export interface SiteSetting {
           contentStyle?: {
             fontSize?: ('small' | 'normal' | 'large') | null;
             fontWeight?: ('normal' | 'semibold' | 'bold') | null;
+            /**
+             * Klikk på fargeboksen for å åpne fargehjul
+             */
             textColor?: string | null;
             textAlign?: ('left' | 'center' | 'right' | 'justify') | null;
             lineHeight?: ('tight' | 'normal' | 'loose') | null;
           };
-          backgroundColor?: ('white' | 'gray' | 'emerald') | null;
+          /**
+           * Velg bakgrunnsfarge (hex, f.eks. #ffffff)
+           */
+          backgroundColor?: string | null;
           sectionPadding?: ('none' | 'small' | 'medium' | 'large') | null;
         };
         banner?: {
@@ -717,17 +757,30 @@ export interface SiteSetting {
     companyNameStyle?: {
       fontSize?: ('small' | 'normal' | 'large' | 'xlarge') | null;
       fontWeight?: ('normal' | 'semibold' | 'bold') | null;
+      /**
+       * Klikk på fargeboksen for å åpne fargehjul
+       */
       textColor?: string | null;
     };
     description?: string | null;
     descriptionStyle?: {
       fontSize?: ('small' | 'normal' | 'large') | null;
+      /**
+       * Klikk på fargeboksen for å åpne fargehjul
+       */
       textColor?: string | null;
     };
     email: string;
     phone?: string | null;
     openingHours?: string | null;
-    backgroundColor?: ('dark' | 'gray' | 'emerald') | null;
+    /**
+     * Klikk på fargeboksen for å åpne fargehjul
+     */
+    backgroundColor: string;
+    /**
+     * Klikk på fargeboksen for å åpne fargehjul
+     */
+    textColor: string;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -792,8 +845,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
               backgroundType?: T;
               backgroundImage?: T;
               backgroundVideo?: T;
-              gradientStart?: T;
-              gradientEnd?: T;
+              gradientColors?: T;
               height?: T;
               textAlign?: T;
               padding?: T;
@@ -892,6 +944,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         phone?: T;
         openingHours?: T;
         backgroundColor?: T;
+        textColor?: T;
       };
   updatedAt?: T;
   createdAt?: T;
