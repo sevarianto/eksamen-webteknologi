@@ -1,0 +1,125 @@
+// Custom styles for Payload admin panel
+
+// Add spacing between search icon and placeholder text in admin search bar
+input[type="search"],
+input[placeholder*="Search"],
+[class*="search"] input {
+  padding-left: 2.75rem !important;
+}
+
+// Style search icon spacing
+[class*="search"] svg,
+[class*="search-icon"],
+svg[class*="search"] {
+  left: 0.875rem !important;
+  margin-right: 0.5rem !important;
+}
+
+// More specific Payload admin search styling
+.payload__template-default [class*="search"] input,
+.payload__template-default input[type="search"] {
+  padding-left: 2.75rem !important;
+}
+
+.payload__template-default [class*="search"] svg {
+  left: 0.875rem !important;
+}
+
+// Fix placeholder text spacing in array fields (Site Settings sections)
+[class*="array-field"],
+[class*="array"],
+[data-field-type="array"] {
+  input::placeholder,
+  textarea::placeholder,
+  select::placeholder {
+    padding-left: 1rem !important;
+    padding-right: 0.5rem !important;
+    letter-spacing: 0.025em !important;
+  }
+  
+  input,
+  textarea,
+  select {
+    padding-left: 1rem !important;
+    padding-right: 0.75rem !important;
+    padding-top: 0.625rem !important;
+    padding-bottom: 0.625rem !important;
+  }
+}
+
+// Fix placeholder text overlap in Site Settings array fields
+[class*="field-type"][class*="array"],
+[data-field-type="array"] input,
+[data-field-type="array"] textarea,
+[data-field-type="array"] select {
+  &::placeholder {
+    padding-left: 1rem !important;
+    padding-right: 0.5rem !important;
+    margin-left: 0 !important;
+    letter-spacing: 0.025em !important;
+  }
+}
+
+// More specific targeting for Payload array fields
+.payload__field-type--array {
+  input,
+  textarea,
+  select {
+    padding-left: 1rem !important;
+    padding-right: 0.75rem !important;
+    padding-top: 0.625rem !important;
+    padding-bottom: 0.625rem !important;
+    
+    &::placeholder {
+      padding-left: 1rem !important;
+      padding-right: 0.5rem !important;
+      letter-spacing: 0.025em !important;
+    }
+  }
+}
+
+// Fix for array field items in Site Settings - improved spacing
+[class*="array-field__row"],
+[class*="array-field-item"],
+[class*="array-field__row"] > *,
+[class*="array-field-item"] > * {
+  input,
+  textarea,
+  select {
+    padding-left: 1rem !important;
+    padding-right: 0.75rem !important;
+    padding-top: 0.625rem !important;
+    padding-bottom: 0.625rem !important;
+    min-height: 2.5rem !important;
+    
+    &::placeholder {
+      padding-left: 1rem !important;
+      padding-right: 0.5rem !important;
+      opacity: 0.7 !important;
+      letter-spacing: 0.025em !important;
+      font-size: 0.875rem !important;
+    }
+  }
+}
+
+// Additional spacing for nested fields in array items
+[class*="array-field__row"] [class*="field"],
+[class*="array-field-item"] [class*="field"] {
+  margin-bottom: 0.75rem !important;
+  
+  input,
+  textarea,
+  select {
+    padding-left: 1rem !important;
+    padding-right: 0.75rem !important;
+    padding-top: 0.625rem !important;
+    padding-bottom: 0.625rem !important;
+    
+    &::placeholder {
+      padding-left: 1rem !important;
+      padding-right: 0.5rem !important;
+      letter-spacing: 0.025em !important;
+    }
+  }
+}
+
