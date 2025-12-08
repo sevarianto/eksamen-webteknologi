@@ -29,7 +29,7 @@ export default async function AuthorsPage() {
   const authors = await getAuthors()
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <main className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold mb-8">Forfattere</h1>
 
       {authors.length === 0 ? (
@@ -41,6 +41,6 @@ export default async function AuthorsPage() {
           ))}
         </div>
       )}
-    </div>
+    </main>
   )
 }
