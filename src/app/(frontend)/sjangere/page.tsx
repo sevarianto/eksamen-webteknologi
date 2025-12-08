@@ -37,7 +37,7 @@ export default async function GenresPage() {
             <Link 
               key={genre.id} 
               href={`/sjangere/${genre.slug}`}
-              className="border rounded-lg p-6 hover:shadow-lg transition text-center focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 block"
+              className="border rounded-lg p-6 hover:shadow-lg transition text-center focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 block"
             >
               <h3 className="text-xl font-bold mb-2">{genre.name}</h3>
               

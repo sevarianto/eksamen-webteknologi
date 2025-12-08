@@ -25,8 +25,18 @@ async function getSiteSettings() {
   return await res.json()
 }
 
+async function getHeaderSettings() {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}/api/globals/header-settings`,
+    { cache: 'no-store' }
+  )
+  if (!res.ok) return null
+  return await res.json()
+}
+
 export default async function Home() {
   const settings = await getSiteSettings()
+  const headerSettings = await getHeaderSettings()
   
   if (!settings || !settings.homeSections || settings.homeSections.length === 0) {
     return (
@@ -34,7 +44,7 @@ export default async function Home() {
         <div className="text-center">
           <h1 className="text-4xl font-bold mb-4">Velkommen til BookDragons</h1>
           <p className="text-gray-600 mb-8">Konfiger hjemmesiden i Admin → Site Settings</p>
-          <Link href="/admin" className="bg-emerald-600 text-white px-6 py-3 rounded-lg">
+          <Link href="/admin" className="bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-900 transition">
             Gå til Admin
           </Link>
         </div>
@@ -61,14 +71,7 @@ export default async function Home() {
             center: 'text-center',
             right: 'text-right',
           }
-          const gradients = {
-            emerald: 'from-emerald-600 via-emerald-700 to-emerald-800',
-            blue: 'from-blue-600 via-blue-700 to-blue-800',
-            purple: 'from-purple-600 via-purple-700 to-purple-800',
-            rose: 'from-rose-600 via-rose-700 to-rose-800',
-            amber: 'from-amber-600 via-amber-700 to-amber-800',
-            teal: 'from-teal-600 via-teal-700 to-teal-800',
-          }
+          // Gradients removed - using gradientColor1 and gradientColor2 from SiteSettings instead
 
           return (
             <section key={index} className={`relative ${heightClasses[hero.height as keyof typeof heightClasses] || heightClasses.normal} flex items-center overflow-hidden`}>
@@ -110,8 +113,16 @@ export default async function Home() {
                     )
                   }
                   
-                  // Fallback to predefined gradients
-                  return <div className={`absolute inset-0 bg-gradient-to-br ${gradients[hero.gradientStart as keyof typeof gradients] || gradients.emerald}`}></div>
+                  // Fallback to default gradient (use header color or neutral gray)
+                  const fallbackColor = headerSettings?.backgroundColor || '#6b7280'
+                  return (
+                    <div 
+                      className="absolute inset-0" 
+                      style={{
+                        background: `linear-gradient(135deg, ${fallbackColor}, ${fallbackColor}dd)`,
+                      }}
+                    ></div>
+                  )
                 })()
               )}
 
@@ -128,7 +139,11 @@ export default async function Home() {
                 {hero.buttonText && (
                   <Link 
                     href={hero.buttonLink || '/boker'}
-                    className="inline-block bg-white text-emerald-600 px-8 py-4 rounded-lg font-semibold hover:bg-opacity-90 transition shadow-lg text-lg focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-emerald-600"
+                    className="inline-block px-8 py-4 rounded-lg font-semibold hover:opacity-90 transition shadow-lg text-lg focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2"
+                    style={{
+                      backgroundColor: hero.buttonStyle?.backgroundColor || '#ffffff',
+                      color: hero.buttonStyle?.textColor || '#000000',
+                    }}
                   >
                     {hero.buttonText}
                   </Link>
@@ -144,12 +159,13 @@ export default async function Home() {
             if (section.featured.backgroundColor && section.featured.backgroundColor.startsWith('#')) {
               return { style: { backgroundColor: section.featured.backgroundColor }, className: '' }
             }
-            const bgClasses: Record<string, string> = {
-              white: 'bg-white',
-              gray: 'bg-gray-100',
-              emerald: 'bg-emerald-50',
+            // Always use hex color from SiteSettings, no fallback classes
+            return { 
+              style: { 
+                backgroundColor: section.featured.backgroundColor || '#ffffff',
+              }, 
+              className: '' 
             }
-            return { style: {}, className: bgClasses[section.featured.backgroundColor as string] || bgClasses.white }
           }
           const bgStyle = getBgStyle()
 
@@ -159,6 +175,7 @@ export default async function Home() {
               settings={section.featured}
               bgClass={bgStyle.className}
               bgStyle={bgStyle.style}
+              headerSettings={headerSettings}
             />
           )
         }
@@ -169,12 +186,13 @@ export default async function Home() {
             if (section.categories.backgroundColor && section.categories.backgroundColor.startsWith('#')) {
               return { style: { backgroundColor: section.categories.backgroundColor }, className: '' }
             }
-            const bgClasses: Record<string, string> = {
-              white: 'bg-white',
-              gray: 'bg-gray-100',
-              emerald: 'bg-emerald-50',
+            // Always use hex color from SiteSettings, no fallback classes
+            return { 
+              style: { 
+                backgroundColor: section.categories.backgroundColor || '#f3f4f6',
+              }, 
+              className: '' 
             }
-            return { style: {}, className: bgClasses[section.categories.backgroundColor as string] || bgClasses.gray }
           }
           const bgStyle = getBgStyle()
 
@@ -185,19 +203,19 @@ export default async function Home() {
                   {section.categories.title}
                 </h2>
                 <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                  <Link href="/sjangere/fantasy" className="bg-white p-8 rounded-xl hover:shadow-xl transition text-center group focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 block">
+                  <Link href="/sjangere/fantasy" className="bg-white p-8 rounded-xl hover:shadow-xl transition text-center group focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 block">
                     <div className="text-5xl mb-4"></div>
-                    <h3 className="text-2xl font-bold text-emerald-600 mb-2">Fantasy</h3>
+                    <h3 className="text-2xl font-bold mb-2" style={{ color: section.categories.titleStyle?.textColor || '#000000' }}>Fantasy</h3>
                     <p className="text-gray-600">Magiske eventyr</p>
                   </Link>
-                  <Link href="/sjangere/krim" className="bg-white p-8 rounded-xl hover:shadow-xl transition text-center group focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 block">
+                  <Link href="/sjangere/krim" className="bg-white p-8 rounded-xl hover:shadow-xl transition text-center group focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 block">
                     <div className="text-5xl mb-4"></div>
-                    <h3 className="text-2xl font-bold text-emerald-600 mb-2">Krim</h3>
+                    <h3 className="text-2xl font-bold mb-2" style={{ color: section.categories.titleStyle?.textColor || '#000000' }}>Krim</h3>
                     <p className="text-gray-600">Spenning og mysterier</p>
                   </Link>
-                  <Link href="/sjangere/barneboker" className="bg-white p-8 rounded-xl hover:shadow-xl transition text-center group focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 block">
+                  <Link href="/sjangere/barneboker" className="bg-white p-8 rounded-xl hover:shadow-xl transition text-center group focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 block">
                     <div className="text-5xl mb-4"></div>
-                    <h3 className="text-2xl font-bold text-emerald-600 mb-2">Barnebøker</h3>
+                    <h3 className="text-2xl font-bold mb-2" style={{ color: section.categories.titleStyle?.textColor || '#000000' }}>Barnebøker</h3>
                     <p className="text-gray-600">Bøker for de minste</p>
                   </Link>
                 </div>
@@ -212,12 +230,13 @@ export default async function Home() {
             if (section.textSection.backgroundColor && section.textSection.backgroundColor.startsWith('#')) {
               return { style: { backgroundColor: section.textSection.backgroundColor }, className: '' }
             }
-            const bgClasses: Record<string, string> = {
-              white: 'bg-white',
-              gray: 'bg-gray-100',
-              emerald: 'bg-emerald-50',
+            // Always use hex color from SiteSettings, no fallback classes
+            return { 
+              style: { 
+                backgroundColor: section.textSection.backgroundColor || '#ffffff',
+              }, 
+              className: '' 
             }
-            return { style: {}, className: bgClasses[section.textSection.backgroundColor as string] || bgClasses.white }
           }
           const bgStyle = getBgStyle()
 
@@ -274,10 +293,12 @@ export default async function Home() {
 // FEATURED BOOKS COMPONENT
 async function FeaturedBooksSection({ 
   settings, 
-  bgClass 
+  bgClass,
+  headerSettings
 }: { 
   settings: { title?: string | null; limit?: number | null } 
-  bgClass?: string 
+  bgClass?: string
+  headerSettings?: any
 }) {
   const books = await getFeaturedBooks(settings.limit || 3)
 
@@ -297,7 +318,7 @@ async function FeaturedBooksSection({
               href={`/boker/${book.slug}`}
               className="group bg-white rounded-xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden"
             >
-              <div className="relative aspect-[3/4] overflow-hidden bg-gradient-to-br from-emerald-100 to-emerald-50">
+              <div className="relative aspect-[3/4] overflow-hidden bg-gray-100">
                 {book.coverImage && typeof book.coverImage === 'object' && book.coverImage.url ? (
                   <img 
                     src={book.coverImage.url} 
@@ -314,7 +335,7 @@ async function FeaturedBooksSection({
                 <h3 className="text-xl font-bold mb-3 line-clamp-2">{book.title}</h3>
                 <p className="text-gray-600 mb-4 line-clamp-3 text-sm">{book.description}</p>
                 <div className="flex justify-between items-center pt-4 border-t">
-                  <span className="text-2xl font-bold text-emerald-600">{book.price} kr</span>
+                  <span className="text-2xl font-bold" style={{ color: headerSettings?.backgroundColor || '#000000' }}>{book.price} kr</span>
                   <span className={`text-sm font-medium px-3 py-1 rounded ${book.stock > 5 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
                     {book.stock > 0 ? `${book.stock} på lager` : 'Utsolgt'}
                   </span>

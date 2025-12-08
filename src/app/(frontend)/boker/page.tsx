@@ -4,14 +4,17 @@ import type { Book, Genre } from '@/payload-types'
 
 async function getBooks(): Promise<Book[]> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}/api/books?limit=50&depth=1`, {
-      cache: 'no-store',
-    })
-    
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}/api/books?limit=50&depth=1`,
+      {
+        cache: 'no-store',
+      },
+    )
+
     if (!res.ok) {
       return []
     }
-    
+
     const data = await res.json()
     return data.docs || []
   } catch (error) {
@@ -22,14 +25,17 @@ async function getBooks(): Promise<Book[]> {
 
 async function getGenres(): Promise<Genre[]> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}/api/genres?limit=20`, {
-      cache: 'no-store',
-    })
-    
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}/api/genres?limit=20`,
+      {
+        cache: 'no-store',
+      },
+    )
+
     if (!res.ok) {
       return []
     }
-    
+
     const data = await res.json()
     return data.docs || []
   } catch (error) {
@@ -50,14 +56,14 @@ export default async function BooksPage() {
       <nav className="mb-8" aria-label="Sjangerfilter">
         <h2 className="text-xl font-semibold mb-4">Filtrer etter sjanger:</h2>
         <div className="flex flex-wrap gap-3">
-          <Link 
+          <Link
             href="/boker"
-            className="px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition"
+            className="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition"
           >
             Alle
           </Link>
           {genres.map((genre) => (
-            <Link 
+            <Link
               key={genre.id}
               href={`/sjangere/${genre.slug}`}
               className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 transition"
@@ -66,7 +72,7 @@ export default async function BooksPage() {
             </Link>
           ))}
         </div>
-      </div>
+      </nav>
 
       {/* Books Grid */}
       {books.length === 0 ? (

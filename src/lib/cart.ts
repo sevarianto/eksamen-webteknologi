@@ -12,8 +12,25 @@ export interface CartItem {
   export function getCart(): CartItem[] {
     if (typeof window === 'undefined') return []
     
-    const cart = localStorage.getItem(CART_KEY)
-    return cart ? JSON.parse(cart) : []
+    try {
+      const cart = localStorage.getItem(CART_KEY)
+      if (!cart) return []
+      
+      const parsed = JSON.parse(cart)
+      // Validate that it's an array
+      if (!Array.isArray(parsed)) {
+        // Clear corrupted data
+        localStorage.removeItem(CART_KEY)
+        return []
+      }
+      
+      return parsed
+    } catch (error) {
+      // Clear corrupted data
+      console.error('Error reading cart from localStorage:', error)
+      localStorage.removeItem(CART_KEY)
+      return []
+    }
   }
   
   export function addToCart(item: Omit<CartItem, 'quantity'>) {

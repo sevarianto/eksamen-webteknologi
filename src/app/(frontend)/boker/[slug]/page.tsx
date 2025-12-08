@@ -39,14 +39,14 @@ export default async function BookDetailPage(props: { params: Promise<{ slug: st
 
   return (
     <main className="container mx-auto px-4 py-8">
-      <Link href="/boker" className="text-emerald-600 hover:underline mb-4 inline-block focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 rounded">
+      <Link href="/boker" className="text-gray-800 hover:underline mb-4 inline-block focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 rounded">
         ← Tilbake til alle bøker
       </Link>
 
       <div className="grid md:grid-cols-2 gap-8 mt-6">
         {/* Book Cover */}
         <div className="flex justify-center">
-          <div className="w-full max-w-md aspect-[3/4] bg-gradient-to-br from-emerald-100 to-emerald-50 rounded-lg overflow-hidden shadow-lg">
+          <div className="w-full max-w-md aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden shadow-lg">
             {coverImage && coverImage.url ? (
               <img 
                 src={coverImage.url} 
@@ -56,8 +56,8 @@ export default async function BookDetailPage(props: { params: Promise<{ slug: st
             ) : (
               <div className="flex items-center justify-center h-full">
                 <div className="text-center">
-                  <div className="w-32 h-40 mx-auto mb-4 bg-emerald-200 rounded flex items-center justify-center">
-                    <span className="text-6xl font-bold text-emerald-600">B</span>
+                  <div className="w-32 h-40 mx-auto mb-4 bg-gray-200 rounded flex items-center justify-center">
+                    <span className="text-6xl font-bold text-gray-600">B</span>
                   </div>
                   <p className="text-lg font-semibold text-gray-700">{book.title}</p>
                 </div>
@@ -72,7 +72,7 @@ export default async function BookDetailPage(props: { params: Promise<{ slug: st
           
           {author && (
             <p className="text-xl text-gray-600 mb-4">
-              av <Link href={`/forfattere/${author.slug}`} className="text-emerald-600 hover:underline">
+              av <Link href={`/forfattere/${author.slug}`} className="text-gray-800 hover:underline">
                 {author.name}
               </Link>
             </p>
@@ -109,7 +109,7 @@ export default async function BookDetailPage(props: { params: Promise<{ slug: st
               <Link
                 key={genre.id}
                 href={`/sjangere/${genre.slug}`}
-                className="px-3 py-1 rounded text-sm font-medium bg-emerald-100 text-emerald-800 hover:bg-emerald-200"
+                className="px-3 py-1 rounded text-sm font-medium bg-gray-200 text-gray-800 hover:bg-gray-300"
               >
                 {genre.name}
               </Link>
@@ -135,7 +135,7 @@ export default async function BookDetailPage(props: { params: Promise<{ slug: st
           {/* Price and Stock */}
           <div className="border-t pt-6 mb-6">
             <div className="flex items-baseline gap-4 mb-4">
-              <span className="text-4xl font-bold text-emerald-600">{book.price} kr</span>
+              <span className="text-4xl font-bold text-gray-800">{book.price} kr</span>
               <span className={`text-lg font-medium ${
                 book.stock > 5 ? 'text-green-600' : 
                 book.stock > 0 ? 'text-orange-600' : 

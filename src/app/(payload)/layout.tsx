@@ -8,6 +8,7 @@ import React from 'react'
 
 import { importMap } from './admin/importMap.js'
 import './custom.scss'
+import Script from 'next/script'
 
 type Args = {
   children: React.ReactNode
@@ -23,9 +24,49 @@ const serverFunction: ServerFunctionClient = async function (args) {
 }
 
 const Layout = ({ children }: Args) => (
-  <RootLayout config={config} importMap={importMap} serverFunction={serverFunction}>
-    {children}
-  </RootLayout>
+  <>
+    <Script
+      id="show-selected-value"
+      strategy="afterInteractive"
+      dangerouslySetInnerHTML={{
+        __html: `
+          (function() {
+            function updateSelectIndicators() {
+              const selectFields = document.querySelectorAll('select');
+              selectFields.forEach(function(select) {
+                const fieldContainer = select.closest('[class*="field"]');
+                if (!fieldContainer) return;
+                const selectedOption = select.options[select.selectedIndex];
+                const selectedText = selectedOption ? selectedOption.text : '';
+                if (selectedText && select.value) {
+                  fieldContainer.setAttribute('data-selected-value', selectedText);
+                  fieldContainer.classList.add('has-selected-value');
+                } else {
+                  fieldContainer.removeAttribute('data-selected-value');
+                  fieldContainer.classList.remove('has-selected-value');
+                }
+              });
+            }
+            if (document.readyState === 'loading') {
+              document.addEventListener('DOMContentLoaded', updateSelectIndicators);
+            } else {
+              updateSelectIndicators();
+            }
+            document.addEventListener('change', function(e) {
+              if (e.target.tagName === 'SELECT') {
+                updateSelectIndicators();
+              }
+            });
+            const observer = new MutationObserver(updateSelectIndicators);
+            observer.observe(document.body, { childList: true, subtree: true });
+          })();
+        `,
+      }}
+    />
+    <RootLayout config={config} importMap={importMap} serverFunction={serverFunction}>
+      {children}
+    </RootLayout>
+  </>
 )
 
 export default Layout

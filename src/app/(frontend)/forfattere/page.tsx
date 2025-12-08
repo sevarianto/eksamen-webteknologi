@@ -3,7 +3,7 @@ import type { Author } from '@/payload-types'
 
 async function getAuthors(): Promise<Author[]> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}/api/authors?limit=50`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}/api/authors?limit=50&depth=1`, {
       cache: 'no-store',
     })
     

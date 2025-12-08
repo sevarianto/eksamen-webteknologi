@@ -12,7 +12,7 @@ export default function AuthorCard({ author }: AuthorCardProps) {
     <article>
       <Link 
         href={`/forfattere/${author.slug}`}
-        className="border rounded-lg p-6 hover:shadow-lg transition text-center focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 block"
+        className="border rounded-lg p-6 hover:shadow-lg transition text-center focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 block"
       >
       {/* Author Photo */}
       {photo && photo.url ? (
@@ -38,7 +38,14 @@ export default function AuthorCard({ author }: AuthorCardProps) {
       )}
 
       {author.birthYear && (
-        <p className="text-gray-500 text-sm">f. {author.birthYear}</p>
+        <p className="text-gray-500 text-sm mb-3">f. {author.birthYear}</p>
+      )}
+
+      {/* Short Biography */}
+      {author.bio && (
+        <p className="text-gray-700 text-sm line-clamp-3 text-left mt-3">
+          {author.bio.length > 150 ? `${author.bio.substring(0, 150)}...` : author.bio}
+        </p>
       )}
       </Link>
     </article>

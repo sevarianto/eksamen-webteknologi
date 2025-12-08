@@ -1,13 +1,47 @@
 // Custom styles for Payload admin panel
+// Following Payload's modern design system and CSS variables
 
-// Add spacing between search icon and placeholder text in admin search bar
+// Use Payload's CSS variables for consistent theming
+:root {
+  --payload-admin-spacing-xs: 0.25rem;
+  --payload-admin-spacing-sm: 0.5rem;
+  --payload-admin-spacing-md: 1rem;
+  --payload-admin-spacing-lg: 1.5rem;
+  --payload-admin-spacing-xl: 2rem;
+  
+  --payload-admin-radius-sm: 0.25rem;
+  --payload-admin-radius-md: 0.375rem;
+  --payload-admin-radius-lg: 0.5rem;
+  
+  --payload-admin-color-gray-50: #f9fafb;
+  --payload-admin-color-gray-100: #f3f4f6;
+  --payload-admin-color-gray-200: #e5e7eb;
+  --payload-admin-color-gray-300: #d1d5db;
+  --payload-admin-color-gray-400: #9ca3af;
+  --payload-admin-color-gray-500: #6b7280;
+  --payload-admin-color-gray-600: #4b5563;
+  --payload-admin-color-gray-700: #374151;
+  --payload-admin-color-gray-800: #1f2937;
+  --payload-admin-color-gray-900: #111827;
+  
+  --payload-admin-color-success: #10b981;
+  --payload-admin-color-success-hover: #059669;
+  --payload-admin-color-error: #ef4444;
+  --payload-admin-color-error-hover: #dc2626;
+  
+  --payload-admin-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --payload-admin-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --payload-admin-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --payload-admin-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+// Search bar styling - consistent with Payload design
 input[type="search"],
 input[placeholder*="Search"],
 [class*="search"] input {
   padding-left: 2.75rem !important;
 }
 
-// Style search icon spacing
 [class*="search"] svg,
 [class*="search-icon"],
 svg[class*="search"] {
@@ -15,7 +49,6 @@ svg[class*="search"] {
   margin-right: 0.5rem !important;
 }
 
-// More specific Payload admin search styling
 .payload__template-default [class*="search"] input,
 .payload__template-default input[type="search"] {
   padding-left: 2.75rem !important;
@@ -25,7 +58,7 @@ svg[class*="search"] {
   left: 0.875rem !important;
 }
 
-// Fix placeholder text spacing in array fields (Site Settings sections)
+// Array field styling - consistent spacing and padding
 [class*="array-field"],
 [class*="array"],
 [data-field-type="array"] {
@@ -34,7 +67,8 @@ svg[class*="search"] {
   select::placeholder {
     padding-left: 1rem !important;
     padding-right: 0.5rem !important;
-    letter-spacing: 0.025em !important;
+    letter-spacing: 0.05em !important;
+    margin: 0 !important;
   }
   
   input,
@@ -42,12 +76,11 @@ svg[class*="search"] {
   select {
     padding-left: 1rem !important;
     padding-right: 0.75rem !important;
-    padding-top: 0.625rem !important;
-    padding-bottom: 0.625rem !important;
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
   }
 }
 
-// Fix placeholder text overlap in Site Settings array fields
 [class*="field-type"][class*="array"],
 [data-field-type="array"] input,
 [data-field-type="array"] textarea,
@@ -60,11 +93,9 @@ svg[class*="search"] {
   }
 }
 
-// More specific targeting for Payload array fields
 .payload__field-type--array {
   input,
-  textarea,
-  select {
+  textarea {
     padding-left: 1rem !important;
     padding-right: 0.75rem !important;
     padding-top: 0.625rem !important;
@@ -76,50 +107,883 @@ svg[class*="search"] {
       letter-spacing: 0.025em !important;
     }
   }
+  
+  // Select fields need more padding-right for dropdown arrow
+  select {
+    padding-left: 1rem !important;
+    padding-right: 4.5rem !important; // Much more space for dropdown arrow
+    padding-top: 0.625rem !important;
+    padding-bottom: 0.625rem !important;
+  }
 }
 
-// Fix for array field items in Site Settings - improved spacing
 [class*="array-field__row"],
 [class*="array-field-item"],
 [class*="array-field__row"] > *,
 [class*="array-field-item"] > * {
   input,
-  textarea,
-  select {
+  textarea {
     padding-left: 1rem !important;
     padding-right: 0.75rem !important;
-    padding-top: 0.625rem !important;
-    padding-bottom: 0.625rem !important;
-    min-height: 2.5rem !important;
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+    min-height: 2.75rem !important;
     
     &::placeholder {
       padding-left: 1rem !important;
       padding-right: 0.5rem !important;
       opacity: 0.7 !important;
-      letter-spacing: 0.025em !important;
+      letter-spacing: 0.05em !important;
       font-size: 0.875rem !important;
+      margin: 0 !important;
     }
+  }
+  
+  // Select fields need more padding-right for dropdown arrow
+  select {
+    padding-left: 1rem !important;
+    padding-right: 4.5rem !important; // Much more space for dropdown arrow
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+    min-height: 2.75rem !important;
   }
 }
 
-// Additional spacing for nested fields in array items
 [class*="array-field__row"] [class*="field"],
 [class*="array-field-item"] [class*="field"] {
-  margin-bottom: 0.75rem !important;
+  margin-bottom: 1rem !important;
   
   input,
-  textarea,
-  select {
+  textarea {
     padding-left: 1rem !important;
     padding-right: 0.75rem !important;
-    padding-top: 0.625rem !important;
-    padding-bottom: 0.625rem !important;
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
     
     &::placeholder {
       padding-left: 1rem !important;
       padding-right: 0.5rem !important;
-      letter-spacing: 0.025em !important;
+      letter-spacing: 0.05em !important;
+      margin: 0 !important;
     }
+  }
+  
+  // Select fields need more padding-right for dropdown arrow
+  select {
+    padding-left: 1rem !important;
+    padding-right: 4.5rem !important; // Much more space for dropdown arrow
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+  }
+}
+
+// Fix spacing between toggle blocks in array fields - cleaner layout
+[class*="array-field__row"],
+[class*="array-field-item"],
+[data-field-type="array"] > [class*="row"],
+[data-field-type="array"] > [class*="item"] {
+  margin-bottom: 2.5rem !important;
+  margin-top: 2rem !important;
+  padding: 2rem !important;
+  padding-top: 1.5rem !important;
+  border: 1px solid var(--payload-admin-color-gray-200) !important;
+  border-radius: var(--payload-admin-radius-lg) !important;
+  background: var(--payload-admin-color-gray-50) !important;
+  position: relative !important;
+  
+  &:last-child {
+    margin-bottom: 1.5rem !important;
+  }
+  
+  // Clean toggle block headers - fix text hidden under close button
+  [class*="toggle-block"],
+  [class*="collapsible"],
+  [class*="block-header"],
+  [class*="row-header"] {
+    margin-bottom: 1.75rem !important;
+    padding-bottom: 1rem !important;
+    padding-top: 0.75rem !important;
+    padding-right: 3rem !important; // Make room for close button
+    line-height: 1.6 !important;
+    min-height: 2.75rem !important;
+    font-weight: 600 !important;
+    font-size: 0.9375rem !important;
+    position: relative !important;
+  }
+  
+  // Close/delete button positioning
+  [class*="row-header"] button[class*="remove"],
+  [class*="row-header"] button[class*="delete"],
+  [class*="row-header"] button[class*="close"],
+  [class*="row-header"] [class*="remove-button"],
+  [class*="row-header"] [class*="delete-button"] {
+    position: absolute !important;
+    right: 0.75rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 10 !important;
+    padding: 0.5rem !important;
+    min-width: auto !important;
+    width: auto !important;
+  }
+  
+  // Toggle button
+  button[class*="toggle"],
+  [class*="row-header"] button:not([class*="remove"]):not([class*="delete"]):not([class*="close"]) {
+    margin-bottom: 1.75rem !important;
+    padding-bottom: 1rem !important;
+    padding-top: 0.75rem !important;
+    padding-right: 3rem !important;
+    line-height: 1.6 !important;
+    min-height: 2.75rem !important;
+    font-weight: 600 !important;
+    font-size: 0.9375rem !important;
+  }
+  
+  // Better spacing for labels - more room around text
+  label,
+  [class*="label"],
+  [class*="field-label"],
+  [class*="field-label"] span,
+  [class*="field-label"] > * {
+    margin-bottom: 0.875rem !important;
+    margin-top: 0.75rem !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-top: 0.375rem !important;
+    padding-bottom: 0.5rem !important;
+    line-height: 1.7 !important;
+    display: block !important;
+    font-size: 0.875rem !important;
+    font-weight: 500 !important;
+    color: var(--payload-admin-color-gray-700) !important;
+  }
+  
+  // Extra spacing for labels before select fields
+  label:has(+ select),
+  [class*="label"]:has(+ select),
+  [class*="field-label"]:has(+ select) {
+    margin-bottom: 1rem !important;
+  }
+  
+  // Clean placeholder text in toggle blocks
+  [class*="toggle-block"] input::placeholder,
+  [class*="toggle-block"] textarea::placeholder,
+  [class*="toggle-block"] select::placeholder,
+  [class*="collapsible"] input::placeholder,
+  [class*="collapsible"] textarea::placeholder,
+  [class*="collapsible"] select::placeholder {
+    padding-left: 0.875rem !important;
+    padding-right: 0.5rem !important;
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+    margin: 0 !important;
+    letter-spacing: 0.02em !important;
+    opacity: 0.65 !important;
+    font-size: 0.875rem !important;
+  }
+  
+  // Better spacing between fields - more room
+  [class*="field"]:not(:last-child) {
+    margin-bottom: 2rem !important;
+    margin-top: 0.5rem !important;
+    padding-bottom: 0.75rem !important;
+    padding-top: 0.5rem !important;
+  }
+  
+  // Extra spacing for text elements
+  p,
+  span,
+  div[class*="text"],
+  [class*="field"] p,
+  [class*="field"] span {
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.75rem !important;
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+    line-height: 1.7 !important;
+  }
+  
+  // Clean group fields
+  [class*="group-field"],
+  [data-field-type="group"] {
+    margin-bottom: 1.75rem !important;
+    margin-top: 0.75rem !important;
+    padding: 1.5rem !important;
+    border: 1px solid var(--payload-admin-color-gray-300) !important;
+    border-radius: var(--payload-admin-radius-md) !important;
+    background: white !important;
+    
+    // Ensure select fields in groups have enough space
+    select {
+      min-width: 180px !important;
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+  }
+  
+  // Description text
+  [class*="description"],
+  [class*="field-description"],
+  [class*="field-description"] p {
+    margin-top: 0.375rem !important;
+    margin-bottom: 0.625rem !important;
+    line-height: 1.5 !important;
+    padding-bottom: 0.25rem !important;
+    font-size: 0.8125rem !important;
+    color: var(--payload-admin-color-gray-500) !important;
+  }
+  
+  // Input fields with better spacing - more room around
+  input,
+  textarea {
+    margin-top: 0.75rem !important;
+    margin-bottom: 1rem !important;
+    padding-top: 0.875rem !important;
+    padding-bottom: 0.875rem !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    border: 1px solid var(--payload-admin-color-gray-300) !important;
+    border-radius: var(--payload-admin-radius-md) !important;
+    background: white !important;
+    min-height: 2.875rem !important;
+    
+    &::placeholder {
+      padding-left: 1rem !important;
+      padding-right: 0.75rem !important;
+      padding-top: 0.5rem !important;
+      padding-bottom: 0.5rem !important;
+      margin: 0 !important;
+      letter-spacing: 0.02em !important;
+      opacity: 0.65 !important;
+      font-size: 0.875rem !important;
+    }
+    
+    &:focus {
+      border-color: var(--payload-admin-color-success) !important;
+      outline: none !important;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1) !important;
+    }
+  }
+  
+  // Select/dropdown fields - extra spacing to prevent text overlap
+  select {
+    margin-top: 0.875rem !important;
+    margin-bottom: 1.25rem !important;
+    margin-right: 1rem !important;
+    padding-top: 0.875rem !important;
+    padding-bottom: 0.875rem !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important; // Much more space for dropdown arrow - plenty of room for text
+    border: 1px solid var(--payload-admin-color-gray-300) !important;
+    border-radius: var(--payload-admin-radius-md) !important;
+    background: white !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 0.625rem center !important; // Position arrow closer to edge
+    background-size: 12px 12px !important;
+    min-height: 2.875rem !important;
+    min-width: 800px !important; // Ensure enough width for text
+    width: 100% !important; // Full width of container
+    max-width: 100% !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    cursor: pointer !important;
+    font-size: 0.875rem !important;
+    line-height: 1.5 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    box-sizing: border-box !important;
+    
+    // Option elements spacing
+    option {
+      padding: 0.75rem 1rem !important;
+      margin: 0.25rem 0 !important;
+      line-height: 1.6 !important;
+      white-space: normal !important; // Allow wrapping in dropdown
+    }
+    
+    &:focus {
+      border-color: var(--payload-admin-color-success) !important;
+      outline: none !important;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1) !important;
+    }
+  }
+  
+  // Ensure label and select don't overlap
+  [class*="field"]:has(select) {
+    margin-bottom: 1.5rem !important;
+    position: relative !important;
+    padding-top: 1rem !important; // Make room for selected value indicator
+    
+    label,
+    [class*="label"],
+    [class*="field-label"] {
+      margin-bottom: 1rem !important; // Extra space before select
+    }
+    
+    // Show selected value indicator above select
+    &::before {
+      content: attr(data-selected-value) !important;
+      display: block !important;
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      font-size: 0.8125rem !important;
+      color: var(--payload-admin-color-gray-700) !important;
+      font-weight: 600 !important;
+      padding: 0.375rem 0.75rem !important;
+      background: var(--payload-admin-color-gray-50) !important;
+      border: 1px solid var(--payload-admin-color-gray-200) !important;
+      border-radius: var(--payload-admin-radius-sm) !important;
+      z-index: 2 !important;
+      pointer-events: none !important;
+      opacity: 0 !important;
+      transition: opacity 0.2s !important;
+      white-space: nowrap !important;
+    }
+    
+    // Show indicator when field has selected value
+    &.has-selected-value::before {
+      opacity: 1 !important;
+    }
+  }
+  
+  // Checkbox fields
+  [type="checkbox"] {
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+}
+
+// General select/dropdown styling - prevent text overlap
+select {
+  padding-right: 2.5rem !important; // Space for dropdown arrow
+  min-width: 200px !important; // Ensure enough width for text
+  width: 100% !important; // Full width of container
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 0.75rem center !important;
+  background-size: 12px !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  
+  // Remove default arrow in IE
+  &::-ms-expand {
+    display: none !important;
+  }
+  
+  option {
+    padding: 0.75rem 1rem !important;
+    margin: 0.25rem 0 !important;
+    line-height: 1.6 !important;
+    white-space: normal !important; // Allow wrapping in dropdown
+  }
+}
+
+// Fix for react-select (Payload bruker dette)
+.rs__control,
+[class*="select__control"],
+.payload-select {
+  min-height: 38px !important;
+  padding-left: 0.75rem !important;
+  padding-right: 0 !important;
+  position: relative !important;
+}
+
+.rs__value-container,
+[class*="select__value-container"] {
+  padding: 2px 8px !important;
+  padding-right: 0 !important;
+}
+
+// Fix for indicator (pil-boksen) som dekker tekst
+.rs__indicators,
+[class*="select__indicators"],
+[class*="indicator"],
+div[class*="indicator"] {
+  position: absolute !important;
+  right: 0 !important;
+  padding-right: 8px !important;
+  background: transparent !important;
+  z-index: 1 !important;
+  width: auto !important;
+  min-width: auto !important;
+}
+
+// Fjern tom boks som dekker tekst - flere varianter
+.rs__indicator-separator,
+[class*="select__indicator-separator"],
+[class*="indicator-separator"],
+div[class*="indicator-separator"],
+span[class*="indicator-separator"] {
+  display: none !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  opacity: 0 !important;
+}
+
+// Fjern hvit bakgrunn på indicators container
+.rs__indicators::before,
+[class*="select__indicators"]::before,
+.rs__indicators::after,
+[class*="select__indicators"]::after {
+  display: none !important;
+  content: none !important;
+}
+
+// Dropdown arrow styling
+.rs__dropdown-indicator,
+[class*="select__dropdown-indicator"] {
+  padding: 8px !important;
+  color: #666 !important;
+}
+
+// Single value (valgt tekst) skal ha nok plass
+.rs__single-value,
+[class*="select__single-value"],
+div[class*="single-value"] {
+  max-width: calc(100% - 50px) !important; // More space for indicators
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  margin-right: 0.5rem !important; // Space before indicators
+  padding-right: 0.5rem !important;
+  position: relative !important;
+  z-index: 0 !important;
+}
+
+// For multi-select values
+.rs__multi-value,
+[class*="select__multi-value"] {
+  max-width: calc(100% - 40px) !important;
+}
+
+// Generell select field fix
+.field-type-select .rs__control,
+.field-type-relationship .rs__control,
+[class*="field-type-select"] [class*="select__control"],
+[class*="field-type-relationship"] [class*="select__control"] {
+  position: relative !important;
+}
+
+// Input felt i dropdown skal ha riktig bredde
+.rs__input-container,
+[class*="select__input-container"] {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+// Meny (options list) skal være over andre elementer
+.rs__menu,
+[class*="select__menu"] {
+  z-index: 9999 !important;
+}
+
+// Fix for disabled state
+.rs__control--is-disabled,
+[class*="select__control"][class*="--is-disabled"] {
+  background-color: #f5f5f5 !important;
+  cursor: not-allowed !important;
+}
+
+// Ensure labels and selects have proper spacing
+[class*="field"]:has(select) {
+  label,
+  [class*="label"],
+  [class*="field-label"] {
+    margin-bottom: 1rem !important;
+  }
+  
+  select {
+    margin-top: 0.875rem !important;
+    margin-bottom: 1.25rem !important;
+  }
+  
+  // Show selected value as a visual indicator above the select
+  select::before {
+    content: attr(data-selected) !important;
+    display: block !important;
+    position: absolute !important;
+    top: -1.5rem !important;
+    left: 0 !important;
+    font-size: 0.75rem !important;
+    color: var(--payload-admin-color-gray-600) !important;
+    font-weight: 500 !important;
+    padding: 0.25rem 0.5rem !important;
+    background: var(--payload-admin-color-gray-100) !important;
+    border-radius: var(--payload-admin-radius-sm) !important;
+  }
+}
+
+// Add visual indicator showing selected value above select fields
+[class*="field"]:has(select) {
+  position: relative !important;
+  
+  // Create a pseudo-element to show selected value
+  &::after {
+    content: attr(data-selected-value) !important;
+    display: block !important;
+    position: absolute !important;
+    top: -0.5rem !important;
+    left: 0 !important;
+    font-size: 0.8125rem !important;
+    color: var(--payload-admin-color-gray-700) !important;
+    font-weight: 600 !important;
+    padding: 0.375rem 0.75rem !important;
+    background: var(--payload-admin-color-gray-50) !important;
+    border: 1px solid var(--payload-admin-color-gray-200) !important;
+    border-radius: var(--payload-admin-radius-sm) !important;
+    z-index: 1 !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
+    transition: opacity 0.2s !important;
+  }
+  
+  // Show indicator when select has a value
+  select:not([value=""]) + *,
+  select:not(:invalid) {
+    & ~ *::after {
+      opacity: 1 !important;
+    }
+  }
+}
+
+// Custom field component styling - following Payload patterns
+.payload-custom-field {
+  margin-bottom: var(--payload-admin-spacing-md);
+  
+  .payload-custom-field__label {
+    display: block;
+    margin-bottom: var(--payload-admin-spacing-sm);
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--payload-admin-color-gray-700);
+  }
+  
+  .payload-custom-field__description {
+    margin-bottom: var(--payload-admin-spacing-sm);
+    font-size: 0.75rem;
+    color: var(--payload-admin-color-gray-500);
+    line-height: 1.5;
+  }
+  
+  .payload-custom-field__input {
+    width: 100%;
+    padding: var(--payload-admin-spacing-sm) var(--payload-admin-spacing-md);
+    border: 1px solid var(--payload-admin-color-gray-300);
+    border-radius: var(--payload-admin-radius-md);
+    font-size: 0.875rem;
+    transition: all 0.2s;
+    
+    &:focus {
+      outline: none;
+      border-color: var(--payload-admin-color-success);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    }
+  }
+  
+  .payload-custom-field__button {
+    padding: var(--payload-admin-spacing-sm) var(--payload-admin-spacing-md);
+    background: var(--payload-admin-color-gray-600);
+    color: white;
+    border: none;
+    border-radius: var(--payload-admin-radius-md);
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    
+    &:hover {
+      background: var(--payload-admin-color-gray-700);
+    }
+    
+    &.payload-custom-field__button--success {
+      background: var(--payload-admin-color-success);
+      
+      &:hover {
+        background: var(--payload-admin-color-success-hover);
+      }
+    }
+  }
+  
+  .payload-custom-field__preview {
+    width: 100%;
+    height: 60px;
+    border-radius: var(--payload-admin-radius-sm);
+    border: 1px solid var(--payload-admin-color-gray-300);
+    margin-bottom: var(--payload-admin-spacing-md);
+  }
+  
+  .payload-custom-field__color-swatch {
+    padding: 5px;
+    background: white;
+    border-radius: var(--payload-admin-radius-sm);
+    display: inline-block;
+    cursor: pointer;
+    border: 1px solid var(--payload-admin-color-gray-300);
+    transition: all 0.2s;
+    
+    &:hover {
+      border-color: var(--payload-admin-color-gray-400);
+      box-shadow: var(--payload-admin-shadow-sm);
+    }
+  }
+  
+  .payload-custom-field__color {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--payload-admin-radius-sm);
+    border: 1px solid var(--payload-admin-color-gray-300);
+    cursor: pointer;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+  }
+  
+  .payload-custom-field__popover {
+    position: absolute;
+    z-index: 2000;
+    margin-top: var(--payload-admin-spacing-sm);
+    
+    .payload-custom-field__popover-content {
+      background: white;
+      border-radius: var(--payload-admin-radius-lg);
+      padding: var(--payload-admin-spacing-md);
+      box-shadow: var(--payload-admin-shadow-lg);
+      min-width: 250px;
+    }
+  }
+  
+  .payload-custom-field__cover {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1999;
+    background: transparent;
+  }
+}
+
+// Two-column layout for Site Settings - preview button next to sections
+[data-global-slug="site-settings"] [class*="form"],
+[data-global-slug="site-settings"] [class*="form-container"],
+[data-global-slug="site-settings"] > [class*="form"] {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1.5rem !important;
+}
+
+// Preview button styling - compact, next to sections
+.payload-preview-button {
+  margin: 0 !important;
+  padding: 1rem 1.25rem !important;
+  background: var(--payload-admin-color-gray-50) !important;
+  border: 1px solid var(--payload-admin-color-gray-200) !important;
+  border-radius: var(--payload-admin-radius-md) !important;
+  box-shadow: var(--payload-admin-shadow-sm) !important;
+  max-width: 280px !important;
+  width: 100% !important;
+  
+  .payload-preview-button__button {
+    width: 100% !important;
+    padding: 0.625rem 1rem !important;
+    background: var(--payload-admin-color-success) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: var(--payload-admin-radius-md) !important;
+    cursor: pointer !important;
+    font-weight: 600 !important;
+    font-size: 0.8125rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+    transition: all 0.2s !important;
+    
+    svg {
+      width: 14px !important;
+      height: 14px !important;
+    }
+    
+    &:hover {
+      background: var(--payload-admin-color-success-hover) !important;
+      transform: translateY(-1px) !important;
+      box-shadow: var(--payload-admin-shadow-md) !important;
+    }
+  }
+  
+  .payload-preview-button__description {
+    margin-top: 0.625rem !important;
+    font-size: 0.75rem !important;
+    color: var(--payload-admin-color-gray-600) !important;
+    line-height: 1.5 !important;
+    text-align: center !important;
+  }
+}
+
+// Wrap sections and preview button in a container
+[data-global-slug="site-settings"] [data-field-name="homeSections"],
+[data-global-slug="site-settings"] [data-field-name="previewButton"] {
+  position: relative !important;
+}
+
+// Create grid container for sections area
+[data-global-slug="site-settings"] [class*="fields"] {
+  display: grid !important;
+  grid-template-columns: 1fr 280px !important;
+  gap: 1.5rem !important;
+  align-items: start !important;
+  
+  @media (max-width: 1400px) {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+// Make preview button appear in right column
+[data-global-slug="site-settings"] [data-field-name="previewButton"] {
+  grid-column: 2 !important;
+  grid-row: 2 !important; // After general settings, next to sections
+  position: sticky !important;
+  top: 2rem !important;
+  
+  @media (max-width: 1400px) {
+    grid-column: 1 !important;
+    grid-row: auto !important;
+    position: relative !important;
+    top: auto !important;
+    margin-top: 1rem !important;
+  }
+}
+
+// Make sections array span left column
+[data-global-slug="site-settings"] [data-field-name="homeSections"] {
+  grid-column: 1 !important;
+}
+
+// General settings span full width
+[data-global-slug="site-settings"] [data-field-name="general"] {
+  grid-column: 1 / -1 !important;
+  
+  @media (max-width: 1400px) {
+    grid-column: 1 !important;
+  }
+}
+
+// Modal/Preview overlay styling
+.payload-preview-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--payload-admin-spacing-md);
+  animation: fadeIn 0.2s ease-in;
+  
+  .payload-preview-modal__content {
+    width: 95%;
+    height: 90%;
+    max-width: 1400px;
+    max-height: 90vh;
+    background: white;
+    border-radius: var(--payload-admin-radius-lg);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: var(--payload-admin-shadow-xl);
+    animation: slideUp 0.3s ease-out;
+    
+    &.payload-preview-modal__content--fullscreen {
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 0;
+      box-shadow: none;
+    }
+  }
+  
+  .payload-preview-modal__header {
+    padding: var(--payload-admin-spacing-md) var(--payload-admin-spacing-lg);
+    border-bottom: 1px solid var(--payload-admin-color-gray-200);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to right, var(--payload-admin-color-gray-50), white);
+    flex-shrink: 0;
+    
+    h2 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--payload-admin-color-gray-900);
+      display: flex;
+      align-items: center;
+      gap: var(--payload-admin-spacing-sm);
+    }
+    
+    p {
+      margin: 0.25rem 0 0 0;
+      font-size: 0.875rem;
+      color: var(--payload-admin-color-gray-500);
+    }
+  }
+  
+  .payload-preview-modal__controls {
+    display: flex;
+    gap: var(--payload-admin-spacing-sm);
+    align-items: center;
+  }
+  
+  .payload-preview-modal__body {
+    flex: 1;
+    overflow: auto;
+    position: relative;
+    background: var(--payload-admin-color-gray-50);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 

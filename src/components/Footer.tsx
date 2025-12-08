@@ -1,7 +1,7 @@
-async function getSiteSettings() {
+async function getFooterSettings() {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}/api/globals/site-settings`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}/api/globals/footer-settings`,
       { cache: 'no-store' },
     )
     if (!res.ok) return null
@@ -12,15 +12,27 @@ async function getSiteSettings() {
 }
 
 export default async function Footer() {
-  const settings = await getSiteSettings()
-  const footer = settings?.footer || {}
+  const footer = await getFooterSettings() || {}
 
-  // Use colors directly from admin settings - no fallbacks
+  // Use colors directly from admin settings with opacity support
   const bgStyle: React.CSSProperties = {}
   const textStyle: React.CSSProperties = {}
 
   if (footer.backgroundColor) {
-    bgStyle.backgroundColor = footer.backgroundColor
+    const opacity = footer.backgroundColorOpacity !== undefined && footer.backgroundColorOpacity !== null 
+      ? footer.backgroundColorOpacity / 100 
+      : 1
+    
+    // Convert hex to rgba if opacity is less than 100
+    if (opacity < 1) {
+      const hex = footer.backgroundColor.replace('#', '')
+      const r = parseInt(hex.substring(0, 2), 16)
+      const g = parseInt(hex.substring(2, 4), 16)
+      const b = parseInt(hex.substring(4, 6), 16)
+      bgStyle.backgroundColor = `rgba(${r}, ${g}, ${b}, ${opacity})`
+    } else {
+      bgStyle.backgroundColor = footer.backgroundColor
+    }
   }
 
   if (footer.textColor) {

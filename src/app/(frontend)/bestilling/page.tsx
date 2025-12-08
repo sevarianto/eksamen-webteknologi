@@ -29,17 +29,30 @@ export default function CheckoutPage() {
       // Generer ordrenummer
       const orderNumber = `ORD-${Date.now()}`
 
-      // Prepare order data
+      // Validate cart items before submission
+      if (cart.length === 0) {
+        alert('Handlekurven er tom')
+        setLoading(false)
+        return
+      }
+
+      // Prepare order data - convert string IDs to numbers for Payload relationships
       const orderData = {
         orderNumber,
-        customerName: formData.customerName,
-        customerEmail: formData.customerEmail,
-        customerPhone: formData.customerPhone,
-        items: cart.map(item => ({
-          book: item.id,
-          quantity: item.quantity,
-          price: item.price,
-        })),
+        customerName: formData.customerName.trim(),
+        customerEmail: formData.customerEmail.trim(),
+        customerPhone: formData.customerPhone?.trim() || undefined,
+        items: cart.map(item => {
+          const bookId = Number(item.id)
+          if (isNaN(bookId) || bookId <= 0) {
+            throw new Error(`Ugyldig bok-ID: ${item.id}`)
+          }
+          return {
+            book: bookId, // Convert string ID to number for Payload relationship
+            quantity: item.quantity,
+            price: item.price,
+          }
+        }),
         totalAmount: getCartTotal(),
         status: 'pending',
       }
@@ -54,6 +67,7 @@ export default function CheckoutPage() {
       })
 
       if (res.ok) {
+        const result = await res.json()
         // Clear cart
         clearCart()
         
@@ -64,7 +78,10 @@ export default function CheckoutPage() {
         console.error('Order error:', errorData)
         setLoading(false)
         // Show error message to user
-        alert(`Noe gikk galt: ${errorData.message || 'Kunne ikke lagre bestillingen. Vennligst prøv igjen.'}`)
+        const errorMessage = errorData.errors?.map((err: any) => err.message).join(', ') || 
+                            errorData.message || 
+                            'Kunne ikke lagre bestillingen. Vennligst prøv igjen.'
+        alert(`Noe gikk galt: ${errorMessage}`)
       }
     } catch (error) {
       console.error('Order error:', error)
@@ -90,7 +107,7 @@ export default function CheckoutPage() {
           <p className="text-xl text-gray-600 mb-6">Handlekurven din er tom</p>
           <Link 
             href="/boker"
-            className="bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700 inline-block focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition"
+            className="bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-900 inline-block focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition"
           >
             Se alle bøker
           </Link>
@@ -122,7 +139,7 @@ export default function CheckoutPage() {
                   required
                   value={formData.customerName}
                   onChange={(e) => setFormData({...formData, customerName: e.target.value})}
-                  className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                   placeholder="Ola Nordmann"
                 />
               </div>
@@ -137,7 +154,7 @@ export default function CheckoutPage() {
                   required
                   value={formData.customerEmail}
                   onChange={(e) => setFormData({...formData, customerEmail: e.target.value})}
-                  className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                   placeholder="ola@example.com"
                 />
               </div>
@@ -151,7 +168,7 @@ export default function CheckoutPage() {
                   type="tel"
                   value={formData.customerPhone}
                   onChange={(e) => setFormData({...formData, customerPhone: e.target.value})}
-                  className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                   placeholder="12 34 56 78"
                 />
               </div>
@@ -159,7 +176,7 @@ export default function CheckoutPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-emerald-600 text-white py-3 rounded-lg font-semibold hover:bg-emerald-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                className="w-full bg-gray-800 text-white py-3 rounded-lg font-semibold hover:bg-gray-900 transition disabled:bg-gray-400 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
               >
                 {loading ? 'Behandler bestilling...' : 'Fullfør bestilling'}
               </button>

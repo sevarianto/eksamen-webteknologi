@@ -37,7 +37,7 @@ export default function CartPage() {
           <p className="text-xl text-gray-600 mb-6">Handlekurven din er tom</p>
           <Link 
             href="/boker"
-            className="bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700 inline-block focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition"
+            className="bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-900 inline-block focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition"
           >
             Se alle bøker
           </Link>
@@ -61,7 +61,7 @@ export default function CartPage() {
               <div className="flex-1">
                 <Link 
                   href={`/boker/${item.slug}`}
-                  className="text-lg font-bold hover:text-emerald-600"
+                  className="text-lg font-bold hover:text-gray-800"
                 >
                   {item.title}
                 </Link>
@@ -128,20 +128,20 @@ export default function CartPage() {
 
             <Link
               href="/bestilling"
-              className="block w-full bg-emerald-600 text-white text-center py-3 rounded-lg font-semibold hover:bg-emerald-700 transition"
+              className="block w-full bg-gray-800 text-white text-center py-3 rounded-lg font-semibold hover:bg-gray-900 transition"
             >
               Gå til bestilling
             </Link>
 
             <Link
               href="/boker"
-              className="block text-center text-emerald-600 mt-4 hover:underline"
+              className="block text-center text-gray-800 mt-4 hover:underline"
             >
               Fortsett å handle
             </Link>
           </div>
         </div>
       </div>
-    </div>
+    </main>
   )
 }

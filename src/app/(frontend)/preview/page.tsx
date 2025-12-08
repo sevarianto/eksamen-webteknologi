@@ -27,8 +27,18 @@ async function getSiteSettings() {
   return await res.json()
 }
 
+async function getHeaderSettings() {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}/api/globals/header-settings`,
+    { cache: 'no-store' },
+  )
+  if (!res.ok) return null
+  return await res.json()
+}
+
 export default async function PreviewPage() {
   const settings = await getSiteSettings()
+  const headerSettings = await getHeaderSettings()
 
   if (!settings || !settings.homeSections || settings.homeSections.length === 0) {
     return (
@@ -36,7 +46,7 @@ export default async function PreviewPage() {
         <div className="text-center">
           <h1 className="text-4xl font-bold mb-4">Velkommen til BookDragons</h1>
           <p className="text-gray-600 mb-8">Konfiger hjemmesiden i Admin → Site Settings</p>
-          <Link href="/admin" className="bg-emerald-600 text-white px-6 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition">
+          <Link href="/admin" className="bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-900 transition focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
             Gå til Admin
           </Link>
         </div>
@@ -217,9 +227,18 @@ export default async function PreviewPage() {
                       )
                     }
 
-                    // Fallback to default gradient
+                    // Fallback to default gradient (use header color or neutral gray)
+                    const fallbackColor = 
+                      (headerSettings?.backgroundType === 'solid' && headerSettings?.backgroundColor) 
+                        ? headerSettings.backgroundColor 
+                        : headerSettings?.gradientColor1 || '#6b7280'
                     return (
-                      <div className="absolute inset-0 bg-gradient-to-br from-emerald-600 to-emerald-800"></div>
+                      <div 
+                        className="absolute inset-0" 
+                        style={{
+                          background: `linear-gradient(135deg, ${fallbackColor}, ${fallbackColor}dd)`,
+                        }}
+                      ></div>
                     )
                   })()
                 )}
@@ -250,7 +269,7 @@ export default async function PreviewPage() {
                       className={`inline-block ${buttonStyle.padding || 'px-8 py-4'} ${buttonStyle.borderRadius || 'rounded-lg'} font-semibold hover:opacity-90 transition shadow-lg ${buttonStyle.fontSize || 'text-lg'} focus:outline-none focus:ring-2 focus:ring-offset-2`}
                       style={{
                         backgroundColor: buttonStyle.backgroundColor || 'white',
-                        color: buttonStyle.color || '#059669',
+                        color: buttonStyle.color || '#000000',
                       }}
                     >
                       {hero.buttonText}
@@ -263,36 +282,28 @@ export default async function PreviewPage() {
 
           // FEATURED BOOKS SECTION
           if (section.sectionType === 'featured' && section.featured) {
-            const bgClasses = {
-              white: 'bg-white',
-              gray: 'bg-gray-100',
-              emerald: 'bg-emerald-50',
-            }
-
             return (
               <FeaturedBooksSection
                 key={index}
                 settings={section.featured}
-                bgClass={
-                  bgClasses[section.featured.backgroundColor as keyof typeof bgClasses] ||
-                  bgClasses.white
-                }
+                bgClass=""
+                bgStyle={{
+                  backgroundColor: section.featured.backgroundColor || '#ffffff',
+                }}
+                headerSettings={headerSettings || null}
               />
             )
           }
 
           // CATEGORIES SECTION
           if (section.sectionType === 'categories' && section.categories) {
-            const bgClasses = {
-              white: 'bg-white',
-              gray: 'bg-gray-100',
-              emerald: 'bg-emerald-50',
-            }
-
             return (
               <section
                 key={index}
-                className={`${bgClasses[section.categories.backgroundColor as keyof typeof bgClasses] || bgClasses.gray} py-16`}
+                className="py-16"
+                style={{
+                  backgroundColor: section.categories.backgroundColor || '#f3f4f6',
+                }}
               >
                 <div className="container mx-auto px-4">
                   <h2 className="text-4xl font-bold mb-10 text-center">
@@ -301,26 +312,26 @@ export default async function PreviewPage() {
                   <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
                     <Link
                       href="/sjangere/fantasy"
-                      className="bg-white p-8 rounded-xl hover:shadow-xl transition text-center group focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 block"
+                      className="bg-white p-8 rounded-xl hover:shadow-xl transition text-center group focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 block"
                     >
                       <div className="text-5xl mb-4"></div>
-                      <h3 className="text-2xl font-bold text-emerald-600 mb-2">Fantasy</h3>
+                      <h3 className="text-2xl font-bold mb-2" style={{ color: section.categories.titleStyle?.textColor || '#000000' }}>Fantasy</h3>
                       <p className="text-gray-600">Magiske eventyr</p>
                     </Link>
                     <Link
                       href="/sjangere/krim"
-                      className="bg-white p-8 rounded-xl hover:shadow-xl transition text-center group focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 block"
+                      className="bg-white p-8 rounded-xl hover:shadow-xl transition text-center group focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 block"
                     >
                       <div className="text-5xl mb-4"></div>
-                      <h3 className="text-2xl font-bold text-emerald-600 mb-2">Krim</h3>
+                      <h3 className="text-2xl font-bold mb-2" style={{ color: section.categories.titleStyle?.textColor || '#000000' }}>Krim</h3>
                       <p className="text-gray-600">Spenning og mysterier</p>
                     </Link>
                     <Link
                       href="/sjangere/barneboker"
-                      className="bg-white p-8 rounded-xl hover:shadow-xl transition text-center group focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 block"
+                      className="bg-white p-8 rounded-xl hover:shadow-xl transition text-center group focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 block"
                     >
                       <div className="text-5xl mb-4"></div>
-                      <h3 className="text-2xl font-bold text-emerald-600 mb-2">Barnebøker</h3>
+                      <h3 className="text-2xl font-bold mb-2" style={{ color: section.categories.titleStyle?.textColor || '#000000' }}>Barnebøker</h3>
                       <p className="text-gray-600">Bøker for de minste</p>
                     </Link>
                   </div>
@@ -342,14 +353,12 @@ export default async function PreviewPage() {
                   className: '',
                 }
               }
-              const bgClasses: Record<string, string> = {
-                white: 'bg-white',
-                gray: 'bg-gray-100',
-                emerald: 'bg-emerald-50',
-              }
+              // Always use hex color from SiteSettings, no fallback classes
               return {
-                style: {},
-                className: bgClasses[textSectionData.backgroundColor as string] || bgClasses.white,
+                style: {
+                  backgroundColor: textSectionData.backgroundColor || '#ffffff',
+                },
+                className: '',
               }
             }
             const bgStyle = getBgStyle()
@@ -450,7 +459,7 @@ export default async function PreviewPage() {
               <Link
                 key={index}
                 href={section.banner.link}
-                className="block hover:opacity-90 transition focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                className="block hover:opacity-90 transition focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
               >
                 {content}
               </Link>
@@ -473,10 +482,12 @@ async function FeaturedBooksSection({
   settings,
   bgClass,
   bgStyle,
+  headerSettings,
 }: {
   settings: { title?: string | null; limit?: number | null }
   bgClass?: string
   bgStyle?: React.CSSProperties
+  headerSettings?: any
 }) {
   const books = await getFeaturedBooks(settings.limit || 3)
 
@@ -492,9 +503,9 @@ async function FeaturedBooksSection({
             <Link
               key={book.id}
               href={`/boker/${book.slug}`}
-              className="group bg-white rounded-xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 block"
+              className="group bg-white rounded-xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 block"
             >
-              <div className="relative aspect-[3/4] overflow-hidden bg-gradient-to-br from-emerald-100 to-emerald-50">
+              <div className="relative aspect-[3/4] overflow-hidden bg-gray-100">
                 {book.coverImage && typeof book.coverImage === 'object' && book.coverImage.url ? (
                   <img
                     src={book.coverImage.url}
@@ -511,7 +522,18 @@ async function FeaturedBooksSection({
                 <h3 className="text-xl font-bold mb-3 line-clamp-2">{book.title}</h3>
                 <p className="text-gray-600 mb-4 line-clamp-3 text-sm">{book.description}</p>
                 <div className="flex justify-between items-center pt-4 border-t">
-                  <span className="text-2xl font-bold text-emerald-600">{book.price} kr</span>
+                  <span 
+                    className="text-2xl font-bold" 
+                    style={{ 
+                      color: headerSettings 
+                        ? (headerSettings.backgroundType === 'solid' 
+                            ? headerSettings.backgroundColor 
+                            : headerSettings.gradientColor1) || '#000000'
+                        : '#000000'
+                    }}
+                  >
+                    {book.price} kr
+                  </span>
                   <span
                     className={`text-sm font-medium px-3 py-1 rounded ${book.stock > 5 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}
                   >

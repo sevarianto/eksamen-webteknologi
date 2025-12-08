@@ -20,9 +20,9 @@ export default function ConfirmationPage() {
         <h1 className="text-4xl font-bold mb-4">Takk for din bestilling!</h1>
         
         {orderNumber && (
-          <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-6 mb-6">
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-6">
             <p className="text-gray-700 mb-2">Ditt ordrenummer er:</p>
-            <p className="text-3xl font-bold text-emerald-600">{orderNumber}</p>
+            <p className="text-3xl font-bold text-gray-800">{orderNumber}</p>
           </div>
         )}
 
@@ -34,7 +34,7 @@ export default function ConfirmationPage() {
         <div className="flex gap-4 justify-center">
           <Link
             href="/boker"
-            className="bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700 transition focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+            className="bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-900 transition focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
           >
             Fortsett å handle
           </Link>
