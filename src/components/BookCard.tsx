@@ -13,10 +13,10 @@ export default function BookCard({ book }: BookCardProps) {
     <article>
       <Link 
         href={`/boker/${book.slug}`}
-        className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 block"
+        className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 block"
       >
       {/* Book Cover */}
-      <div className="bg-gradient-to-br from-emerald-100 to-emerald-50 aspect-[3/4] flex items-center justify-center overflow-hidden">
+      <div className="bg-gray-100 aspect-[3/4] flex items-center justify-center overflow-hidden">
         {coverImage && coverImage.url ? (
           <img 
             src={coverImage.url} 
@@ -25,8 +25,8 @@ export default function BookCard({ book }: BookCardProps) {
           />
         ) : (
           <div className="text-center p-4">
-            <div className="w-16 h-20 mx-auto mb-2 bg-emerald-200 rounded flex items-center justify-center">
-              <span className="text-2xl font-bold text-emerald-600">B</span>
+            <div className="w-16 h-20 mx-auto mb-2 bg-gray-200 rounded flex items-center justify-center">
+              <span className="text-2xl font-bold text-gray-600">B</span>
             </div>
             <p className="text-xs text-gray-600 font-medium line-clamp-2">{book.title}</p>
           </div>
@@ -75,7 +75,7 @@ export default function BookCard({ book }: BookCardProps) {
 
         {/* Price and Stock */}
         <div className="flex justify-between items-center pt-3 border-t">
-          <span className="text-xl font-bold text-emerald-600">
+          <span className="text-xl font-bold text-gray-800">
             {book.price} kr
           </span>
           <span className={`text-sm font-medium ${
