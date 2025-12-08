@@ -52,8 +52,8 @@ export default async function GenrePage(props: { params: Promise<{ slug: string 
   const books = await getBooksByGenre(genre.id)
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <Link href="/boker" className="text-emerald-600 hover:underline mb-4 inline-block">
+    <main className="container mx-auto px-4 py-8">
+      <Link href="/boker" className="text-emerald-600 hover:underline mb-4 inline-block focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 rounded">
         ← Tilbake til alle bøker
       </Link>
 
@@ -70,7 +70,7 @@ export default async function GenrePage(props: { params: Promise<{ slug: string 
           <p className="text-xl text-gray-600 mb-6">Ingen bøker funnet i denne sjangeren.</p>
           <Link 
             href="/boker"
-            className="bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700 inline-block"
+            className="bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700 inline-block focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition"
           >
             Se alle bøker
           </Link>
@@ -86,6 +86,6 @@ export default async function GenrePage(props: { params: Promise<{ slug: string 
           </div>
         </>
       )}
-    </div>
+    </main>
   )
 }

@@ -38,8 +38,8 @@ export default async function BookDetailPage(props: { params: Promise<{ slug: st
   const coverImage = typeof book.coverImage === 'object' ? book.coverImage : null
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <Link href="/boker" className="text-emerald-600 hover:underline mb-4 inline-block">
+    <main className="container mx-auto px-4 py-8">
+      <Link href="/boker" className="text-emerald-600 hover:underline mb-4 inline-block focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 rounded">
         ← Tilbake til alle bøker
       </Link>
 
@@ -159,6 +159,6 @@ export default async function BookDetailPage(props: { params: Promise<{ slug: st
           </div>
         </div>
       </div>
-    </div>
+    </main>
   )
 }

@@ -26,7 +26,7 @@ export default async function GenresPage() {
   const genres = await getGenres()
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <main className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold mb-8">Sjangere</h1>
 
       {genres.length === 0 ? (
@@ -37,7 +37,7 @@ export default async function GenresPage() {
             <Link 
               key={genre.id} 
               href={`/sjangere/${genre.slug}`}
-              className="border rounded-lg p-6 hover:shadow-lg transition text-center"
+              className="border rounded-lg p-6 hover:shadow-lg transition text-center focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 block"
             >
               <h3 className="text-xl font-bold mb-2">{genre.name}</h3>
               
@@ -48,7 +48,7 @@ export default async function GenresPage() {
           ))}
         </div>
       )}
-    </div>
+    </main>
   )
 }
 

@@ -43,16 +43,16 @@ export default async function BooksPage() {
   const genres = await getGenres()
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <main className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold mb-8">Alle bøker</h1>
 
       {/* Genre Filter */}
-      <div className="mb-8">
+      <nav className="mb-8" aria-label="Sjangerfilter">
         <h2 className="text-xl font-semibold mb-4">Filtrer etter sjanger:</h2>
         <div className="flex flex-wrap gap-3">
           <Link 
             href="/boker"
-            className="px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700"
+            className="px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition"
           >
             Alle
           </Link>
@@ -60,7 +60,7 @@ export default async function BooksPage() {
             <Link 
               key={genre.id}
               href={`/sjangere/${genre.slug}`}
-              className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
+              className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 transition"
             >
               {genre.name}
             </Link>
@@ -78,6 +78,6 @@ export default async function BooksPage() {
           ))}
         </div>
       )}
-    </div>
+    </main>
   )
 }
