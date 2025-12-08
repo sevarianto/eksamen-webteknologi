@@ -57,7 +57,7 @@ export const SiteSettings: GlobalConfig = {
           defaultValue: '#10b981',
           label: 'Bakgrunnsfarge',
           admin: {
-            description: 'Velg bakgrunnsfarge (hex, f.eks. #10b981)',
+            description: 'Velg bakgrunnsfarge (hex, f.eks.rgb(238, 238, 238))',
           },
         },
         {

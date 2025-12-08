@@ -611,7 +611,7 @@ export interface SiteSetting {
   };
   header: {
     /**
-     * Velg bakgrunnsfarge (hex, f.eks. #10b981)
+     * Velg bakgrunnsfarge (hex, f.eks.rgb(238, 238, 238))
      */
     backgroundColor: string;
     /**
