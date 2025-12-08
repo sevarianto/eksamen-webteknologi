@@ -76,7 +76,7 @@ eksamen-webteknologi/
 
 2. **Installer avhengigheter**
    ```bash
-   pnpm install
+   npm install
    ```
 
 3. **Opprett miljøvariabler**
@@ -100,7 +100,7 @@ eksamen-webteknologi/
 
 4. **Start utviklingsserveren**
    ```bash
-   pnpm dev
+   npm dev
    ```
 
 5. **Åpne nettleseren**
@@ -125,17 +125,6 @@ eksamen-webteknologi/
    ```
    - Alle data kan redigeres og slettes i admin-panelet etterpå
 
-## Bygging for produksjon
-
-1. **Bygg prosjektet**
-   ```bash
-   pnpm build
-   ```
-
-2. **Start produksjonsserveren**
-   ```bash
-   pnpm start
-   ```
 
 ## Database
 
