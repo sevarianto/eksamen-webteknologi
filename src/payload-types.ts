@@ -97,9 +97,13 @@ export interface Config {
   fallbackLocale: null;
   globals: {
     'site-settings': SiteSetting;
+    'header-settings': HeaderSetting;
+    'footer-settings': FooterSetting;
   };
   globalsSelect: {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    'header-settings': HeaderSettingsSelect<false> | HeaderSettingsSelect<true>;
+    'footer-settings': FooterSettingsSelect<false> | FooterSettingsSelect<true>;
   };
   locale: null;
   user: User & {
@@ -134,6 +138,10 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  /**
+   * Last opp et profilbilde for admin-brukeren
+   */
+  avatar?: (number | null) | Media;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -151,6 +159,26 @@ export interface User {
       }[]
     | null;
   password?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  alt: string;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+  sizes?: {};
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -230,26 +258,6 @@ export interface Author {
   };
   updatedAt: string;
   createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
-export interface Media {
-  id: number;
-  alt: string;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
-  sizes?: {};
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -392,6 +400,7 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  avatar?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -606,30 +615,238 @@ export interface SiteSetting {
   id: number;
   general: {
     siteName: string;
-    logo?: (number | null) | Media;
     favicon?: (number | null) | Media;
-  };
-  header: {
+    pageBackgroundType?: ('solid' | 'gradient') | null;
     /**
-     * Velg bakgrunnsfarge (hex, f.eks.rgb(238, 238, 238))
+     * Velg farge fra listen
      */
-    backgroundColor: string;
+    pageBackgroundColor?:
+      | (
+          | '#ffffff'
+          | '#000000'
+          | '#f9fafb'
+          | '#f3f4f6'
+          | '#e5e7eb'
+          | '#6b7280'
+          | '#374151'
+          | '#1f2937'
+          | '#fee2e2'
+          | '#ef4444'
+          | '#dc2626'
+          | '#b91c1c'
+          | '#be123c'
+          | '#991b1b'
+          | '#eff6ff'
+          | '#dbeafe'
+          | '#3b82f6'
+          | '#2563eb'
+          | '#1e40af'
+          | '#1e3a8a'
+          | '#1e293b'
+          | '#f0fdf4'
+          | '#d1fae5'
+          | '#10b981'
+          | '#059669'
+          | '#047857'
+          | '#065f46'
+          | '#fefce8'
+          | '#fef3c7'
+          | '#f59e0b'
+          | '#d97706'
+          | '#d4af37'
+          | '#b8860b'
+          | '#f97316'
+          | '#faf5ff'
+          | '#ede9fe'
+          | '#8b5cf6'
+          | '#7c3aed'
+          | '#6d28d9'
+          | '#5b21b6'
+          | '#fdf2f8'
+          | '#fce7f3'
+          | '#ec4899'
+          | '#db2777'
+          | '#be185d'
+          | '#d946ef'
+          | '#c026d3'
+          | '#ecfeff'
+          | '#cffafe'
+          | '#06b6d4'
+          | '#0891b2'
+          | '#0e7490'
+          | '#fff7ed'
+          | '#ffedd5'
+          | '#ea580c'
+          | '#c2410c'
+          | '#e8e8e8'
+          | '#c0c0c0'
+          | '#a8a8a8'
+          | '#b87333'
+          | '#cd7f32'
+          | '#ff7f50'
+          | '#fa8072'
+          | '#ffdab9'
+          | '#e6e6fa'
+          | '#98ff98'
+          | '#808000'
+          | '#008080'
+          | '#4b0082'
+        )
+      | null;
     /**
-     * Velg tekstfarge fra listen
+     * 0 = fullstendig gjennomsiktig, 100 = fullstendig ugjennomsiktig
      */
-    textColor:
-      | '#ffffff'
-      | '#000000'
-      | '#f3f4f6'
-      | '#6b7280'
-      | '#374151'
-      | '#ef4444'
-      | '#3b82f6'
-      | '#10b981'
-      | '#f59e0b'
-      | '#8b5cf6';
-    sticky?: boolean | null;
-    showCartIcon?: boolean | null;
+    pageBackgroundColorOpacity?: number | null;
+    pageGradientColor1?:
+      | (
+          | '#ffffff'
+          | '#000000'
+          | '#f9fafb'
+          | '#f3f4f6'
+          | '#e5e7eb'
+          | '#6b7280'
+          | '#374151'
+          | '#1f2937'
+          | '#fee2e2'
+          | '#ef4444'
+          | '#dc2626'
+          | '#b91c1c'
+          | '#be123c'
+          | '#991b1b'
+          | '#eff6ff'
+          | '#dbeafe'
+          | '#3b82f6'
+          | '#2563eb'
+          | '#1e40af'
+          | '#1e3a8a'
+          | '#1e293b'
+          | '#f0fdf4'
+          | '#d1fae5'
+          | '#10b981'
+          | '#059669'
+          | '#047857'
+          | '#065f46'
+          | '#fefce8'
+          | '#fef3c7'
+          | '#f59e0b'
+          | '#d97706'
+          | '#d4af37'
+          | '#b8860b'
+          | '#f97316'
+          | '#faf5ff'
+          | '#ede9fe'
+          | '#8b5cf6'
+          | '#7c3aed'
+          | '#6d28d9'
+          | '#5b21b6'
+          | '#fdf2f8'
+          | '#fce7f3'
+          | '#ec4899'
+          | '#db2777'
+          | '#be185d'
+          | '#d946ef'
+          | '#c026d3'
+          | '#ecfeff'
+          | '#cffafe'
+          | '#06b6d4'
+          | '#0891b2'
+          | '#0e7490'
+          | '#fff7ed'
+          | '#ffedd5'
+          | '#ea580c'
+          | '#c2410c'
+          | '#e8e8e8'
+          | '#c0c0c0'
+          | '#a8a8a8'
+          | '#b87333'
+          | '#cd7f32'
+          | '#ff7f50'
+          | '#fa8072'
+          | '#ffdab9'
+          | '#e6e6fa'
+          | '#98ff98'
+          | '#808000'
+          | '#008080'
+          | '#4b0082'
+        )
+      | null;
+    pageGradientColor2?:
+      | (
+          | '#ffffff'
+          | '#000000'
+          | '#f9fafb'
+          | '#f3f4f6'
+          | '#e5e7eb'
+          | '#6b7280'
+          | '#374151'
+          | '#1f2937'
+          | '#fee2e2'
+          | '#ef4444'
+          | '#dc2626'
+          | '#b91c1c'
+          | '#be123c'
+          | '#991b1b'
+          | '#eff6ff'
+          | '#dbeafe'
+          | '#3b82f6'
+          | '#2563eb'
+          | '#1e40af'
+          | '#1e3a8a'
+          | '#1e293b'
+          | '#f0fdf4'
+          | '#d1fae5'
+          | '#10b981'
+          | '#059669'
+          | '#047857'
+          | '#065f46'
+          | '#fefce8'
+          | '#fef3c7'
+          | '#f59e0b'
+          | '#d97706'
+          | '#d4af37'
+          | '#b8860b'
+          | '#f97316'
+          | '#faf5ff'
+          | '#ede9fe'
+          | '#8b5cf6'
+          | '#7c3aed'
+          | '#6d28d9'
+          | '#5b21b6'
+          | '#fdf2f8'
+          | '#fce7f3'
+          | '#ec4899'
+          | '#db2777'
+          | '#be185d'
+          | '#d946ef'
+          | '#c026d3'
+          | '#ecfeff'
+          | '#cffafe'
+          | '#06b6d4'
+          | '#0891b2'
+          | '#0e7490'
+          | '#fff7ed'
+          | '#ffedd5'
+          | '#ea580c'
+          | '#c2410c'
+          | '#e8e8e8'
+          | '#c0c0c0'
+          | '#a8a8a8'
+          | '#b87333'
+          | '#cd7f32'
+          | '#ff7f50'
+          | '#fa8072'
+          | '#ffdab9'
+          | '#e6e6fa'
+          | '#98ff98'
+          | '#808000'
+          | '#008080'
+          | '#4b0082'
+        )
+      | null;
+    /**
+     * Vinkel for gradient (0-360 grader)
+     */
+    pageGradientAngle?: number | null;
   };
   /**
    * Legg til seksjoner som vises på hjemmesiden i rekkefølge
@@ -643,21 +860,77 @@ export interface SiteSetting {
           titleStyle?: {
             fontSize?: ('small' | 'normal' | 'large' | 'xlarge' | 'xxlarge') | null;
             fontWeight?: ('normal' | 'semibold' | 'bold') | null;
-            /**
-             * Velg tekstfarge fra listen
-             */
             textColor?:
               | (
                   | '#ffffff'
                   | '#000000'
+                  | '#f9fafb'
                   | '#f3f4f6'
+                  | '#e5e7eb'
                   | '#6b7280'
                   | '#374151'
+                  | '#1f2937'
+                  | '#fee2e2'
                   | '#ef4444'
+                  | '#dc2626'
+                  | '#b91c1c'
+                  | '#be123c'
+                  | '#991b1b'
+                  | '#eff6ff'
+                  | '#dbeafe'
                   | '#3b82f6'
+                  | '#2563eb'
+                  | '#1e40af'
+                  | '#1e3a8a'
+                  | '#1e293b'
+                  | '#f0fdf4'
+                  | '#d1fae5'
                   | '#10b981'
+                  | '#059669'
+                  | '#047857'
+                  | '#065f46'
+                  | '#fefce8'
+                  | '#fef3c7'
                   | '#f59e0b'
+                  | '#d97706'
+                  | '#d4af37'
+                  | '#b8860b'
+                  | '#f97316'
+                  | '#faf5ff'
+                  | '#ede9fe'
                   | '#8b5cf6'
+                  | '#7c3aed'
+                  | '#6d28d9'
+                  | '#5b21b6'
+                  | '#fdf2f8'
+                  | '#fce7f3'
+                  | '#ec4899'
+                  | '#db2777'
+                  | '#be185d'
+                  | '#d946ef'
+                  | '#c026d3'
+                  | '#ecfeff'
+                  | '#cffafe'
+                  | '#06b6d4'
+                  | '#0891b2'
+                  | '#0e7490'
+                  | '#fff7ed'
+                  | '#ffedd5'
+                  | '#ea580c'
+                  | '#c2410c'
+                  | '#e8e8e8'
+                  | '#c0c0c0'
+                  | '#a8a8a8'
+                  | '#b87333'
+                  | '#cd7f32'
+                  | '#ff7f50'
+                  | '#fa8072'
+                  | '#ffdab9'
+                  | '#e6e6fa'
+                  | '#98ff98'
+                  | '#808000'
+                  | '#008080'
+                  | '#4b0082'
                 )
               | null;
             textAlign?: ('left' | 'center' | 'right') | null;
@@ -666,21 +939,77 @@ export interface SiteSetting {
           subtitleStyle?: {
             fontSize?: ('small' | 'normal' | 'large' | 'xlarge') | null;
             fontWeight?: ('normal' | 'semibold' | 'bold') | null;
-            /**
-             * Velg tekstfarge fra listen
-             */
             textColor?:
               | (
                   | '#ffffff'
                   | '#000000'
+                  | '#f9fafb'
                   | '#f3f4f6'
+                  | '#e5e7eb'
                   | '#6b7280'
                   | '#374151'
+                  | '#1f2937'
+                  | '#fee2e2'
                   | '#ef4444'
+                  | '#dc2626'
+                  | '#b91c1c'
+                  | '#be123c'
+                  | '#991b1b'
+                  | '#eff6ff'
+                  | '#dbeafe'
                   | '#3b82f6'
+                  | '#2563eb'
+                  | '#1e40af'
+                  | '#1e3a8a'
+                  | '#1e293b'
+                  | '#f0fdf4'
+                  | '#d1fae5'
                   | '#10b981'
+                  | '#059669'
+                  | '#047857'
+                  | '#065f46'
+                  | '#fefce8'
+                  | '#fef3c7'
                   | '#f59e0b'
+                  | '#d97706'
+                  | '#d4af37'
+                  | '#b8860b'
+                  | '#f97316'
+                  | '#faf5ff'
+                  | '#ede9fe'
                   | '#8b5cf6'
+                  | '#7c3aed'
+                  | '#6d28d9'
+                  | '#5b21b6'
+                  | '#fdf2f8'
+                  | '#fce7f3'
+                  | '#ec4899'
+                  | '#db2777'
+                  | '#be185d'
+                  | '#d946ef'
+                  | '#c026d3'
+                  | '#ecfeff'
+                  | '#cffafe'
+                  | '#06b6d4'
+                  | '#0891b2'
+                  | '#0e7490'
+                  | '#fff7ed'
+                  | '#ffedd5'
+                  | '#ea580c'
+                  | '#c2410c'
+                  | '#e8e8e8'
+                  | '#c0c0c0'
+                  | '#a8a8a8'
+                  | '#b87333'
+                  | '#cd7f32'
+                  | '#ff7f50'
+                  | '#fa8072'
+                  | '#ffdab9'
+                  | '#e6e6fa'
+                  | '#98ff98'
+                  | '#808000'
+                  | '#008080'
+                  | '#4b0082'
                 )
               | null;
             textAlign?: ('left' | 'center' | 'right') | null;
@@ -688,24 +1017,156 @@ export interface SiteSetting {
           buttonText?: string | null;
           buttonStyle?: {
             /**
-             * Velg bakgrunnsfarge (hex, f.eks. #10b981)
+             * Velg farge fra listen
              */
-            backgroundColor?: string | null;
+            backgroundColor?:
+              | (
+                  | '#ffffff'
+                  | '#000000'
+                  | '#f9fafb'
+                  | '#f3f4f6'
+                  | '#e5e7eb'
+                  | '#6b7280'
+                  | '#374151'
+                  | '#1f2937'
+                  | '#fee2e2'
+                  | '#ef4444'
+                  | '#dc2626'
+                  | '#b91c1c'
+                  | '#be123c'
+                  | '#991b1b'
+                  | '#eff6ff'
+                  | '#dbeafe'
+                  | '#3b82f6'
+                  | '#2563eb'
+                  | '#1e40af'
+                  | '#1e3a8a'
+                  | '#1e293b'
+                  | '#f0fdf4'
+                  | '#d1fae5'
+                  | '#10b981'
+                  | '#059669'
+                  | '#047857'
+                  | '#065f46'
+                  | '#fefce8'
+                  | '#fef3c7'
+                  | '#f59e0b'
+                  | '#d97706'
+                  | '#d4af37'
+                  | '#b8860b'
+                  | '#f97316'
+                  | '#faf5ff'
+                  | '#ede9fe'
+                  | '#8b5cf6'
+                  | '#7c3aed'
+                  | '#6d28d9'
+                  | '#5b21b6'
+                  | '#fdf2f8'
+                  | '#fce7f3'
+                  | '#ec4899'
+                  | '#db2777'
+                  | '#be185d'
+                  | '#d946ef'
+                  | '#c026d3'
+                  | '#ecfeff'
+                  | '#cffafe'
+                  | '#06b6d4'
+                  | '#0891b2'
+                  | '#0e7490'
+                  | '#fff7ed'
+                  | '#ffedd5'
+                  | '#ea580c'
+                  | '#c2410c'
+                  | '#e8e8e8'
+                  | '#c0c0c0'
+                  | '#a8a8a8'
+                  | '#b87333'
+                  | '#cd7f32'
+                  | '#ff7f50'
+                  | '#fa8072'
+                  | '#ffdab9'
+                  | '#e6e6fa'
+                  | '#98ff98'
+                  | '#808000'
+                  | '#008080'
+                  | '#4b0082'
+                )
+              | null;
             /**
-             * Velg tekstfarge fra listen
+             * 0 = fullstendig gjennomsiktig, 100 = fullstendig ugjennomsiktig
              */
+            backgroundColorOpacity?: number | null;
             textColor?:
               | (
                   | '#ffffff'
                   | '#000000'
+                  | '#f9fafb'
                   | '#f3f4f6'
+                  | '#e5e7eb'
                   | '#6b7280'
                   | '#374151'
+                  | '#1f2937'
+                  | '#fee2e2'
                   | '#ef4444'
+                  | '#dc2626'
+                  | '#b91c1c'
+                  | '#be123c'
+                  | '#991b1b'
+                  | '#eff6ff'
+                  | '#dbeafe'
                   | '#3b82f6'
+                  | '#2563eb'
+                  | '#1e40af'
+                  | '#1e3a8a'
+                  | '#1e293b'
+                  | '#f0fdf4'
+                  | '#d1fae5'
                   | '#10b981'
+                  | '#059669'
+                  | '#047857'
+                  | '#065f46'
+                  | '#fefce8'
+                  | '#fef3c7'
                   | '#f59e0b'
+                  | '#d97706'
+                  | '#d4af37'
+                  | '#b8860b'
+                  | '#f97316'
+                  | '#faf5ff'
+                  | '#ede9fe'
                   | '#8b5cf6'
+                  | '#7c3aed'
+                  | '#6d28d9'
+                  | '#5b21b6'
+                  | '#fdf2f8'
+                  | '#fce7f3'
+                  | '#ec4899'
+                  | '#db2777'
+                  | '#be185d'
+                  | '#d946ef'
+                  | '#c026d3'
+                  | '#ecfeff'
+                  | '#cffafe'
+                  | '#06b6d4'
+                  | '#0891b2'
+                  | '#0e7490'
+                  | '#fff7ed'
+                  | '#ffedd5'
+                  | '#ea580c'
+                  | '#c2410c'
+                  | '#e8e8e8'
+                  | '#c0c0c0'
+                  | '#a8a8a8'
+                  | '#b87333'
+                  | '#cd7f32'
+                  | '#ff7f50'
+                  | '#fa8072'
+                  | '#ffdab9'
+                  | '#e6e6fa'
+                  | '#98ff98'
+                  | '#808000'
+                  | '#008080'
+                  | '#4b0082'
                 )
               | null;
             fontSize?: ('small' | 'normal' | 'large') | null;
@@ -719,14 +1180,152 @@ export interface SiteSetting {
            * Last opp video (MP4 anbefales)
            */
           backgroundVideo?: (number | null) | Media;
-          /**
-           * Velg første gradient-farge (hex, f.eks. #10b981)
-           */
-          gradientColor1?: string | null;
-          /**
-           * Velg andre gradient-farge (hex, f.eks. #059669)
-           */
-          gradientColor2?: string | null;
+          gradientColor1?:
+            | (
+                | '#ffffff'
+                | '#000000'
+                | '#f9fafb'
+                | '#f3f4f6'
+                | '#e5e7eb'
+                | '#6b7280'
+                | '#374151'
+                | '#1f2937'
+                | '#fee2e2'
+                | '#ef4444'
+                | '#dc2626'
+                | '#b91c1c'
+                | '#be123c'
+                | '#991b1b'
+                | '#eff6ff'
+                | '#dbeafe'
+                | '#3b82f6'
+                | '#2563eb'
+                | '#1e40af'
+                | '#1e3a8a'
+                | '#1e293b'
+                | '#f0fdf4'
+                | '#d1fae5'
+                | '#10b981'
+                | '#059669'
+                | '#047857'
+                | '#065f46'
+                | '#fefce8'
+                | '#fef3c7'
+                | '#f59e0b'
+                | '#d97706'
+                | '#d4af37'
+                | '#b8860b'
+                | '#f97316'
+                | '#faf5ff'
+                | '#ede9fe'
+                | '#8b5cf6'
+                | '#7c3aed'
+                | '#6d28d9'
+                | '#5b21b6'
+                | '#fdf2f8'
+                | '#fce7f3'
+                | '#ec4899'
+                | '#db2777'
+                | '#be185d'
+                | '#d946ef'
+                | '#c026d3'
+                | '#ecfeff'
+                | '#cffafe'
+                | '#06b6d4'
+                | '#0891b2'
+                | '#0e7490'
+                | '#fff7ed'
+                | '#ffedd5'
+                | '#ea580c'
+                | '#c2410c'
+                | '#e8e8e8'
+                | '#c0c0c0'
+                | '#a8a8a8'
+                | '#b87333'
+                | '#cd7f32'
+                | '#ff7f50'
+                | '#fa8072'
+                | '#ffdab9'
+                | '#e6e6fa'
+                | '#98ff98'
+                | '#808000'
+                | '#008080'
+                | '#4b0082'
+              )
+            | null;
+          gradientColor2?:
+            | (
+                | '#ffffff'
+                | '#000000'
+                | '#f9fafb'
+                | '#f3f4f6'
+                | '#e5e7eb'
+                | '#6b7280'
+                | '#374151'
+                | '#1f2937'
+                | '#fee2e2'
+                | '#ef4444'
+                | '#dc2626'
+                | '#b91c1c'
+                | '#be123c'
+                | '#991b1b'
+                | '#eff6ff'
+                | '#dbeafe'
+                | '#3b82f6'
+                | '#2563eb'
+                | '#1e40af'
+                | '#1e3a8a'
+                | '#1e293b'
+                | '#f0fdf4'
+                | '#d1fae5'
+                | '#10b981'
+                | '#059669'
+                | '#047857'
+                | '#065f46'
+                | '#fefce8'
+                | '#fef3c7'
+                | '#f59e0b'
+                | '#d97706'
+                | '#d4af37'
+                | '#b8860b'
+                | '#f97316'
+                | '#faf5ff'
+                | '#ede9fe'
+                | '#8b5cf6'
+                | '#7c3aed'
+                | '#6d28d9'
+                | '#5b21b6'
+                | '#fdf2f8'
+                | '#fce7f3'
+                | '#ec4899'
+                | '#db2777'
+                | '#be185d'
+                | '#d946ef'
+                | '#c026d3'
+                | '#ecfeff'
+                | '#cffafe'
+                | '#06b6d4'
+                | '#0891b2'
+                | '#0e7490'
+                | '#fff7ed'
+                | '#ffedd5'
+                | '#ea580c'
+                | '#c2410c'
+                | '#e8e8e8'
+                | '#c0c0c0'
+                | '#a8a8a8'
+                | '#b87333'
+                | '#cd7f32'
+                | '#ff7f50'
+                | '#fa8072'
+                | '#ffdab9'
+                | '#e6e6fa'
+                | '#98ff98'
+                | '#808000'
+                | '#008080'
+                | '#4b0082'
+              )
+            | null;
           /**
            * Vinkel for gradient (0-360 grader)
            */
@@ -740,30 +1339,162 @@ export interface SiteSetting {
           titleStyle?: {
             fontSize?: ('small' | 'normal' | 'large' | 'xlarge') | null;
             fontWeight?: ('normal' | 'semibold' | 'bold') | null;
-            /**
-             * Velg tekstfarge fra listen
-             */
             textColor?:
               | (
                   | '#ffffff'
                   | '#000000'
+                  | '#f9fafb'
                   | '#f3f4f6'
+                  | '#e5e7eb'
                   | '#6b7280'
                   | '#374151'
+                  | '#1f2937'
+                  | '#fee2e2'
                   | '#ef4444'
+                  | '#dc2626'
+                  | '#b91c1c'
+                  | '#be123c'
+                  | '#991b1b'
+                  | '#eff6ff'
+                  | '#dbeafe'
                   | '#3b82f6'
+                  | '#2563eb'
+                  | '#1e40af'
+                  | '#1e3a8a'
+                  | '#1e293b'
+                  | '#f0fdf4'
+                  | '#d1fae5'
                   | '#10b981'
+                  | '#059669'
+                  | '#047857'
+                  | '#065f46'
+                  | '#fefce8'
+                  | '#fef3c7'
                   | '#f59e0b'
+                  | '#d97706'
+                  | '#d4af37'
+                  | '#b8860b'
+                  | '#f97316'
+                  | '#faf5ff'
+                  | '#ede9fe'
                   | '#8b5cf6'
+                  | '#7c3aed'
+                  | '#6d28d9'
+                  | '#5b21b6'
+                  | '#fdf2f8'
+                  | '#fce7f3'
+                  | '#ec4899'
+                  | '#db2777'
+                  | '#be185d'
+                  | '#d946ef'
+                  | '#c026d3'
+                  | '#ecfeff'
+                  | '#cffafe'
+                  | '#06b6d4'
+                  | '#0891b2'
+                  | '#0e7490'
+                  | '#fff7ed'
+                  | '#ffedd5'
+                  | '#ea580c'
+                  | '#c2410c'
+                  | '#e8e8e8'
+                  | '#c0c0c0'
+                  | '#a8a8a8'
+                  | '#b87333'
+                  | '#cd7f32'
+                  | '#ff7f50'
+                  | '#fa8072'
+                  | '#ffdab9'
+                  | '#e6e6fa'
+                  | '#98ff98'
+                  | '#808000'
+                  | '#008080'
+                  | '#4b0082'
                 )
               | null;
             textAlign?: ('left' | 'center' | 'right') | null;
           };
           limit?: number | null;
           /**
-           * Velg bakgrunnsfarge (hex, f.eks. #ffffff)
+           * Velg farge fra listen
            */
-          backgroundColor?: string | null;
+          backgroundColor?:
+            | (
+                | '#ffffff'
+                | '#000000'
+                | '#f9fafb'
+                | '#f3f4f6'
+                | '#e5e7eb'
+                | '#6b7280'
+                | '#374151'
+                | '#1f2937'
+                | '#fee2e2'
+                | '#ef4444'
+                | '#dc2626'
+                | '#b91c1c'
+                | '#be123c'
+                | '#991b1b'
+                | '#eff6ff'
+                | '#dbeafe'
+                | '#3b82f6'
+                | '#2563eb'
+                | '#1e40af'
+                | '#1e3a8a'
+                | '#1e293b'
+                | '#f0fdf4'
+                | '#d1fae5'
+                | '#10b981'
+                | '#059669'
+                | '#047857'
+                | '#065f46'
+                | '#fefce8'
+                | '#fef3c7'
+                | '#f59e0b'
+                | '#d97706'
+                | '#d4af37'
+                | '#b8860b'
+                | '#f97316'
+                | '#faf5ff'
+                | '#ede9fe'
+                | '#8b5cf6'
+                | '#7c3aed'
+                | '#6d28d9'
+                | '#5b21b6'
+                | '#fdf2f8'
+                | '#fce7f3'
+                | '#ec4899'
+                | '#db2777'
+                | '#be185d'
+                | '#d946ef'
+                | '#c026d3'
+                | '#ecfeff'
+                | '#cffafe'
+                | '#06b6d4'
+                | '#0891b2'
+                | '#0e7490'
+                | '#fff7ed'
+                | '#ffedd5'
+                | '#ea580c'
+                | '#c2410c'
+                | '#e8e8e8'
+                | '#c0c0c0'
+                | '#a8a8a8'
+                | '#b87333'
+                | '#cd7f32'
+                | '#ff7f50'
+                | '#fa8072'
+                | '#ffdab9'
+                | '#e6e6fa'
+                | '#98ff98'
+                | '#808000'
+                | '#008080'
+                | '#4b0082'
+              )
+            | null;
+          /**
+           * 0 = fullstendig gjennomsiktig, 100 = fullstendig ugjennomsiktig
+           */
+          backgroundColorOpacity?: number | null;
           sectionPadding?: ('none' | 'small' | 'medium' | 'large') | null;
         };
         categories?: {
@@ -771,29 +1502,161 @@ export interface SiteSetting {
           titleStyle?: {
             fontSize?: ('small' | 'normal' | 'large' | 'xlarge') | null;
             fontWeight?: ('normal' | 'semibold' | 'bold') | null;
-            /**
-             * Velg tekstfarge fra listen
-             */
             textColor?:
               | (
                   | '#ffffff'
                   | '#000000'
+                  | '#f9fafb'
                   | '#f3f4f6'
+                  | '#e5e7eb'
                   | '#6b7280'
                   | '#374151'
+                  | '#1f2937'
+                  | '#fee2e2'
                   | '#ef4444'
+                  | '#dc2626'
+                  | '#b91c1c'
+                  | '#be123c'
+                  | '#991b1b'
+                  | '#eff6ff'
+                  | '#dbeafe'
                   | '#3b82f6'
+                  | '#2563eb'
+                  | '#1e40af'
+                  | '#1e3a8a'
+                  | '#1e293b'
+                  | '#f0fdf4'
+                  | '#d1fae5'
                   | '#10b981'
+                  | '#059669'
+                  | '#047857'
+                  | '#065f46'
+                  | '#fefce8'
+                  | '#fef3c7'
                   | '#f59e0b'
+                  | '#d97706'
+                  | '#d4af37'
+                  | '#b8860b'
+                  | '#f97316'
+                  | '#faf5ff'
+                  | '#ede9fe'
                   | '#8b5cf6'
+                  | '#7c3aed'
+                  | '#6d28d9'
+                  | '#5b21b6'
+                  | '#fdf2f8'
+                  | '#fce7f3'
+                  | '#ec4899'
+                  | '#db2777'
+                  | '#be185d'
+                  | '#d946ef'
+                  | '#c026d3'
+                  | '#ecfeff'
+                  | '#cffafe'
+                  | '#06b6d4'
+                  | '#0891b2'
+                  | '#0e7490'
+                  | '#fff7ed'
+                  | '#ffedd5'
+                  | '#ea580c'
+                  | '#c2410c'
+                  | '#e8e8e8'
+                  | '#c0c0c0'
+                  | '#a8a8a8'
+                  | '#b87333'
+                  | '#cd7f32'
+                  | '#ff7f50'
+                  | '#fa8072'
+                  | '#ffdab9'
+                  | '#e6e6fa'
+                  | '#98ff98'
+                  | '#808000'
+                  | '#008080'
+                  | '#4b0082'
                 )
               | null;
             textAlign?: ('left' | 'center' | 'right') | null;
           };
           /**
-           * Velg bakgrunnsfarge (hex, f.eks. #f3f4f6)
+           * Velg farge fra listen
            */
-          backgroundColor?: string | null;
+          backgroundColor?:
+            | (
+                | '#ffffff'
+                | '#000000'
+                | '#f9fafb'
+                | '#f3f4f6'
+                | '#e5e7eb'
+                | '#6b7280'
+                | '#374151'
+                | '#1f2937'
+                | '#fee2e2'
+                | '#ef4444'
+                | '#dc2626'
+                | '#b91c1c'
+                | '#be123c'
+                | '#991b1b'
+                | '#eff6ff'
+                | '#dbeafe'
+                | '#3b82f6'
+                | '#2563eb'
+                | '#1e40af'
+                | '#1e3a8a'
+                | '#1e293b'
+                | '#f0fdf4'
+                | '#d1fae5'
+                | '#10b981'
+                | '#059669'
+                | '#047857'
+                | '#065f46'
+                | '#fefce8'
+                | '#fef3c7'
+                | '#f59e0b'
+                | '#d97706'
+                | '#d4af37'
+                | '#b8860b'
+                | '#f97316'
+                | '#faf5ff'
+                | '#ede9fe'
+                | '#8b5cf6'
+                | '#7c3aed'
+                | '#6d28d9'
+                | '#5b21b6'
+                | '#fdf2f8'
+                | '#fce7f3'
+                | '#ec4899'
+                | '#db2777'
+                | '#be185d'
+                | '#d946ef'
+                | '#c026d3'
+                | '#ecfeff'
+                | '#cffafe'
+                | '#06b6d4'
+                | '#0891b2'
+                | '#0e7490'
+                | '#fff7ed'
+                | '#ffedd5'
+                | '#ea580c'
+                | '#c2410c'
+                | '#e8e8e8'
+                | '#c0c0c0'
+                | '#a8a8a8'
+                | '#b87333'
+                | '#cd7f32'
+                | '#ff7f50'
+                | '#fa8072'
+                | '#ffdab9'
+                | '#e6e6fa'
+                | '#98ff98'
+                | '#808000'
+                | '#008080'
+                | '#4b0082'
+              )
+            | null;
+          /**
+           * 0 = fullstendig gjennomsiktig, 100 = fullstendig ugjennomsiktig
+           */
+          backgroundColorOpacity?: number | null;
           sectionPadding?: ('none' | 'small' | 'medium' | 'large') | null;
         };
         textSection?: {
@@ -801,21 +1664,77 @@ export interface SiteSetting {
           titleStyle?: {
             fontSize?: ('small' | 'normal' | 'large' | 'xlarge') | null;
             fontWeight?: ('normal' | 'semibold' | 'bold') | null;
-            /**
-             * Velg tekstfarge fra listen
-             */
             textColor?:
               | (
                   | '#ffffff'
                   | '#000000'
+                  | '#f9fafb'
                   | '#f3f4f6'
+                  | '#e5e7eb'
                   | '#6b7280'
                   | '#374151'
+                  | '#1f2937'
+                  | '#fee2e2'
                   | '#ef4444'
+                  | '#dc2626'
+                  | '#b91c1c'
+                  | '#be123c'
+                  | '#991b1b'
+                  | '#eff6ff'
+                  | '#dbeafe'
                   | '#3b82f6'
+                  | '#2563eb'
+                  | '#1e40af'
+                  | '#1e3a8a'
+                  | '#1e293b'
+                  | '#f0fdf4'
+                  | '#d1fae5'
                   | '#10b981'
+                  | '#059669'
+                  | '#047857'
+                  | '#065f46'
+                  | '#fefce8'
+                  | '#fef3c7'
                   | '#f59e0b'
+                  | '#d97706'
+                  | '#d4af37'
+                  | '#b8860b'
+                  | '#f97316'
+                  | '#faf5ff'
+                  | '#ede9fe'
                   | '#8b5cf6'
+                  | '#7c3aed'
+                  | '#6d28d9'
+                  | '#5b21b6'
+                  | '#fdf2f8'
+                  | '#fce7f3'
+                  | '#ec4899'
+                  | '#db2777'
+                  | '#be185d'
+                  | '#d946ef'
+                  | '#c026d3'
+                  | '#ecfeff'
+                  | '#cffafe'
+                  | '#06b6d4'
+                  | '#0891b2'
+                  | '#0e7490'
+                  | '#fff7ed'
+                  | '#ffedd5'
+                  | '#ea580c'
+                  | '#c2410c'
+                  | '#e8e8e8'
+                  | '#c0c0c0'
+                  | '#a8a8a8'
+                  | '#b87333'
+                  | '#cd7f32'
+                  | '#ff7f50'
+                  | '#fa8072'
+                  | '#ffdab9'
+                  | '#e6e6fa'
+                  | '#98ff98'
+                  | '#808000'
+                  | '#008080'
+                  | '#4b0082'
                 )
               | null;
             textAlign?: ('left' | 'center' | 'right') | null;
@@ -824,30 +1743,162 @@ export interface SiteSetting {
           contentStyle?: {
             fontSize?: ('small' | 'normal' | 'large') | null;
             fontWeight?: ('normal' | 'semibold' | 'bold') | null;
-            /**
-             * Velg tekstfarge fra listen
-             */
             textColor?:
               | (
                   | '#ffffff'
                   | '#000000'
+                  | '#f9fafb'
                   | '#f3f4f6'
+                  | '#e5e7eb'
                   | '#6b7280'
                   | '#374151'
+                  | '#1f2937'
+                  | '#fee2e2'
                   | '#ef4444'
+                  | '#dc2626'
+                  | '#b91c1c'
+                  | '#be123c'
+                  | '#991b1b'
+                  | '#eff6ff'
+                  | '#dbeafe'
                   | '#3b82f6'
+                  | '#2563eb'
+                  | '#1e40af'
+                  | '#1e3a8a'
+                  | '#1e293b'
+                  | '#f0fdf4'
+                  | '#d1fae5'
                   | '#10b981'
+                  | '#059669'
+                  | '#047857'
+                  | '#065f46'
+                  | '#fefce8'
+                  | '#fef3c7'
                   | '#f59e0b'
+                  | '#d97706'
+                  | '#d4af37'
+                  | '#b8860b'
+                  | '#f97316'
+                  | '#faf5ff'
+                  | '#ede9fe'
                   | '#8b5cf6'
+                  | '#7c3aed'
+                  | '#6d28d9'
+                  | '#5b21b6'
+                  | '#fdf2f8'
+                  | '#fce7f3'
+                  | '#ec4899'
+                  | '#db2777'
+                  | '#be185d'
+                  | '#d946ef'
+                  | '#c026d3'
+                  | '#ecfeff'
+                  | '#cffafe'
+                  | '#06b6d4'
+                  | '#0891b2'
+                  | '#0e7490'
+                  | '#fff7ed'
+                  | '#ffedd5'
+                  | '#ea580c'
+                  | '#c2410c'
+                  | '#e8e8e8'
+                  | '#c0c0c0'
+                  | '#a8a8a8'
+                  | '#b87333'
+                  | '#cd7f32'
+                  | '#ff7f50'
+                  | '#fa8072'
+                  | '#ffdab9'
+                  | '#e6e6fa'
+                  | '#98ff98'
+                  | '#808000'
+                  | '#008080'
+                  | '#4b0082'
                 )
               | null;
             textAlign?: ('left' | 'center' | 'right' | 'justify') | null;
             lineHeight?: ('tight' | 'normal' | 'loose') | null;
           };
           /**
-           * Velg bakgrunnsfarge (hex, f.eks. #ffffff)
+           * Velg farge fra listen
            */
-          backgroundColor?: string | null;
+          backgroundColor?:
+            | (
+                | '#ffffff'
+                | '#000000'
+                | '#f9fafb'
+                | '#f3f4f6'
+                | '#e5e7eb'
+                | '#6b7280'
+                | '#374151'
+                | '#1f2937'
+                | '#fee2e2'
+                | '#ef4444'
+                | '#dc2626'
+                | '#b91c1c'
+                | '#be123c'
+                | '#991b1b'
+                | '#eff6ff'
+                | '#dbeafe'
+                | '#3b82f6'
+                | '#2563eb'
+                | '#1e40af'
+                | '#1e3a8a'
+                | '#1e293b'
+                | '#f0fdf4'
+                | '#d1fae5'
+                | '#10b981'
+                | '#059669'
+                | '#047857'
+                | '#065f46'
+                | '#fefce8'
+                | '#fef3c7'
+                | '#f59e0b'
+                | '#d97706'
+                | '#d4af37'
+                | '#b8860b'
+                | '#f97316'
+                | '#faf5ff'
+                | '#ede9fe'
+                | '#8b5cf6'
+                | '#7c3aed'
+                | '#6d28d9'
+                | '#5b21b6'
+                | '#fdf2f8'
+                | '#fce7f3'
+                | '#ec4899'
+                | '#db2777'
+                | '#be185d'
+                | '#d946ef'
+                | '#c026d3'
+                | '#ecfeff'
+                | '#cffafe'
+                | '#06b6d4'
+                | '#0891b2'
+                | '#0e7490'
+                | '#fff7ed'
+                | '#ffedd5'
+                | '#ea580c'
+                | '#c2410c'
+                | '#e8e8e8'
+                | '#c0c0c0'
+                | '#a8a8a8'
+                | '#b87333'
+                | '#cd7f32'
+                | '#ff7f50'
+                | '#fa8072'
+                | '#ffdab9'
+                | '#e6e6fa'
+                | '#98ff98'
+                | '#808000'
+                | '#008080'
+                | '#4b0082'
+              )
+            | null;
+          /**
+           * 0 = fullstendig gjennomsiktig, 100 = fullstendig ugjennomsiktig
+           */
+          backgroundColorOpacity?: number | null;
           sectionPadding?: ('none' | 'small' | 'medium' | 'large') | null;
         };
         banner?: {
@@ -863,72 +1914,682 @@ export interface SiteSetting {
         id?: string | null;
       }[]
     | null;
-  footer: {
-    companyName: string;
-    companyNameStyle?: {
-      fontSize?: ('small' | 'normal' | 'large' | 'xlarge') | null;
-      fontWeight?: ('normal' | 'semibold' | 'bold') | null;
-      /**
-       * Velg tekstfarge fra listen
-       */
-      textColor?:
-        | (
-            | '#ffffff'
-            | '#000000'
-            | '#f3f4f6'
-            | '#6b7280'
-            | '#374151'
-            | '#ef4444'
-            | '#3b82f6'
-            | '#10b981'
-            | '#f59e0b'
-            | '#8b5cf6'
-          )
-        | null;
-    };
-    description?: string | null;
-    descriptionStyle?: {
-      fontSize?: ('small' | 'normal' | 'large') | null;
-      /**
-       * Velg tekstfarge fra listen
-       */
-      textColor?:
-        | (
-            | '#ffffff'
-            | '#000000'
-            | '#f3f4f6'
-            | '#6b7280'
-            | '#374151'
-            | '#ef4444'
-            | '#3b82f6'
-            | '#10b981'
-            | '#f59e0b'
-            | '#8b5cf6'
-          )
-        | null;
-    };
-    email: string;
-    phone?: string | null;
-    openingHours?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Konfigurer header og navigasjonsbar
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "header-settings".
+ */
+export interface HeaderSetting {
+  id: number;
+  /**
+   * Velg om header skal ha solid farge eller gradient
+   */
+  backgroundType: 'solid' | 'gradient';
+  /**
+   * Velg bakgrunnsfarge for header
+   */
+  backgroundColor?:
+    | (
+        | '#ffffff'
+        | '#000000'
+        | '#f9fafb'
+        | '#f3f4f6'
+        | '#e5e7eb'
+        | '#6b7280'
+        | '#374151'
+        | '#1f2937'
+        | '#fee2e2'
+        | '#ef4444'
+        | '#dc2626'
+        | '#b91c1c'
+        | '#be123c'
+        | '#991b1b'
+        | '#eff6ff'
+        | '#dbeafe'
+        | '#3b82f6'
+        | '#2563eb'
+        | '#1e40af'
+        | '#1e3a8a'
+        | '#1e293b'
+        | '#f0fdf4'
+        | '#d1fae5'
+        | '#10b981'
+        | '#059669'
+        | '#047857'
+        | '#065f46'
+        | '#fefce8'
+        | '#fef3c7'
+        | '#f59e0b'
+        | '#d97706'
+        | '#d4af37'
+        | '#b8860b'
+        | '#f97316'
+        | '#faf5ff'
+        | '#ede9fe'
+        | '#8b5cf6'
+        | '#7c3aed'
+        | '#6d28d9'
+        | '#5b21b6'
+        | '#fdf2f8'
+        | '#fce7f3'
+        | '#ec4899'
+        | '#db2777'
+        | '#be185d'
+        | '#d946ef'
+        | '#c026d3'
+        | '#ecfeff'
+        | '#cffafe'
+        | '#06b6d4'
+        | '#0891b2'
+        | '#0e7490'
+        | '#fff7ed'
+        | '#ffedd5'
+        | '#ea580c'
+        | '#c2410c'
+        | '#e8e8e8'
+        | '#c0c0c0'
+        | '#a8a8a8'
+        | '#b87333'
+        | '#cd7f32'
+        | '#ff7f50'
+        | '#fa8072'
+        | '#ffdab9'
+        | '#e6e6fa'
+        | '#98ff98'
+        | '#808000'
+        | '#008080'
+        | '#4b0082'
+      )
+    | null;
+  /**
+   * 0 = fullstendig gjennomsiktig, 100 = fullstendig ugjennomsiktig
+   */
+  backgroundColorOpacity?: number | null;
+  /**
+   * Velg første farge i gradienten
+   */
+  gradientColor1?:
+    | (
+        | '#ffffff'
+        | '#000000'
+        | '#f9fafb'
+        | '#f3f4f6'
+        | '#e5e7eb'
+        | '#6b7280'
+        | '#374151'
+        | '#1f2937'
+        | '#fee2e2'
+        | '#ef4444'
+        | '#dc2626'
+        | '#b91c1c'
+        | '#be123c'
+        | '#991b1b'
+        | '#eff6ff'
+        | '#dbeafe'
+        | '#3b82f6'
+        | '#2563eb'
+        | '#1e40af'
+        | '#1e3a8a'
+        | '#1e293b'
+        | '#f0fdf4'
+        | '#d1fae5'
+        | '#10b981'
+        | '#059669'
+        | '#047857'
+        | '#065f46'
+        | '#fefce8'
+        | '#fef3c7'
+        | '#f59e0b'
+        | '#d97706'
+        | '#d4af37'
+        | '#b8860b'
+        | '#f97316'
+        | '#faf5ff'
+        | '#ede9fe'
+        | '#8b5cf6'
+        | '#7c3aed'
+        | '#6d28d9'
+        | '#5b21b6'
+        | '#fdf2f8'
+        | '#fce7f3'
+        | '#ec4899'
+        | '#db2777'
+        | '#be185d'
+        | '#d946ef'
+        | '#c026d3'
+        | '#ecfeff'
+        | '#cffafe'
+        | '#06b6d4'
+        | '#0891b2'
+        | '#0e7490'
+        | '#fff7ed'
+        | '#ffedd5'
+        | '#ea580c'
+        | '#c2410c'
+        | '#e8e8e8'
+        | '#c0c0c0'
+        | '#a8a8a8'
+        | '#b87333'
+        | '#cd7f32'
+        | '#ff7f50'
+        | '#fa8072'
+        | '#ffdab9'
+        | '#e6e6fa'
+        | '#98ff98'
+        | '#808000'
+        | '#008080'
+        | '#4b0082'
+      )
+    | null;
+  /**
+   * Velg andre farge i gradienten
+   */
+  gradientColor2?:
+    | (
+        | '#ffffff'
+        | '#000000'
+        | '#f9fafb'
+        | '#f3f4f6'
+        | '#e5e7eb'
+        | '#6b7280'
+        | '#374151'
+        | '#1f2937'
+        | '#fee2e2'
+        | '#ef4444'
+        | '#dc2626'
+        | '#b91c1c'
+        | '#be123c'
+        | '#991b1b'
+        | '#eff6ff'
+        | '#dbeafe'
+        | '#3b82f6'
+        | '#2563eb'
+        | '#1e40af'
+        | '#1e3a8a'
+        | '#1e293b'
+        | '#f0fdf4'
+        | '#d1fae5'
+        | '#10b981'
+        | '#059669'
+        | '#047857'
+        | '#065f46'
+        | '#fefce8'
+        | '#fef3c7'
+        | '#f59e0b'
+        | '#d97706'
+        | '#d4af37'
+        | '#b8860b'
+        | '#f97316'
+        | '#faf5ff'
+        | '#ede9fe'
+        | '#8b5cf6'
+        | '#7c3aed'
+        | '#6d28d9'
+        | '#5b21b6'
+        | '#fdf2f8'
+        | '#fce7f3'
+        | '#ec4899'
+        | '#db2777'
+        | '#be185d'
+        | '#d946ef'
+        | '#c026d3'
+        | '#ecfeff'
+        | '#cffafe'
+        | '#06b6d4'
+        | '#0891b2'
+        | '#0e7490'
+        | '#fff7ed'
+        | '#ffedd5'
+        | '#ea580c'
+        | '#c2410c'
+        | '#e8e8e8'
+        | '#c0c0c0'
+        | '#a8a8a8'
+        | '#b87333'
+        | '#cd7f32'
+        | '#ff7f50'
+        | '#fa8072'
+        | '#ffdab9'
+        | '#e6e6fa'
+        | '#98ff98'
+        | '#808000'
+        | '#008080'
+        | '#4b0082'
+      )
+    | null;
+  /**
+   * Vinkel for gradient (0-360 grader)
+   */
+  gradientAngle?: number | null;
+  /**
+   * Velg tekstfarge fra listen
+   */
+  textColor:
+    | '#ffffff'
+    | '#000000'
+    | '#f9fafb'
+    | '#f3f4f6'
+    | '#e5e7eb'
+    | '#6b7280'
+    | '#374151'
+    | '#1f2937'
+    | '#fee2e2'
+    | '#ef4444'
+    | '#dc2626'
+    | '#b91c1c'
+    | '#be123c'
+    | '#991b1b'
+    | '#eff6ff'
+    | '#dbeafe'
+    | '#3b82f6'
+    | '#2563eb'
+    | '#1e40af'
+    | '#1e3a8a'
+    | '#1e293b'
+    | '#f0fdf4'
+    | '#d1fae5'
+    | '#10b981'
+    | '#059669'
+    | '#047857'
+    | '#065f46'
+    | '#fefce8'
+    | '#fef3c7'
+    | '#f59e0b'
+    | '#d97706'
+    | '#d4af37'
+    | '#b8860b'
+    | '#f97316'
+    | '#faf5ff'
+    | '#ede9fe'
+    | '#8b5cf6'
+    | '#7c3aed'
+    | '#6d28d9'
+    | '#5b21b6'
+    | '#fdf2f8'
+    | '#fce7f3'
+    | '#ec4899'
+    | '#db2777'
+    | '#be185d'
+    | '#d946ef'
+    | '#c026d3'
+    | '#ecfeff'
+    | '#cffafe'
+    | '#06b6d4'
+    | '#0891b2'
+    | '#0e7490'
+    | '#fff7ed'
+    | '#ffedd5'
+    | '#ea580c'
+    | '#c2410c'
+    | '#e8e8e8'
+    | '#c0c0c0'
+    | '#a8a8a8'
+    | '#b87333'
+    | '#cd7f32'
+    | '#ff7f50'
+    | '#fa8072'
+    | '#ffdab9'
+    | '#e6e6fa'
+    | '#98ff98'
+    | '#808000'
+    | '#008080'
+    | '#4b0082';
+  /**
+   * Last opp logo for header (kun logo)
+   */
+  logo?: (number | null) | Media;
+  logoSettings?: {
     /**
-     * Velg bakgrunnsfarge (hex, f.eks. #111827)
+     * Velg form for logoen
      */
-    backgroundColor: string;
-    /**
-     * Velg tekstfarge fra listen
-     */
-    textColor:
-      | '#ffffff'
-      | '#000000'
-      | '#f3f4f6'
-      | '#6b7280'
-      | '#374151'
-      | '#ef4444'
-      | '#3b82f6'
-      | '#10b981'
-      | '#f59e0b'
-      | '#8b5cf6';
+    shape?: ('rectangle' | 'rounded' | 'circle') | null;
   };
+  /**
+   * Hvis aktivert, vil header følge med når du scroller ned på siden
+   */
+  sticky?: boolean | null;
+  /**
+   * Hvis aktivert, vises handlekurv-ikonet i header
+   */
+  showCartIcon?: boolean | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Konfigurer footer og kontaktinformasjon
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer-settings".
+ */
+export interface FooterSetting {
+  id: number;
+  /**
+   * Navnet på firmaet som vises i footer
+   */
+  companyName: string;
+  companyNameStyle?: {
+    fontSize?: ('small' | 'normal' | 'large' | 'xlarge') | null;
+    fontWeight?: ('normal' | 'semibold' | 'bold') | null;
+    textColor?:
+      | (
+          | '#ffffff'
+          | '#000000'
+          | '#f9fafb'
+          | '#f3f4f6'
+          | '#e5e7eb'
+          | '#6b7280'
+          | '#374151'
+          | '#1f2937'
+          | '#fee2e2'
+          | '#ef4444'
+          | '#dc2626'
+          | '#b91c1c'
+          | '#be123c'
+          | '#991b1b'
+          | '#eff6ff'
+          | '#dbeafe'
+          | '#3b82f6'
+          | '#2563eb'
+          | '#1e40af'
+          | '#1e3a8a'
+          | '#1e293b'
+          | '#f0fdf4'
+          | '#d1fae5'
+          | '#10b981'
+          | '#059669'
+          | '#047857'
+          | '#065f46'
+          | '#fefce8'
+          | '#fef3c7'
+          | '#f59e0b'
+          | '#d97706'
+          | '#d4af37'
+          | '#b8860b'
+          | '#f97316'
+          | '#faf5ff'
+          | '#ede9fe'
+          | '#8b5cf6'
+          | '#7c3aed'
+          | '#6d28d9'
+          | '#5b21b6'
+          | '#fdf2f8'
+          | '#fce7f3'
+          | '#ec4899'
+          | '#db2777'
+          | '#be185d'
+          | '#d946ef'
+          | '#c026d3'
+          | '#ecfeff'
+          | '#cffafe'
+          | '#06b6d4'
+          | '#0891b2'
+          | '#0e7490'
+          | '#fff7ed'
+          | '#ffedd5'
+          | '#ea580c'
+          | '#c2410c'
+          | '#e8e8e8'
+          | '#c0c0c0'
+          | '#a8a8a8'
+          | '#b87333'
+          | '#cd7f32'
+          | '#ff7f50'
+          | '#fa8072'
+          | '#ffdab9'
+          | '#e6e6fa'
+          | '#98ff98'
+          | '#808000'
+          | '#008080'
+          | '#4b0082'
+        )
+      | null;
+  };
+  /**
+   * Kort beskrivelse av firmaet som vises i footer
+   */
+  description?: string | null;
+  descriptionStyle?: {
+    fontSize?: ('small' | 'normal' | 'large') | null;
+    textColor?:
+      | (
+          | '#ffffff'
+          | '#000000'
+          | '#f9fafb'
+          | '#f3f4f6'
+          | '#e5e7eb'
+          | '#6b7280'
+          | '#374151'
+          | '#1f2937'
+          | '#fee2e2'
+          | '#ef4444'
+          | '#dc2626'
+          | '#b91c1c'
+          | '#be123c'
+          | '#991b1b'
+          | '#eff6ff'
+          | '#dbeafe'
+          | '#3b82f6'
+          | '#2563eb'
+          | '#1e40af'
+          | '#1e3a8a'
+          | '#1e293b'
+          | '#f0fdf4'
+          | '#d1fae5'
+          | '#10b981'
+          | '#059669'
+          | '#047857'
+          | '#065f46'
+          | '#fefce8'
+          | '#fef3c7'
+          | '#f59e0b'
+          | '#d97706'
+          | '#d4af37'
+          | '#b8860b'
+          | '#f97316'
+          | '#faf5ff'
+          | '#ede9fe'
+          | '#8b5cf6'
+          | '#7c3aed'
+          | '#6d28d9'
+          | '#5b21b6'
+          | '#fdf2f8'
+          | '#fce7f3'
+          | '#ec4899'
+          | '#db2777'
+          | '#be185d'
+          | '#d946ef'
+          | '#c026d3'
+          | '#ecfeff'
+          | '#cffafe'
+          | '#06b6d4'
+          | '#0891b2'
+          | '#0e7490'
+          | '#fff7ed'
+          | '#ffedd5'
+          | '#ea580c'
+          | '#c2410c'
+          | '#e8e8e8'
+          | '#c0c0c0'
+          | '#a8a8a8'
+          | '#b87333'
+          | '#cd7f32'
+          | '#ff7f50'
+          | '#fa8072'
+          | '#ffdab9'
+          | '#e6e6fa'
+          | '#98ff98'
+          | '#808000'
+          | '#008080'
+          | '#4b0082'
+        )
+      | null;
+  };
+  /**
+   * Kontakt e-postadresse
+   */
+  email: string;
+  /**
+   * Kontakt telefonnummer
+   */
+  phone?: string | null;
+  /**
+   * Åpningstider for butikken (én linje per dag)
+   */
+  openingHours?: string | null;
+  /**
+   * Velg bakgrunnsfarge for footer
+   */
+  backgroundColor:
+    | '#ffffff'
+    | '#000000'
+    | '#f9fafb'
+    | '#f3f4f6'
+    | '#e5e7eb'
+    | '#6b7280'
+    | '#374151'
+    | '#1f2937'
+    | '#fee2e2'
+    | '#ef4444'
+    | '#dc2626'
+    | '#b91c1c'
+    | '#be123c'
+    | '#991b1b'
+    | '#eff6ff'
+    | '#dbeafe'
+    | '#3b82f6'
+    | '#2563eb'
+    | '#1e40af'
+    | '#1e3a8a'
+    | '#1e293b'
+    | '#f0fdf4'
+    | '#d1fae5'
+    | '#10b981'
+    | '#059669'
+    | '#047857'
+    | '#065f46'
+    | '#fefce8'
+    | '#fef3c7'
+    | '#f59e0b'
+    | '#d97706'
+    | '#d4af37'
+    | '#b8860b'
+    | '#f97316'
+    | '#faf5ff'
+    | '#ede9fe'
+    | '#8b5cf6'
+    | '#7c3aed'
+    | '#6d28d9'
+    | '#5b21b6'
+    | '#fdf2f8'
+    | '#fce7f3'
+    | '#ec4899'
+    | '#db2777'
+    | '#be185d'
+    | '#d946ef'
+    | '#c026d3'
+    | '#ecfeff'
+    | '#cffafe'
+    | '#06b6d4'
+    | '#0891b2'
+    | '#0e7490'
+    | '#fff7ed'
+    | '#ffedd5'
+    | '#ea580c'
+    | '#c2410c'
+    | '#e8e8e8'
+    | '#c0c0c0'
+    | '#a8a8a8'
+    | '#b87333'
+    | '#cd7f32'
+    | '#ff7f50'
+    | '#fa8072'
+    | '#ffdab9'
+    | '#e6e6fa'
+    | '#98ff98'
+    | '#808000'
+    | '#008080'
+    | '#4b0082';
+  /**
+   * 0 = fullstendig gjennomsiktig, 100 = fullstendig ugjennomsiktig
+   */
+  backgroundColorOpacity?: number | null;
+  /**
+   * Velg tekstfarge for footer
+   */
+  textColor:
+    | '#ffffff'
+    | '#000000'
+    | '#f9fafb'
+    | '#f3f4f6'
+    | '#e5e7eb'
+    | '#6b7280'
+    | '#374151'
+    | '#1f2937'
+    | '#fee2e2'
+    | '#ef4444'
+    | '#dc2626'
+    | '#b91c1c'
+    | '#be123c'
+    | '#991b1b'
+    | '#eff6ff'
+    | '#dbeafe'
+    | '#3b82f6'
+    | '#2563eb'
+    | '#1e40af'
+    | '#1e3a8a'
+    | '#1e293b'
+    | '#f0fdf4'
+    | '#d1fae5'
+    | '#10b981'
+    | '#059669'
+    | '#047857'
+    | '#065f46'
+    | '#fefce8'
+    | '#fef3c7'
+    | '#f59e0b'
+    | '#d97706'
+    | '#d4af37'
+    | '#b8860b'
+    | '#f97316'
+    | '#faf5ff'
+    | '#ede9fe'
+    | '#8b5cf6'
+    | '#7c3aed'
+    | '#6d28d9'
+    | '#5b21b6'
+    | '#fdf2f8'
+    | '#fce7f3'
+    | '#ec4899'
+    | '#db2777'
+    | '#be185d'
+    | '#d946ef'
+    | '#c026d3'
+    | '#ecfeff'
+    | '#cffafe'
+    | '#06b6d4'
+    | '#0891b2'
+    | '#0e7490'
+    | '#fff7ed'
+    | '#ffedd5'
+    | '#ea580c'
+    | '#c2410c'
+    | '#e8e8e8'
+    | '#c0c0c0'
+    | '#a8a8a8'
+    | '#b87333'
+    | '#cd7f32'
+    | '#ff7f50'
+    | '#fa8072'
+    | '#ffdab9'
+    | '#e6e6fa'
+    | '#98ff98'
+    | '#808000'
+    | '#008080'
+    | '#4b0082';
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -941,16 +2602,13 @@ export interface SiteSettingsSelect<T extends boolean = true> {
     | T
     | {
         siteName?: T;
-        logo?: T;
         favicon?: T;
-      };
-  header?:
-    | T
-    | {
-        backgroundColor?: T;
-        textColor?: T;
-        sticky?: T;
-        showCartIcon?: T;
+        pageBackgroundType?: T;
+        pageBackgroundColor?: T;
+        pageBackgroundColorOpacity?: T;
+        pageGradientColor1?: T;
+        pageGradientColor2?: T;
+        pageGradientAngle?: T;
       };
   homeSections?:
     | T
@@ -983,6 +2641,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
                 | T
                 | {
                     backgroundColor?: T;
+                    backgroundColorOpacity?: T;
                     textColor?: T;
                     fontSize?: T;
                     padding?: T;
@@ -1013,6 +2672,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
                   };
               limit?: T;
               backgroundColor?: T;
+              backgroundColorOpacity?: T;
               sectionPadding?: T;
             };
         categories?:
@@ -1028,6 +2688,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
                     textAlign?: T;
                   };
               backgroundColor?: T;
+              backgroundColorOpacity?: T;
               sectionPadding?: T;
             };
         textSection?:
@@ -1053,6 +2714,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
                     lineHeight?: T;
                   };
               backgroundColor?: T;
+              backgroundColorOpacity?: T;
               sectionPadding?: T;
             };
         banner?:
@@ -1071,30 +2733,60 @@ export interface SiteSettingsSelect<T extends boolean = true> {
             };
         id?: T;
       };
-  footer?:
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "header-settings_select".
+ */
+export interface HeaderSettingsSelect<T extends boolean = true> {
+  backgroundType?: T;
+  backgroundColor?: T;
+  backgroundColorOpacity?: T;
+  gradientColor1?: T;
+  gradientColor2?: T;
+  gradientAngle?: T;
+  textColor?: T;
+  logo?: T;
+  logoSettings?:
     | T
     | {
-        companyName?: T;
-        companyNameStyle?:
-          | T
-          | {
-              fontSize?: T;
-              fontWeight?: T;
-              textColor?: T;
-            };
-        description?: T;
-        descriptionStyle?:
-          | T
-          | {
-              fontSize?: T;
-              textColor?: T;
-            };
-        email?: T;
-        phone?: T;
-        openingHours?: T;
-        backgroundColor?: T;
+        shape?: T;
+      };
+  sticky?: T;
+  showCartIcon?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer-settings_select".
+ */
+export interface FooterSettingsSelect<T extends boolean = true> {
+  companyName?: T;
+  companyNameStyle?:
+    | T
+    | {
+        fontSize?: T;
+        fontWeight?: T;
         textColor?: T;
       };
+  description?: T;
+  descriptionStyle?:
+    | T
+    | {
+        fontSize?: T;
+        textColor?: T;
+      };
+  email?: T;
+  phone?: T;
+  openingHours?: T;
+  backgroundColor?: T;
+  backgroundColorOpacity?: T;
+  textColor?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
