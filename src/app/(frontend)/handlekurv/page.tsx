@@ -31,25 +31,25 @@ export default function CartPage() {
 
   if (cart.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-8">
         <h1 className="text-4xl font-bold mb-8">Handlekurv</h1>
         <div className="text-center py-16">
           <p className="text-xl text-gray-600 mb-6">Handlekurven din er tom</p>
           <Link 
             href="/boker"
-            className="bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700 inline-block"
+            className="bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700 inline-block focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition"
           >
             Se alle bøker
           </Link>
         </div>
-      </div>
+      </main>
     )
   }
 
   const total = getCartTotal()
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <main className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold mb-8">Handlekurv</h1>
 
       <div className="grid lg:grid-cols-3 gap-8">
@@ -72,15 +72,17 @@ export default function CartPage() {
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                  className="w-8 h-8 bg-gray-200 rounded hover:bg-gray-300"
+                  className="w-8 h-8 bg-gray-200 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 transition"
+                  aria-label="Reduser antall"
                 >
                   -
                 </button>
-                <span className="w-12 text-center font-semibold">{item.quantity}</span>
+                <span className="w-12 text-center font-semibold" aria-label={`Antall: ${item.quantity}`}>{item.quantity}</span>
                 <button
                   onClick={() => updateQuantity(item.id, item.quantity + 1)}
                   disabled={item.quantity >= item.stock}
-                  className="w-8 h-8 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-8 h-8 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 transition"
+                  aria-label="Øk antall"
                 >
                   +
                 </button>
@@ -91,7 +93,8 @@ export default function CartPage() {
                 <p className="font-bold text-lg">{item.price * item.quantity} kr</p>
                 <button
                   onClick={() => removeFromCart(item.id)}
-                  className="text-red-600 text-sm hover:underline"
+                  className="text-red-600 text-sm hover:underline focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded px-1"
+                  aria-label={`Fjern ${item.title} fra handlekurv`}
                 >
                   Fjern
                 </button>

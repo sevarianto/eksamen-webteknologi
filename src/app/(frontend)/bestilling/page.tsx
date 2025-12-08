@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { getCart, clearCart, getCartTotal, type CartItem } from '@/lib/cart'
 
 export default function CheckoutPage() {
@@ -59,46 +60,49 @@ export default function CheckoutPage() {
         // Redirect til bekreftelse
         router.push(`/bestilling/bekreftelse?orderNumber=${orderNumber}`)
       } else {
-        alert('Noe gikk galt. Vennligst prøv igjen.')
+        const errorData = await res.json().catch(() => ({}))
+        console.error('Order error:', errorData)
         setLoading(false)
+        // Show error message to user
+        alert(`Noe gikk galt: ${errorData.message || 'Kunne ikke lagre bestillingen. Vennligst prøv igjen.'}`)
       }
     } catch (error) {
       console.error('Order error:', error)
-      alert('Noe gikk galt. Vennligst prøv igjen.')
       setLoading(false)
+      alert('Noe gikk galt. Vennligst prøv igjen.')
     }
   }
 
   if (!mounted) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-8">
         <h1 className="text-4xl font-bold mb-8">Bestilling</h1>
         <p>Laster...</p>
-      </div>
+      </main>
     )
   }
 
   if (cart.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-8">
         <h1 className="text-4xl font-bold mb-8">Bestilling</h1>
         <div className="text-center py-16">
           <p className="text-xl text-gray-600 mb-6">Handlekurven din er tom</p>
-          <a 
+          <Link 
             href="/boker"
-            className="bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700 inline-block"
+            className="bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700 inline-block focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition"
           >
             Se alle bøker
-          </a>
+          </Link>
         </div>
-      </div>
+      </main>
     )
   }
 
   const total = getCartTotal()
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <main className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold mb-8">Bestilling</h1>
 
       <div className="grid lg:grid-cols-3 gap-8">
@@ -118,7 +122,7 @@ export default function CheckoutPage() {
                   required
                   value={formData.customerName}
                   onChange={(e) => setFormData({...formData, customerName: e.target.value})}
-                  className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                   placeholder="Ola Nordmann"
                 />
               </div>
@@ -133,7 +137,7 @@ export default function CheckoutPage() {
                   required
                   value={formData.customerEmail}
                   onChange={(e) => setFormData({...formData, customerEmail: e.target.value})}
-                  className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                   placeholder="ola@example.com"
                 />
               </div>
@@ -147,7 +151,7 @@ export default function CheckoutPage() {
                   type="tel"
                   value={formData.customerPhone}
                   onChange={(e) => setFormData({...formData, customerPhone: e.target.value})}
-                  className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                   placeholder="12 34 56 78"
                 />
               </div>
@@ -155,7 +159,7 @@ export default function CheckoutPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-emerald-600 text-white py-3 rounded-lg font-semibold hover:bg-emerald-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+                className="w-full bg-emerald-600 text-white py-3 rounded-lg font-semibold hover:bg-emerald-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
               >
                 {loading ? 'Behandler bestilling...' : 'Fullfør bestilling'}
               </button>
@@ -197,6 +201,6 @@ export default function CheckoutPage() {
           </div>
         </div>
       </div>
-    </div>
+    </main>
   )
 }

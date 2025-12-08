@@ -8,7 +8,7 @@ export default function ConfirmationPage() {
   const orderNumber = searchParams.get('orderNumber')
 
   return (
-    <div className="container mx-auto px-4 py-16">
+    <main className="container mx-auto px-4 py-16">
       <div className="max-w-2xl mx-auto text-center">
         {/* Success Icon */}
         <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -34,18 +34,18 @@ export default function ConfirmationPage() {
         <div className="flex gap-4 justify-center">
           <Link
             href="/boker"
-            className="bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700 transition"
+            className="bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700 transition focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
           >
             Fortsett å handle
           </Link>
           <Link
             href="/"
-            className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition"
+            className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
           >
             Tilbake til forsiden
           </Link>
         </div>
       </div>
-    </div>
+    </main>
   )
 }
