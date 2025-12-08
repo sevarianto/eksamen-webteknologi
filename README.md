@@ -83,7 +83,7 @@ eksamen-webteknologi/
 
 1. **Klon repositoriet**
    ```bash
-   git clone <>
+   git clone <https://github.com/sevarianto/eksamen-webteknologi.git>
    cd eksamen-webteknologi
    ```
 
