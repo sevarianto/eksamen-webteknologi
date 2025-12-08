@@ -18,50 +18,24 @@ export default async function Header() {
   const header = settings?.header || {}
   const general = settings?.general || {}
 
-  // Handle hex colors, rgba colors, or fallback to predefined colors
-  const getBgColor = () => {
-    if (header.backgroundColor) {
-      // Check if it's hex, rgb, or rgba
-      if (header.backgroundColor.startsWith('#') || header.backgroundColor.startsWith('rgb')) {
-        return { backgroundColor: header.backgroundColor }
-      }
-    }
-    // Fallback to predefined colors
-    const bgColors: Record<string, string> = {
-      emerald: 'bg-emerald-600',
-      blue: 'bg-blue-600',
-      purple: 'bg-purple-600',
-      dark: 'bg-gray-900',
-      white: 'bg-white border-b',
-    }
-    return { className: bgColors[header.backgroundColor as string] || bgColors.emerald }
+  // Use colors directly from admin settings - no fallbacks
+  const bgStyle: React.CSSProperties = {}
+  const textStyle: React.CSSProperties = {}
+  
+  if (header.backgroundColor) {
+    bgStyle.backgroundColor = header.backgroundColor
   }
-
-  const getTextColor = () => {
-    if (header.textColor) {
-      // Check if it's hex, rgb, or rgba
-      if (header.textColor.startsWith('#') || header.textColor.startsWith('rgb')) {
-        return { color: header.textColor }
-      }
-    }
-    // Fallback to predefined colors
-    const textColors: Record<string, string> = {
-      white: 'text-white',
-      black: 'text-gray-900',
-      gray: 'text-gray-600',
-    }
-    return { className: textColors[header.textColor as string] || textColors.white }
+  
+  if (header.textColor) {
+    textStyle.color = header.textColor
   }
-
-  const bgStyle = getBgColor()
-  const textStyle = getTextColor()
 
   return (
     <header 
-      className={`${bgStyle.className || ''} ${textStyle.className || ''} ${header.sticky ? 'sticky top-0 z-50' : ''} shadow-md`}
+      className={`${header.sticky ? 'sticky top-0 z-50' : ''} shadow-md`}
       style={{
-        ...(bgStyle.backgroundColor && { backgroundColor: bgStyle.backgroundColor }),
-        ...(textStyle.color && { color: textStyle.color }),
+        ...bgStyle,
+        ...textStyle,
       }}
     >
       <div className="container mx-auto px-4 py-4">
@@ -85,21 +59,21 @@ export default async function Header() {
           <nav className="flex items-center gap-6">
             <Link 
               href="/" 
-              className={`${textStyle.className || ''} hover:opacity-80 transition`}
+              className="hover:opacity-80 transition"
               style={textStyle.color ? { color: textStyle.color } : undefined}
             >
               Hjem
             </Link>
             <Link 
               href="/boker" 
-              className={`${textStyle.className || ''} hover:opacity-80 transition`}
+              className="hover:opacity-80 transition"
               style={textStyle.color ? { color: textStyle.color } : undefined}
             >
               Bøker
             </Link>
             <Link 
               href="/forfattere" 
-              className={`${textStyle.className || ''} hover:opacity-80 transition`}
+              className="hover:opacity-80 transition"
               style={textStyle.color ? { color: textStyle.color } : undefined}
             >
               Forfattere
@@ -109,10 +83,11 @@ export default async function Header() {
             {header.showCartIcon && (
               <Link 
                 href="/handlekurv" 
-                className={`${textStyle.className || ''} hover:opacity-80 transition flex items-center gap-2`}
+                className="hover:opacity-80 transition flex items-center gap-2"
                 style={textStyle.color ? { color: textStyle.color } : undefined}
+                aria-label="Gå til handlekurv"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
                 <span className="hidden md:inline">Handlekurv</span>
