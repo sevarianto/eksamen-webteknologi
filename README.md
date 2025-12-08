@@ -88,7 +88,7 @@ eksamen-webteknologi/
    ```
 
 2. **Installer avhengigheter**
-   ```bash
+   ```bash1122121
    npm install
    ```
    Dette installerer alle dependencies definert i `package.json` (Next.js, Payload CMS, React, Tailwind, etc.)
