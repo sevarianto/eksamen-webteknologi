@@ -10,10 +10,11 @@ export default function BookCard({ book }: BookCardProps) {
   const coverImage = typeof book.coverImage === 'object' ? book.coverImage : null
 
   return (
-    <Link 
-      href={`/boker/${book.slug}`}
-      className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
-    >
+    <article>
+      <Link 
+        href={`/boker/${book.slug}`}
+        className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 block"
+      >
       {/* Book Cover */}
       <div className="bg-gradient-to-br from-emerald-100 to-emerald-50 aspect-[3/4] flex items-center justify-center overflow-hidden">
         {coverImage && coverImage.url ? (
@@ -88,7 +89,8 @@ export default function BookCard({ book }: BookCardProps) {
           </span>
         </div>
       </div>
-    </Link>
+      </Link>
+    </article>
   )
 }
 

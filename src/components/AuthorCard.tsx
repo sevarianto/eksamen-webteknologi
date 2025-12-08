@@ -9,10 +9,11 @@ export default function AuthorCard({ author }: AuthorCardProps) {
   const photo = typeof author.photo === 'object' ? author.photo : null
 
   return (
-    <Link 
-      href={`/forfattere/${author.slug}`}
-      className="border rounded-lg p-6 hover:shadow-lg transition text-center"
-    >
+    <article>
+      <Link 
+        href={`/forfattere/${author.slug}`}
+        className="border rounded-lg p-6 hover:shadow-lg transition text-center focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 block"
+      >
       {/* Author Photo */}
       {photo && photo.url ? (
         <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden">
@@ -39,7 +40,8 @@ export default function AuthorCard({ author }: AuthorCardProps) {
       {author.birthYear && (
         <p className="text-gray-500 text-sm">f. {author.birthYear}</p>
       )}
-    </Link>
+      </Link>
+    </article>
   )
 }
 

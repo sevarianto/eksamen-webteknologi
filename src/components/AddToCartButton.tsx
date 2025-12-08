@@ -43,10 +43,10 @@ export default function AddToCartButton({ book }: AddToCartButtonProps) {
   return (
     <button 
       onClick={handleAddToCart}
-      className={`w-full py-3 rounded-lg font-semibold transition ${
+      className={`w-full py-3 rounded-lg font-semibold transition focus:outline-none focus:ring-2 focus:ring-offset-2 ${
         added 
-          ? 'bg-green-600 text-white' 
-          : 'bg-emerald-600 text-white hover:bg-emerald-700'
+          ? 'bg-green-600 text-white focus:ring-green-500' 
+          : 'bg-emerald-600 text-white hover:bg-emerald-700 focus:ring-emerald-500'
       }`}
     >
       {added ? '✓ Lagt til i handlekurv' : 'Legg i handlekurv'}
