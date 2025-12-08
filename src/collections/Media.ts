@@ -12,5 +12,11 @@ export const Media: CollectionConfig = {
       required: true,
     },
   ],
-  upload: true,
+  upload: {
+    staticDir: 'media',
+    maxFileSize: 10 * 1024 * 1024, // 10MB
+    mimeTypes: ['image/*'],
+    adminThumbnail: 'original',
+    imageSizes: [],
+  },
 }
