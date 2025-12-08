@@ -32,15 +32,15 @@ export default async function PreviewPage() {
 
   if (!settings || !settings.homeSections || settings.homeSections.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <main className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-4xl font-bold mb-4">Velkommen til BookDragons</h1>
           <p className="text-gray-600 mb-8">Konfiger hjemmesiden i Admin → Site Settings</p>
-          <Link href="/admin" className="bg-emerald-600 text-white px-6 py-3 rounded-lg">
+          <Link href="/admin" className="bg-emerald-600 text-white px-6 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition">
             Gå til Admin
           </Link>
         </div>
-      </div>
+      </main>
     )
   }
 
@@ -73,17 +73,11 @@ export default async function PreviewPage() {
               center: 'text-center',
               right: 'text-right',
             }
-            const gradients = {
-              emerald: 'from-emerald-600 via-emerald-700 to-emerald-800',
-              blue: 'from-blue-600 via-blue-700 to-blue-800',
-              purple: 'from-purple-600 via-purple-700 to-purple-800',
-              rose: 'from-rose-600 via-rose-700 to-rose-800',
-              amber: 'from-amber-600 via-amber-700 to-amber-800',
-              teal: 'from-teal-600 via-teal-700 to-teal-800',
-            }
+            // Gradients removed - using gradientColor1 and gradientColor2 instead
 
             // Apply custom styling from hero.titleStyle
             const titleStyle: React.CSSProperties = {}
+            const titleClassName: string[] = []
             if (hero.titleStyle) {
               if (hero.titleStyle.fontSize) {
                 const fontSizeMap: Record<string, string> = {
@@ -93,7 +87,7 @@ export default async function PreviewPage() {
                   xlarge: 'text-6xl',
                   xxlarge: 'text-7xl',
                 }
-                titleStyle.fontSize = fontSizeMap[hero.titleStyle.fontSize] || 'text-5xl'
+                titleClassName.push(fontSizeMap[hero.titleStyle.fontSize] || 'text-5xl')
               }
               if (hero.titleStyle.fontWeight) {
                 const fontWeightMap: Record<string, string> = {
@@ -101,7 +95,7 @@ export default async function PreviewPage() {
                   semibold: 'font-semibold',
                   bold: 'font-bold',
                 }
-                titleStyle.fontWeight = fontWeightMap[hero.titleStyle.fontWeight] || 'font-bold'
+                titleClassName.push(fontWeightMap[hero.titleStyle.fontWeight] || 'font-bold')
               }
               if (hero.titleStyle.textColor) {
                 titleStyle.color = hero.titleStyle.textColor
@@ -110,6 +104,7 @@ export default async function PreviewPage() {
 
             // Apply custom styling from hero.subtitleStyle
             const subtitleStyle: React.CSSProperties = {}
+            const subtitleClassName: string[] = []
             if (hero.subtitleStyle) {
               if (hero.subtitleStyle.fontSize) {
                 const fontSizeMap: Record<string, string> = {
@@ -118,7 +113,7 @@ export default async function PreviewPage() {
                   large: 'text-xl',
                   xlarge: 'text-2xl',
                 }
-                subtitleStyle.fontSize = fontSizeMap[hero.subtitleStyle.fontSize] || 'text-xl'
+                subtitleClassName.push(fontSizeMap[hero.subtitleStyle.fontSize] || 'text-xl')
               }
               if (hero.subtitleStyle.fontWeight) {
                 const fontWeightMap: Record<string, string> = {
@@ -126,8 +121,9 @@ export default async function PreviewPage() {
                   semibold: 'font-semibold',
                   bold: 'font-bold',
                 }
-                subtitleStyle.fontWeight =
-                  fontWeightMap[hero.subtitleStyle.fontWeight] || 'font-normal'
+                subtitleClassName.push(
+                  fontWeightMap[hero.subtitleStyle.fontWeight] || 'font-normal',
+                )
               }
               if (hero.subtitleStyle.textColor) {
                 subtitleStyle.color = hero.subtitleStyle.textColor
@@ -208,30 +204,22 @@ export default async function PreviewPage() {
                   </>
                 ) : (
                   (() => {
-                    // Try to parse custom gradient colors
-                    let gradientStyle: React.CSSProperties = {}
-                    try {
-                      if (hero.gradientColors && typeof hero.gradientColors === 'string') {
-                        const gradient = JSON.parse(hero.gradientColors)
-                        if (gradient.color1 && gradient.color2) {
-                          gradientStyle = {
-                            background: `linear-gradient(${gradient.angle || 135}deg, ${gradient.color1}, ${gradient.color2})`,
-                          }
-                        }
-                      }
-                    } catch {
-                      // Fallback to default gradient
+                    // Use new gradient color fields
+                    if (hero.gradientColor1 && hero.gradientColor2) {
+                      const angle = hero.gradientAngle || 135
+                      return (
+                        <div
+                          className="absolute inset-0"
+                          style={{
+                            background: `linear-gradient(${angle}deg, ${hero.gradientColor1}, ${hero.gradientColor2})`,
+                          }}
+                        ></div>
+                      )
                     }
 
-                    if (Object.keys(gradientStyle).length > 0) {
-                      return <div className="absolute inset-0" style={gradientStyle}></div>
-                    }
-
-                    // Fallback to predefined gradients
+                    // Fallback to default gradient
                     return (
-                      <div
-                        className={`absolute inset-0 bg-gradient-to-br ${gradients[hero.gradientStart as keyof typeof gradients] || gradients.emerald}`}
-                      ></div>
+                      <div className="absolute inset-0 bg-gradient-to-br from-emerald-600 to-emerald-800"></div>
                     )
                   })()
                 )}
@@ -241,15 +229,17 @@ export default async function PreviewPage() {
                   className={`relative container mx-auto px-4 ${textAlignClasses[hero.textAlign as keyof typeof textAlignClasses] || textAlignClasses.center}`}
                 >
                   <h1
-                    className={`${titleStyle.fontSize || 'text-5xl'} md:${titleStyle.fontSize?.replace('text-', 'md:text-') || 'text-6xl'} ${titleStyle.fontWeight || 'font-bold'} mb-6 drop-shadow-lg`}
-                    style={{ color: titleStyle.color || 'white' }}
+                    className={`${titleClassName.join(' ') || 'text-5xl md:text-6xl font-bold'} mb-6 drop-shadow-lg`}
+                    style={titleStyle.color ? { color: titleStyle.color } : { color: 'white' }}
                   >
                     {hero.title}
                   </h1>
                   {hero.subtitle && (
                     <p
-                      className={`${subtitleStyle.fontSize || 'text-xl'} md:${subtitleStyle.fontSize?.replace('text-', 'md:text-') || 'text-2xl'} ${subtitleStyle.fontWeight || 'font-normal'} mb-8 drop-shadow-md max-w-3xl mx-auto`}
-                      style={{ color: subtitleStyle.color || 'white' }}
+                      className={`${subtitleClassName.join(' ') || 'text-xl md:text-2xl font-normal'} mb-8 drop-shadow-md max-w-3xl mx-auto`}
+                      style={
+                        subtitleStyle.color ? { color: subtitleStyle.color } : { color: 'white' }
+                      }
                     >
                       {hero.subtitle}
                     </p>
@@ -257,7 +247,7 @@ export default async function PreviewPage() {
                   {hero.buttonText && (
                     <Link
                       href={hero.buttonLink || '/boker'}
-                      className={`inline-block ${buttonStyle.padding || 'px-8 py-4'} ${buttonStyle.borderRadius || 'rounded-lg'} font-semibold hover:opacity-90 transition shadow-lg ${buttonStyle.fontSize || 'text-lg'}`}
+                      className={`inline-block ${buttonStyle.padding || 'px-8 py-4'} ${buttonStyle.borderRadius || 'rounded-lg'} font-semibold hover:opacity-90 transition shadow-lg ${buttonStyle.fontSize || 'text-lg'} focus:outline-none focus:ring-2 focus:ring-offset-2`}
                       style={{
                         backgroundColor: buttonStyle.backgroundColor || 'white',
                         color: buttonStyle.color || '#059669',
@@ -311,7 +301,7 @@ export default async function PreviewPage() {
                   <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
                     <Link
                       href="/sjangere/fantasy"
-                      className="bg-white p-8 rounded-xl hover:shadow-xl transition text-center group"
+                      className="bg-white p-8 rounded-xl hover:shadow-xl transition text-center group focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 block"
                     >
                       <div className="text-5xl mb-4"></div>
                       <h3 className="text-2xl font-bold text-emerald-600 mb-2">Fantasy</h3>
@@ -319,7 +309,7 @@ export default async function PreviewPage() {
                     </Link>
                     <Link
                       href="/sjangere/krim"
-                      className="bg-white p-8 rounded-xl hover:shadow-xl transition text-center group"
+                      className="bg-white p-8 rounded-xl hover:shadow-xl transition text-center group focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 block"
                     >
                       <div className="text-5xl mb-4"></div>
                       <h3 className="text-2xl font-bold text-emerald-600 mb-2">Krim</h3>
@@ -327,7 +317,7 @@ export default async function PreviewPage() {
                     </Link>
                     <Link
                       href="/sjangere/barneboker"
-                      className="bg-white p-8 rounded-xl hover:shadow-xl transition text-center group"
+                      className="bg-white p-8 rounded-xl hover:shadow-xl transition text-center group focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 block"
                     >
                       <div className="text-5xl mb-4"></div>
                       <h3 className="text-2xl font-bold text-emerald-600 mb-2">Barnebøker</h3>
@@ -341,13 +331,14 @@ export default async function PreviewPage() {
 
           // TEXT SECTION
           if (section.sectionType === 'text' && section.textSection) {
+            const textSectionData = section.textSection
             const getBgStyle = () => {
               if (
-                section.textSection.backgroundColor &&
-                section.textSection.backgroundColor.startsWith('#')
+                textSectionData.backgroundColor &&
+                textSectionData.backgroundColor.startsWith('#')
               ) {
                 return {
-                  style: { backgroundColor: section.textSection.backgroundColor },
+                  style: { backgroundColor: textSectionData.backgroundColor },
                   className: '',
                 }
               }
@@ -358,80 +349,78 @@ export default async function PreviewPage() {
               }
               return {
                 style: {},
-                className:
-                  bgClasses[section.textSection.backgroundColor as string] || bgClasses.white,
+                className: bgClasses[textSectionData.backgroundColor as string] || bgClasses.white,
               }
             }
             const bgStyle = getBgStyle()
 
             // Apply custom styling
             const titleStyle: React.CSSProperties = {}
-            if (section.textSection.titleStyle) {
-              if (section.textSection.titleStyle.fontSize) {
+            if (textSectionData.titleStyle) {
+              if (textSectionData.titleStyle.fontSize) {
                 const fontSizeMap: Record<string, string> = {
                   small: 'text-2xl',
                   normal: 'text-3xl',
                   large: 'text-4xl',
                   xlarge: 'text-5xl',
                 }
-                titleStyle.fontSize =
-                  fontSizeMap[section.textSection.titleStyle.fontSize] || 'text-4xl'
+                titleStyle.fontSize = fontSizeMap[textSectionData.titleStyle.fontSize] || 'text-4xl'
               }
-              if (section.textSection.titleStyle.fontWeight) {
+              if (textSectionData.titleStyle.fontWeight) {
                 const fontWeightMap: Record<string, string> = {
                   normal: 'font-normal',
                   semibold: 'font-semibold',
                   bold: 'font-bold',
                 }
                 titleStyle.fontWeight =
-                  fontWeightMap[section.textSection.titleStyle.fontWeight] || 'font-bold'
+                  fontWeightMap[textSectionData.titleStyle.fontWeight] || 'font-bold'
               }
-              if (section.textSection.titleStyle.textColor) {
-                titleStyle.color = section.textSection.titleStyle.textColor
+              if (textSectionData.titleStyle.textColor) {
+                titleStyle.color = textSectionData.titleStyle.textColor
               }
             }
 
             const contentStyle: React.CSSProperties = {}
-            if (section.textSection.contentStyle) {
-              if (section.textSection.contentStyle.fontSize) {
+            if (textSectionData.contentStyle) {
+              if (textSectionData.contentStyle.fontSize) {
                 const fontSizeMap: Record<string, string> = {
                   small: 'text-sm',
                   normal: 'text-base',
                   large: 'text-lg',
                 }
                 contentStyle.fontSize =
-                  fontSizeMap[section.textSection.contentStyle.fontSize] || 'text-lg'
+                  fontSizeMap[textSectionData.contentStyle.fontSize] || 'text-lg'
               }
-              if (section.textSection.contentStyle.fontWeight) {
+              if (textSectionData.contentStyle.fontWeight) {
                 const fontWeightMap: Record<string, string> = {
                   normal: 'font-normal',
                   semibold: 'font-semibold',
                   bold: 'font-bold',
                 }
                 contentStyle.fontWeight =
-                  fontWeightMap[section.textSection.contentStyle.fontWeight] || 'font-normal'
+                  fontWeightMap[textSectionData.contentStyle.fontWeight] || 'font-normal'
               }
-              if (section.textSection.contentStyle.textColor) {
-                contentStyle.color = section.textSection.contentStyle.textColor
+              if (textSectionData.contentStyle.textColor) {
+                contentStyle.color = textSectionData.contentStyle.textColor
               }
             }
 
             return (
               <section key={index} className={`${bgStyle.className} py-16`} style={bgStyle.style}>
                 <div className="container mx-auto px-4 max-w-4xl">
-                  {section.textSection.title && (
+                  {textSectionData.title && (
                     <h2
                       className={`${titleStyle.fontSize || 'text-4xl'} ${titleStyle.fontWeight || 'font-bold'} mb-6 text-center`}
                       style={{ color: titleStyle.color }}
                     >
-                      {section.textSection.title}
+                      {textSectionData.title}
                     </h2>
                   )}
                   <p
                     className={`${contentStyle.fontSize || 'text-lg'} ${contentStyle.fontWeight || 'font-normal'} text-gray-700 leading-relaxed whitespace-pre-line`}
                     style={{ color: contentStyle.color || undefined }}
                   >
-                    {section.textSection.content}
+                    {textSectionData.content}
                   </p>
                 </div>
               </section>
@@ -461,7 +450,7 @@ export default async function PreviewPage() {
               <Link
                 key={index}
                 href={section.banner.link}
-                className="block hover:opacity-90 transition"
+                className="block hover:opacity-90 transition focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
               >
                 {content}
               </Link>
@@ -480,14 +469,14 @@ export default async function PreviewPage() {
 }
 
 // FEATURED BOOKS COMPONENT
-async function FeaturedBooksSection({ 
-  settings, 
-  bgClass, 
-  bgStyle 
-}: { 
-  settings: { title?: string | null; limit?: number | null } 
-  bgClass?: string 
-  bgStyle?: React.CSSProperties 
+async function FeaturedBooksSection({
+  settings,
+  bgClass,
+  bgStyle,
+}: {
+  settings: { title?: string | null; limit?: number | null }
+  bgClass?: string
+  bgStyle?: React.CSSProperties
 }) {
   const books = await getFeaturedBooks(settings.limit || 3)
 
@@ -503,7 +492,7 @@ async function FeaturedBooksSection({
             <Link
               key={book.id}
               href={`/boker/${book.slug}`}
-              className="group bg-white rounded-xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden"
+              className="group bg-white rounded-xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 block"
             >
               <div className="relative aspect-[3/4] overflow-hidden bg-gradient-to-br from-emerald-100 to-emerald-50">
                 {book.coverImage && typeof book.coverImage === 'object' && book.coverImage.url ? (

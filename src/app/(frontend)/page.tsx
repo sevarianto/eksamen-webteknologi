@@ -45,7 +45,7 @@ export default async function Home() {
   const visibleSections = (settings.homeSections || []).filter((s: HomeSection) => s.visible !== false)
 
   return (
-    <div className="min-h-screen">
+    <main className="min-h-screen">
       {visibleSections.map((section: HomeSection, index: number) => {
         // HERO SECTION
         if (section.sectionType === 'hero' && section.hero) {
@@ -97,23 +97,17 @@ export default async function Home() {
                 </>
               ) : (
                 (() => {
-                  // Try to parse custom gradient colors
-                  let gradientStyle: React.CSSProperties = {}
-                  try {
-                    if (hero.gradientColors && typeof hero.gradientColors === 'string') {
-                      const gradient = JSON.parse(hero.gradientColors)
-                      if (gradient.color1 && gradient.color2) {
-                        gradientStyle = {
-                          background: `linear-gradient(${gradient.angle || 135}deg, ${gradient.color1}, ${gradient.color2})`,
-                        }
-                      }
-                    }
-                  } catch {
-                    // Fallback to default gradient
-                  }
-                  
-                  if (Object.keys(gradientStyle).length > 0) {
-                    return <div className="absolute inset-0" style={gradientStyle}></div>
+                  // Use new gradient color fields
+                  if (hero.gradientColor1 && hero.gradientColor2) {
+                    const angle = hero.gradientAngle || 135
+                    return (
+                      <div 
+                        className="absolute inset-0" 
+                        style={{
+                          background: `linear-gradient(${angle}deg, ${hero.gradientColor1}, ${hero.gradientColor2})`,
+                        }}
+                      ></div>
+                    )
                   }
                   
                   // Fallback to predefined gradients
@@ -134,7 +128,7 @@ export default async function Home() {
                 {hero.buttonText && (
                   <Link 
                     href={hero.buttonLink || '/boker'}
-                    className="inline-block bg-white text-emerald-600 px-8 py-4 rounded-lg font-semibold hover:bg-opacity-90 transition shadow-lg text-lg"
+                    className="inline-block bg-white text-emerald-600 px-8 py-4 rounded-lg font-semibold hover:bg-opacity-90 transition shadow-lg text-lg focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-emerald-600"
                   >
                     {hero.buttonText}
                   </Link>
@@ -191,17 +185,17 @@ export default async function Home() {
                   {section.categories.title}
                 </h2>
                 <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                  <Link href="/sjangere/fantasy" className="bg-white p-8 rounded-xl hover:shadow-xl transition text-center group">
+                  <Link href="/sjangere/fantasy" className="bg-white p-8 rounded-xl hover:shadow-xl transition text-center group focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 block">
                     <div className="text-5xl mb-4"></div>
                     <h3 className="text-2xl font-bold text-emerald-600 mb-2">Fantasy</h3>
                     <p className="text-gray-600">Magiske eventyr</p>
                   </Link>
-                  <Link href="/sjangere/krim" className="bg-white p-8 rounded-xl hover:shadow-xl transition text-center group">
+                  <Link href="/sjangere/krim" className="bg-white p-8 rounded-xl hover:shadow-xl transition text-center group focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 block">
                     <div className="text-5xl mb-4"></div>
                     <h3 className="text-2xl font-bold text-emerald-600 mb-2">Krim</h3>
                     <p className="text-gray-600">Spenning og mysterier</p>
                   </Link>
-                  <Link href="/sjangere/barneboker" className="bg-white p-8 rounded-xl hover:shadow-xl transition text-center group">
+                  <Link href="/sjangere/barneboker" className="bg-white p-8 rounded-xl hover:shadow-xl transition text-center group focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 block">
                     <div className="text-5xl mb-4"></div>
                     <h3 className="text-2xl font-bold text-emerald-600 mb-2">Barnebøker</h3>
                     <p className="text-gray-600">Bøker for de minste</p>
@@ -273,7 +267,7 @@ export default async function Home() {
 
         return null
       })}
-    </div>
+    </main>
   )
 }
 
